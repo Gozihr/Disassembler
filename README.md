@@ -20,6 +20,14 @@ make
 - `./Disassembler "0x 55 48 8b 05 b8 13 00 00"`
 - `./Disassembler "55 48 8b 05 b8 13 00 00"`
 
+## Docker Build & Run
+- build: `docker build -t disassembler:latest .`
+- run: `docker run  --name test_vm -it disassembler:latest`
+
+## Supported Platform(s)
+- OS X
+- Linux
+
 ## Coming Soon
 - flags
 - input/output files

@@ -21,17 +21,24 @@ download_file(https://raw.githubusercontent.com/FlorianRappl/CmdParser/master/cm
               ../package/cmdParser/cmdparser.hpp
               MD5
               7680d10af49010f8b349906bd2a5ac5b)
-include_directories(${CMAKE_SOURCE_DIR}/package)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -std=c++14  " )
+
+#find dependencies
+include(FindPkgConfig)
+pkg_check_modules (CAPSTONE REQUIRED capstone)
+
+include_directories(${CMAKE_SOURCE_DIR}/package/ ${CAPSTONE_INCLUDE_DIRS}/..)
+message(STATUS ${CMAKE_SOURCE_DIR})
+message(STATUS ${CAPSTONE_INCLUDE_DIRS})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -std=c++14" )
 
 set(SOURCE_FILES disassemble.cpp capstoneDisassembler.cpp)
 set(EXE_SOURCE_FILES ${SOURCE_FILES} main.cpp )
 add_executable(${PROJECT_NAME} ${EXE_SOURCE_FILES})
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER disassemble.h)
-target_link_libraries(${PROJECT_NAME} -lcapstone )
+target_link_libraries(${PROJECT_NAME} ${CAPSTONE_LIBRARIES} )
 
 set(UNIT_TEST_NAME ${PROJECT_NAME}_TEST)
 set(TEST_SOURCE_FILES ${SOURCE_FILES} test.cpp )
 add_executable(${UNIT_TEST_NAME} ${TEST_SOURCE_FILES})
-target_link_libraries(${UNIT_TEST_NAME} -lcapstone )
+target_link_libraries(${UNIT_TEST_NAME} ${CAPSTONE_LIBRARIES} )
 

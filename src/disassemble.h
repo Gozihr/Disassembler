@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory> 
 #include <vector>
+#include <iterator>
 #include <string>
 
 enum class Archtype { 
