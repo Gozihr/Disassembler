@@ -19,7 +19,7 @@ public:
     virtual ~Disassembler() {}
     friend std::ostream& operator<< (std::ostream& out, const Disassembler& aDis);
     //const std::unique_ptr<AbstractDisassembler>& getDisassembler() const { return pDisasm;}
-    const std::vector<std::string>& getMnemonic() const final { return pDisasm->getMnemonic();}
+    const std::vector<std::string>& getOperands() const final { return pDisasm->getOperands();}
     const std::vector<std::string>& getOpCodes() const final { return pDisasm->getOpCodes();}
     virtual void Clear() final;
 private:
@@ -37,11 +37,11 @@ inline std::ostream& operator<< (std::ostream& out, const std::vector<T>& v) {
 }
 
 inline std::ostream& operator<< (std::ostream& out, const Disassembler& aDis) {
-    auto mnemonic = aDis.pDisasm->getMnemonic();
+    auto operands = aDis.pDisasm->getOperands();
     auto opCodes  = aDis.pDisasm->getOpCodes();
-    out << "Instruction count: " << mnemonic.size() << std::endl;
-    for(size_t i = 0; i < mnemonic.size(); i++) {
-        out << mnemonic[i] << " " << opCodes[i] << std::endl;
+    out << "Instruction count: " << opCodes.size() << std::endl;
+    for(size_t i = 0; i < opCodes.size(); i++) {
+        out << opCodes[i] << " " << operands[i] << std::endl;
     }
     return out;
 }

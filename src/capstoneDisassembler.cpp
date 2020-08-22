@@ -45,8 +45,8 @@ void CapstoneDisassembler::Decode(const unsigned char *code, int size) {
     size_t count = decodeInstruction(code, size, insn);
     if (count > 0) {
 		for (size_t i = 0; i < count; i++) {
-            mnemonic.push_back(insn[i].mnemonic);
-            opCodes.push_back(insn[i].op_str);
+            opCodes.push_back(insn[i].mnemonic);
+            operands.push_back(insn[i].op_str);
         }
     }
     freeInstruction(insn, count);
