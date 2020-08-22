@@ -1,26 +1,5 @@
-project(Disassembler)
+project(lib${CMAKE_PROJECT_NAME})
 cmake_minimum_required(VERSION 3.10)
-
-function(download_file url filename hash_type hash)
-
-if(NOT EXISTS ${filename})
-  file(DOWNLOAD ${url} ${filename}
-       TIMEOUT 60  # seconds
-       EXPECTED_HASH ${hash_type}=${hash}
-       TLS_VERIFY ON
-      )
-endif()
-
-endfunction(download_file)
-
-download_file(https://github.com/catchorg/Catch2/releases/download/v2.13.0/catch.hpp 
-              ../package/catch2/catch.hpp
-              MD5
-              209cbb2f8f37224cc5f7261cf9388bc2)
-download_file(https://raw.githubusercontent.com/FlorianRappl/CmdParser/master/cmdparser.hpp
-              ../package/cmdParser/cmdparser.hpp
-              MD5
-              7680d10af49010f8b349906bd2a5ac5b)
 
 #find dependencies
 include(FindPkgConfig)
@@ -30,13 +9,16 @@ include_directories(${CMAKE_SOURCE_DIR}/package/ ${CAPSTONE_INCLUDE_DIRS}/..)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -std=c++14" )
 
 set(SOURCE_FILES disassemble.cpp capstoneDisassembler.cpp)
-set(EXE_SOURCE_FILES ${SOURCE_FILES} main.cpp )
-add_executable(${PROJECT_NAME} ${EXE_SOURCE_FILES})
+add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
+target_link_libraries(${PROJECT_NAME} ${CAPSTONE_LDFLAGS} )
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER disassemble.h)
-target_link_libraries(${PROJECT_NAME} ${CAPSTONE_LDFLAGS})
 
-set(UNIT_TEST_NAME ${PROJECT_NAME}_TEST)
-set(TEST_SOURCE_FILES ${SOURCE_FILES} test.cpp )
-add_executable(${UNIT_TEST_NAME} ${TEST_SOURCE_FILES})
-target_link_libraries(${UNIT_TEST_NAME} ${CAPSTONE_LDFLAGS})
+INSTALL(TARGETS ${PROJECT_NAME} 
+        LIBRARY DESTINATION ${CMAKE_SOURCE_DIR}/bin/
+        PUBLIC_HEADER DESTINATION ${CMAKE_SOURCE_DIR}/include/
+)
+
+add_subdirectory (cli)
+add_subdirectory (test)
+
 
