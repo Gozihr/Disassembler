@@ -13,7 +13,7 @@ namespace {
 }
 
 Disassembler::Disassembler(Archtype archtype, DisassemblerType disamType) :
-    InterFaceDisassembler() {
+    InterfaceDisassembler() {
     pDisasm = std::unique_ptr<AbstractDisassembler>(pickDisam(archtype, disamType));
 }
 
@@ -23,9 +23,4 @@ void Disassembler::Decode(const unsigned char *code, int size) {
 
 void Disassembler::Clear() {
     pDisasm->Clear();
-}
-
-void AbstractDisassembler::Clear() {
-    mnemonic.clear();
-    opCodes.clear();
 }

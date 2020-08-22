@@ -6,40 +6,13 @@
 #include <vector>
 #include <iterator>
 #include <string>
-
-enum class Archtype { 
-    ARM64,
-    X86,
-    X86_64
-};
+#include "interfaces/interfaceDisassembler.h"
 
 enum class DisassemblerType { 
     CAPSTONE
 };
 
-class InterFaceDisassembler {
-    public:
-        virtual void Decode(const unsigned char *code, int size) = 0;
-        virtual void Clear() = 0;
-        virtual ~InterFaceDisassembler() {};
-        virtual const std::vector<std::string>& getMnemonic() const = 0;
-        virtual const std::vector<std::string>& getOpCodes() const = 0;
-};
-
-class AbstractDisassembler : public InterFaceDisassembler {
-    public:
-        virtual void Decode(const unsigned char *code, int size) = 0;
-        virtual ~AbstractDisassembler() {}
-        friend std::ostream& operator<< (std::ostream& out, const AbstractDisassembler& aDis);
-        virtual const std::vector<std::string>& getMnemonic() const { return mnemonic;}
-        virtual const std::vector<std::string>& getOpCodes() const { return opCodes;}
-        virtual void Clear() final;
-    protected:
-        std::vector<std::string> mnemonic;
-        std::vector<std::string> opCodes;
-};
-
-class Disassembler : public InterFaceDisassembler {
+class Disassembler : public InterfaceDisassembler {
 public:
     Disassembler(Archtype Archtype, DisassemblerType type=DisassemblerType::CAPSTONE);
     virtual void Decode(const unsigned char *code, int size) final;
@@ -59,15 +32,6 @@ inline std::ostream& operator<< (std::ostream& out, const std::vector<T>& v) {
         out << '[';
         std::copy (v.begin(), v.end(), std::ostream_iterator<T>(out, ", "));
         out << "\b\b]";
-    }
-    return out;
-}
-
-inline std::ostream& operator<< (std::ostream& out, const AbstractDisassembler& aDis) {
-    auto mnemonic = aDis.mnemonic;
-    auto opCodes  = aDis.opCodes;
-    for(size_t i = 0; i < aDis.mnemonic.size(); i++) {
-        out << mnemonic[i] << " " << opCodes[i] << std::endl;
     }
     return out;
 }

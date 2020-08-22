@@ -14,11 +14,11 @@ make
 - CmdParser
 
 ## Usage
-- `echo 0x55488b05b8130000 | xargs ./Disassemble`
-- `./Disassemble 0x55488b05b8130000`
-- `./Disassemble 55488b05b8130000`
-- `./Disassembler "0x 55 48 8b 05 b8 13 00 00"`
-- `./Disassembler "55 48 8b 05 b8 13 00 00"`
+- `echo 0x55488b05b8130000 | xargs ./disasm`
+- `./disasm 0x55488b05b8130000`
+- `./disasm 55488b05b8130000`
+- `./disasm "0x 55 48 8b 05 b8 13 00 00"`
+- `./disasm "55 48 8b 05 b8 13 00 00"`
 
 ## Docker Build & Run
 - build: `docker build -t disassembler:latest .`

@@ -13,4 +13,5 @@ endif()
 
 endfunction(download_file)
 add_subdirectory (src)
+add_subdirectory (plugins)
 
