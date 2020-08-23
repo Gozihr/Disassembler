@@ -8,12 +8,12 @@ TEST_CASE( "test 2 instructions" ) {
     unsigned char assembly[] = "\x55\x48\x8b\x05\xb8\x13\x00\x00";
     Disassembler disasm(Archtype::X86_64, DisassemblerType::CAPSTONE);
     disasm.Decode(assembly, sizeof(assembly)-1);
-    auto mnemonic = disasm.getMnemonic();
+    auto operands = disasm.getOperands();
     auto opCodes  = disasm.getOpCodes();
-    REQUIRE( mnemonic[0] == "push" );
-    REQUIRE( opCodes[0] == "rbp" );
-    REQUIRE( mnemonic[1] == "mov" );
-    REQUIRE( opCodes[1] == "rax, qword ptr [rip + 0x13b8]" );
+    REQUIRE( opCodes[0] == "push" );
+    REQUIRE( operands[0] == "rbp" );
+    REQUIRE( opCodes[1] == "mov" );
+    REQUIRE( operands[1] == "rax, qword ptr [rip + 0x13b8]" );
 }
 
 TEST_CASE( "test more instructions" ) {

@@ -20,6 +20,7 @@ if [ ! -e $SCRIPT_DIR/../packages/xed ]; then
 
   echo === MOVING XED ===
   mv $PIN/extras/$XED/ $SCRIPT_DIR/../packages/xed
+  mv $PIN/$TARGET_ARCH/runtime/pincrt/* $SCRIPT_DIR/../packages/xed/lib
   rm -rf $PIN
   rm -r $PIN_ARCHIVE
 fi

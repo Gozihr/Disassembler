@@ -58,10 +58,32 @@ namespace {
 	    }
         return buffer;
     }
+
+    const std::string WHITESPACE = " \n\r\t\f\v";
+
+    std::string ltrim(const std::string& s)
+    {
+    	size_t start = s.find_first_not_of(WHITESPACE);
+    	return (start == std::string::npos) ? "" : s.substr(start);
+    }
+
+    std::string rtrim(const std::string& s)
+    {
+    	size_t end = s.find_last_not_of(WHITESPACE);
+    	return (end == std::string::npos) ? "" : s.substr(0, end + 1);
+    }
+
+    std::string trim(const std::string& s)
+    {
+    	return rtrim(ltrim(s));
+    }
+
 }
 
 XedDisassembler::XedDisassembler(Archtype archType)
 {
+    // initialize the XED tables -- one time.
+    xed_tables_init();
     this->xedInternal = std::unique_ptr<XedInternal>(pickPlatform(archType));
 }
 
@@ -69,19 +91,25 @@ XedDisassembler::~XedDisassembler(){
 }
 
 int XedDisassembler::decodeInstruction(const unsigned char *code, int size) {
-    for (int currByte = 0; currByte < XED_MAX_INSTRUCTION_BYTES; currByte++) {
+    for (int currByte = 1; currByte <= XED_MAX_INSTRUCTION_BYTES; currByte++) {
         xed_decoded_inst_t xedd;
         xed_decoded_inst_zero_set_mode(&xedd, &this->xedInternal->state);
         xed_decoded_inst_set_input_chip(&xedd, this->xedInternal->chipType);
         xed_error_enum_t error = xed_decode(&xedd, code, currByte);
         if (error != XED_ERROR_NONE) {
-            std::cerr << "XED error: " << xed_error_enum_t2str(error) << std::endl;
+            //std::cerr << "XED error: " << xed_error_enum_t2str(error) << std::endl;
             continue;
         }
-        std::cout << ::printInstruction(code, &xedd) << std::endl;
+        std::string instruction = ::printInstruction(code, &xedd);
+        //std::cout << instruction << std::endl;
+        size_t split = instruction.find(' ');
+        std::string opcode = instruction.substr(0, split);
+        std::string strOperands = ::trim(instruction.substr(split+1));
+        operands.push_back(strOperands);
+        opCodes.push_back(opcode);
         return currByte;
     }
-    return 0;
+    return -1;
 }
 
 void XedDisassembler::Decode(const unsigned char *code, int size) {
@@ -89,6 +117,9 @@ void XedDisassembler::Decode(const unsigned char *code, int size) {
     unsigned char* currInst = const_cast<unsigned char*>(code);
     while(currCount < size) {
         size_t count = decodeInstruction(currInst, size);
+        if(count == -1) {
+            break;
+        }
         currInst += count;
         currCount += count;
     }
