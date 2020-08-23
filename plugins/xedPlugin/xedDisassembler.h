@@ -2,6 +2,7 @@
 #define __Xed_Disassembler_H__
 
 #include "interfaceDisassembler.h"
+#include <memory>
 
 struct XedInternal;
 

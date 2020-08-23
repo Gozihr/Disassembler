@@ -9,6 +9,14 @@ cd build
 cmake ../
 make
 ```
+### Build with Ninja
+```bash
+mkdir build
+cd build
+cmake -G Ninja ..
+Ninja XED_TEST Disassembler_TEST
+```
+
 ## Dependencies 
 - Catch2
 - CmdParser
