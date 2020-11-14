@@ -1,7 +1,7 @@
 #!/bin/sh
 # Download PIN & set it up.
-PIN_VERSION="3.14-98223"
-PIN_GITHASH="gb010a12c6"
+PIN_VERSION="3.16-98275"
+PIN_GITHASH="ge0db48c31"
 PIN=pin-$PIN_VERSION-$PIN_GITHASH
 IS_WIN=false
 if [ "$(uname)" == "Darwin" ]; then

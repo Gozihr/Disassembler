@@ -1,5 +1,8 @@
 project(xedPlugin)
 cmake_minimum_required(VERSION 3.10)
+if(UNIX AND NOT APPLE)
+    set(LINUX TRUE)
+endif()
 
 function(download_xed)
 execute_process (
@@ -10,7 +13,19 @@ execute_process (
 )
 endfunction(download_xed)
 
-download_xed()
+function(build_xed)
+execute_process (
+    #Linux builds with download_xed but doesn't run
+    #seems like lack of abi stability
+    COMMAND bash -c "${CMAKE_SOURCE_DIR}/scripts/buildXED.sh"
+)
+endfunction(build_xed)
+
+if(LINUX) 
+    build_xed()
+else()
+    download_xed()
+endif()
 
 set(XED ${CMAKE_SOURCE_DIR}/packages/xed)
 include_directories(${CMAKE_SOURCE_DIR}/src/interfaces ${XED}/include)
@@ -18,11 +33,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -std=c++14")
 
 set(SOURCE_FILES xedDisassembler.cpp)
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
-#set(CMAKE_MACOSX_RPATH 1)
-#set(CMAKE_INSTALL_RPATH ${XED}/lib)
+
 link_directories(${XED}/lib)
 target_link_libraries(${PROJECT_NAME} PRIVATE -L${XED}/lib -lxed)
-#target_link_libraries(${PROJECT_NAME} PRIVATE ${XED}/lib/libxed.dylib)
 
-#message(STATUS "${XED}")
 add_subdirectory (test)
