@@ -1,8 +1,5 @@
 project(xedPlugin)
 cmake_minimum_required(VERSION 3.10)
-if(UNIX AND NOT APPLE)
-    set(LINUX TRUE)
-endif()
 
 function(download_xed)
 execute_process (

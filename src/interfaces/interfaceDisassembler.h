@@ -5,12 +5,7 @@
 #include <vector>
 #include <iterator>
 #include <string>
-
-enum class Archtype { 
-    ARM64,
-    X86,
-    X86_64
-};
+#include "types.h"
 
 class InterfaceDisassembler {
     public:

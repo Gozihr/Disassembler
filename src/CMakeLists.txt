@@ -5,12 +5,15 @@ cmake_minimum_required(VERSION 3.10)
 include(FindPkgConfig)
 pkg_check_modules (CAPSTONE REQUIRED capstone)
 
-include_directories(${CAPSTONE_INCLUDE_DIRS}/..)
+set(LIEF ${CMAKE_SOURCE_DIR}/packages/LIEF)
+include_directories(${CAPSTONE_INCLUDE_DIRS}/..
+                    ${LIEF}/include)
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -std=c++14" )
 
-set(SOURCE_FILES disassemble.cpp capstoneDisassembler.cpp)
+set(SOURCE_FILES disassemble.cpp capstoneDisassembler.cpp parser.cpp)
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME} ${CAPSTONE_LDFLAGS} )
+target_link_libraries(${PROJECT_NAME} ${CAPSTONE_LDFLAGS}  -L${LIEF}/lib -lLIEF)
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER disassemble.h)
 
 INSTALL(TARGETS ${PROJECT_NAME} 
