@@ -20,13 +20,17 @@ Ninja XED_TEST Disassembler_TEST
 ## Dependencies 
 - Catch2
 - CmdParser
+- Capstone
+- XED (optional)
+- LIEF
 
 ## Usage
-- `echo 0x55488b05b8130000 | xargs ./disasm`
-- `./disasm 0x55488b05b8130000`
-- `./disasm 55488b05b8130000`
-- `./disasm "0x 55 48 8b 05 b8 13 00 00"`
-- `./disasm "55 48 8b 05 b8 13 00 00"`
+- `echo 0x55488b05b8130000 | xargs ./disasm --raw -a x86_64 -i`
+- `./disasm --raw -a x86_64 -i 0x55488b05b8130000`
+- `./disasm --raw -a x86_64 -i 55488b05b8130000`
+- `./disasm --raw -a x86_64 -i "0x 55 48 8b 05 b8 13 00 00"`
+- `./disasm --raw -a x86_64 -i "55 48 8b 05 b8 13 00 00"`
+- `./disasm --binary -f /bin/ls`
 
 ## Docker Build & Run
 - build: `docker build -t disassembler:latest .`
@@ -37,8 +41,12 @@ Ninja XED_TEST Disassembler_TEST
 - Linux
 
 ## Coming Soon
-- flags
-- input/output files
-- elf/pe/mach-O
+- [x] flags
+- [ ] input/output files
+    - [x] input
+    - [ ] output
+- [ ] elf/pe/mach-O
+    - [x] mach-O
 - add support for more disassemblers (compare output)
-- Allow for dynamic loading of disassemblers (plugin model)
+    - [x] XED
+- [ ] Allow for dynamic loading of disassemblers (plugin model)
