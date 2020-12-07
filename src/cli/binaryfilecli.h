@@ -1,7 +1,7 @@
 #ifndef __binary_file_cli_h__
 #define __binary_file_cli_h__
 
-#include "abstractcli.h"
+#include "basecli.h"
 #include "binaryDisassemble.h"
 
 class BinaryFileCLI : public BaseCLI
@@ -13,8 +13,7 @@ public:
 
 protected:
 	BinaryDisassemble m_disassemble;
-	virtual void configure_parser(cli::Parser& parser) override;
-	virtual void executeCLI() override;
+	virtual void configure_parser() override;
 
 public: 
 	BinaryFileCLI(int argc, char** argv);

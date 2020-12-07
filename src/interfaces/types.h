@@ -5,12 +5,14 @@
 #include <string>
 
 enum class Archtype { 
+    UNKNOWN,
     ARM64,
     X86,
     X86_64
 };
 
-enum class OStype { 
+enum class OStype {
+    UNKNOWN,
     LINUX,
     MACOS,
     WINDOWS
@@ -28,10 +30,10 @@ static const std::unordered_map<std::string, Archtype> ArchTypeMap = {
 
 static const std::unordered_map<Archtype,std::string> ArchStrMap = {
 
-{Archtype::ARM64 , "aarch64"},
-{Archtype::ARM64 , "arm64"  },
-{Archtype::X86   , "x86"    },
-{Archtype::X86_64, "x86_64" }
+{Archtype::UNKNOWN, "unknown"},
+{Archtype::ARM64  , "arm64"  },
+{Archtype::X86    , "x86"    },
+{Archtype::X86_64 , "x86_64" }
 
 };
 
@@ -48,7 +50,7 @@ static const std::unordered_map<std::string, OStype> OSTypeMap = {
 };
 
 static const std::unordered_map<OStype, std::string> OSStrMap = {
-
+{OStype::UNKNOWN, "unknown"},
 {OStype::LINUX  , "Linux"  },
 {OStype::MACOS  , "MacOS"  },
 {OStype::WINDOWS, "Windows"}

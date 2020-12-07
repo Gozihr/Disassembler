@@ -1,7 +1,7 @@
 #ifndef __raw_cli_h__
 #define __raw_cli_h__
 
-#include "abstractcli.h"
+#include "basecli.h"
 #include "rawDisassemble.h"
 
 class RawCLI : public BaseCLI
@@ -13,8 +13,7 @@ public:
 
 protected:
 	RawDisassemble m_disassemble;
-	virtual void configure_parser(cli::Parser& parser) override;
-	virtual void executeCLI() override;
+	virtual void configure_parser() override;
 
 public: 
 	RawCLI(int argc, char** argv);

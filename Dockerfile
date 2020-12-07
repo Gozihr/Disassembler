@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt install -y --no-install-recommends \
     git build-essential cmake vim openssl curl ca-certificates \
-    python3 libcapstone-dev pkg-config wget
+    nasm python3 libcapstone-dev pkg-config wget
 
 # Set the working directory to root (ie $HOME)
 WORKDIR root
@@ -21,3 +21,7 @@ ENV XED_LIB_PATH /root/packages/xed/lib
 
 RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$XED_LIB_PATH \
     && ./build/plugins/xedPlugin/test/XED_TEST
+
+
+RUN scripts/elfLinuxBuildAndRun.sh src/test/hello.linux.asm \
+    && ./build/src/cli/disasm --binary -f src/test/hello.linux.out

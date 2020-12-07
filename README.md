@@ -36,6 +36,17 @@ Ninja XED_TEST Disassembler_TEST
 - build: `docker build -t disassembler:latest .`
 - run: `docker run  --name test_vm -it disassembler:latest`
 
+
+## Debuging 
+- Switch compiler
+    - in the process of building this project i've found differences between clang and gcc. First step I try is to swap the compilers
+    - `cmake -D CMAKE_C_COMPILER=clang -D CMAKE_CXX_COMPILER=clang++ ..`
+- Build with Debug symbols
+    - If you need unoptimized replace -O3 with -O0 whereever you find CMAKE_CXX_FLAGS. If you don'y just run below
+    - `cmake -DCMAKE_BUILD_TYPE=Debug ..`
+- Check for Dwarf Version
+    - `readelf --debug-dump=info src/cli/disasm | grep "Version" | uniq`
+
 ## Supported Platform(s)
 - OS X
 - Linux
@@ -47,6 +58,7 @@ Ninja XED_TEST Disassembler_TEST
     - [ ] output
 - [ ] elf/pe/mach-O
     - [x] mach-O
+    - [x] elf
 - add support for more disassemblers (compare output)
     - [x] XED
 - [ ] Allow for dynamic loading of disassemblers (plugin model)
