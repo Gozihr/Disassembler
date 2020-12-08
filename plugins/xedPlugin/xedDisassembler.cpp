@@ -27,15 +27,15 @@ struct XedInternal {
 namespace {
     XedInternal* pickPlatform(Archtype archType) {
         switch(archType) {
-            case Archtype::ARM64:
-                throw;
-                break;
             case Archtype::X86:
                 return new XedInternal(XED_MACHINE_MODE_LONG_COMPAT_32, XED_ADDRESS_WIDTH_32b);
                 break;
             case Archtype::X86_64:
                 return new XedInternal(XED_MACHINE_MODE_LONG_64, XED_ADDRESS_WIDTH_64b);
                 break;
+            default:
+                std::cerr << "unsupported arch" << std::endl;
+                throw;
         }
         return nullptr;
     }

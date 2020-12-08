@@ -29,12 +29,31 @@ namespace {
             throw;
         }
     }
+
+    Archtype GetArch(LIEF::ELF::ARCH cputype) {
+        switch(cputype) {
+            case LIEF::ELF::ARCH::EM_AARCH64:
+                return Archtype::ARM64;
+            case LIEF::ELF::ARCH::EM_386:
+                return Archtype::X86;
+            case LIEF::ELF::ARCH::EM_X86_64:
+                return Archtype::X86_64;
+             default:
+                std::cerr << "This not a unsupported Architecture." << std::endl;
+                throw;
+        }
+    }
+    
 }
 
 ASMParser::ASMParser(std::string filename) {
     if (LIEF::ELF::is_elf(filename)) {
         this->os = OStype::LINUX;
-        auto elfBinary = LIEF::ELF::Parser::parse(filename);
+        std::unique_ptr<LIEF::ELF::Binary> elfBinary = LIEF::ELF::Parser::parse(filename);
+        
+        auto header = elfBinary->header();
+        this->arch = ::GetArch(header.machine_type());
+
         LIEF::ELF::Section& textSection = elfBinary->get_section(".text");
         textSection.content().swap(this->instructions);
         //TODO fetch cpu type

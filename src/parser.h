@@ -13,8 +13,8 @@ class ASMParser {
         const std::vector<uint8_t>& Instructions() const;
 
     private:
-        OStype os;
-        Archtype arch;
+        OStype os = OStype::UNKNOWN;
+        Archtype arch = Archtype::UNKNOWN;
         std::vector<uint8_t> instructions;
 };
 

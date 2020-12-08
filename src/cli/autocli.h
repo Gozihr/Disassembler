@@ -2,7 +2,7 @@
 #define __auto_cli_h__
 
 #include <memory>
-#include "abstractcli.h"
+#include "basecli.h"
 
 class AutoCLI
 {

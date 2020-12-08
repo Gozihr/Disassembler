@@ -18,6 +18,9 @@ namespace {
             case Archtype::X86_64:
                 pf = {CS_ARCH_X86, CS_MODE_64};
                 break;
+            default:
+                std::cerr << "unsupported arch" << std::endl;
+                throw;
         }
     }
 }
