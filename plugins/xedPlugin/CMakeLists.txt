@@ -2,12 +2,17 @@ project(xedPlugin)
 cmake_minimum_required(VERSION 3.10)
 
 function(download_xed)
-execute_process (
-    # This creates an unfortunate bash dependency for windows.
-    # And adds a wget dependency to mac and linux.
-    # Works for my crossplat process but could be troublesome for others.
-    COMMAND bash -c "${CMAKE_SOURCE_DIR}/scripts/setupXED.sh"
-)
+if(WIN32 AND MSVC)
+    execute_process (
+        COMMAND powershell.exe -ExecutionPolicy Bypass -File "${CMAKE_SOURCE_DIR}/scripts/setupXED.ps1"
+    )
+else()
+    execute_process (
+        # If you are using MinGW or Cygwin we will use bash
+        # This creates a crossplat bash and wget dependency.
+        COMMAND bash -c "${CMAKE_SOURCE_DIR}/scripts/setupXED.sh"
+    )
+endif()
 endfunction(download_xed)
 
 function(build_xed)
@@ -26,12 +31,17 @@ endif()
 
 set(XED ${CMAKE_SOURCE_DIR}/packages/xed)
 include_directories(${CMAKE_SOURCE_DIR}/src/interfaces ${XED}/include)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -std=c++14")
 
 set(SOURCE_FILES xedDisassembler.cpp)
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
 
+set(XED_LDFLAGS -L${XED}/lib -lxed)
+
+if(MSVC)
+    set(XED_LDFLAGS ${XED}/lib/xed.lib)
+endif()
+
 link_directories(${XED}/lib)
-target_link_libraries(${PROJECT_NAME} PRIVATE -L${XED}/lib -lxed)
+target_link_libraries(${PROJECT_NAME} PRIVATE  ${XED_LDFLAGS})
 
 add_subdirectory (test)

@@ -2,7 +2,7 @@ project(disasm)
 cmake_minimum_required(VERSION 3.10)
 
 download_file(https://raw.githubusercontent.com/farzonl/CmdParser/feature/customization/cmdparser.hpp
-              ../packages/cmdParser/cmdparser.hpp
+              ${CMAKE_SOURCE_DIR}/packages/cmdParser/cmdparser.hpp
               MD5
               f9206b10f4555bb775aadfb058905f85)
 

@@ -4,16 +4,12 @@ This is hopefully the start of a really awesome custom tool for my own personal 
 
 ## Build Instructions
 ```bash
-mkdir build
-cd build
-cmake ../
+cmake -B build
 make
 ```
 ### Build with Ninja
 ```bash
-mkdir build
-cd build
-cmake -G Ninja ..
+cmake -G Ninja -B build
 Ninja XED_TEST Disassembler_TEST
 ```
 
