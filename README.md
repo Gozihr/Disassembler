@@ -4,17 +4,27 @@ This is hopefully the start of a really awesome custom tool for my own personal 
 
 ## Build Instructions
 ```bash
-mkdir build
-cd build
-cmake ../
+cmake -B build
 make
 ```
 ### Build with Ninja
 ```bash
-mkdir build
-cd build
-cmake -G Ninja ..
-Ninja XED_TEST Disassembler_TEST
+cmake -G Ninja -B build
+ninja -C./build
+# or if you just want to build the tests
+ninja XED_TEST Disassembler_TEST
+```
+### Building on Windows (Experimental)
+Windows is still experimental and for now you can just build release
+- Using Ninja
+```powershell
+cmake -GNinja -Bbuild -DCMAKE_BUILD_TYPE=Release
+ninja -C./build
+```
+- Using MSBUILD
+```powershell
+cmake -B build
+msbuild build\Disassembler.sln -t:Build -p:Configuration=Release
 ```
 
 ## Dependencies 
@@ -50,6 +60,7 @@ Ninja XED_TEST Disassembler_TEST
 ## Supported Platform(s)
 - OS X
 - Linux
+- Windows (Experimental) (Release Only Builds)
 
 ## Coming Soon
 - [x] flags

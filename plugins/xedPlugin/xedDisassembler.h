@@ -10,9 +10,9 @@ class XedDisassembler : public AbstractDisassembler {
     public:
         XedDisassembler(Archtype archType);
         virtual ~XedDisassembler();
-        virtual void Decode(const unsigned char *code, int size) final;
+        virtual void Decode(const unsigned char *code, size_t size) final;
     private:
-        int decodeInstruction(const unsigned char *code, int size);
+        int decodeInstruction(const unsigned char *code);
         std::unique_ptr<XedInternal> xedInternal;
 };
 

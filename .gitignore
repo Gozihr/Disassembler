@@ -1,5 +1,5 @@
-build
-packages
+build*
+packages*
 .DS_Store
 *.o
 *.out

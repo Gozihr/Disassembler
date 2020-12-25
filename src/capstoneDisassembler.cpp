@@ -42,7 +42,7 @@ CapstoneDisassembler::~CapstoneDisassembler()
     cs_close(&handle);
 }
 
-void CapstoneDisassembler::Decode(const unsigned char *code, int size) {
+void CapstoneDisassembler::Decode(const unsigned char *code, size_t size) {
 
     cs_insn *insn = nullptr;
     size_t count = decodeInstruction(code, size, insn);
@@ -55,11 +55,11 @@ void CapstoneDisassembler::Decode(const unsigned char *code, int size) {
     freeInstruction(insn, count);
 }
 
-int CapstoneDisassembler::decodeInstruction(const unsigned char *code, int size, cs_insn *&insn) {
-    int count;
+size_t CapstoneDisassembler::decodeInstruction(const unsigned char *code, size_t size, cs_insn *&insn) {
+    size_t count;
     count = cs_disasm(handle, code, size, 0, 0, &insn);
     return count;
 }
-void CapstoneDisassembler::freeInstruction(cs_insn *insn, int count) {
+void CapstoneDisassembler::freeInstruction(cs_insn *insn, size_t count) {
     cs_free(insn, count);
 }

@@ -8,10 +8,10 @@ class CapstoneDisassembler : public AbstractDisassembler {
     public:
         CapstoneDisassembler(Archtype archType);
         virtual ~CapstoneDisassembler();
-        virtual void Decode(const unsigned char *code, int size) final;
+        virtual void Decode(const unsigned char *code, size_t size) final;
     private:
-        int decodeInstruction(const unsigned char *code, int size, cs_insn *&insn);
-        void freeInstruction(cs_insn *insn, int count);
+        size_t decodeInstruction(const unsigned char *code, size_t size, cs_insn *&insn);
+        void freeInstruction(cs_insn *insn, size_t count);
         size_t handle; //csh
 };
 
