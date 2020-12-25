@@ -9,7 +9,7 @@
 
 class InterfaceDisassembler {
     public:
-        virtual void Decode(const unsigned char *code, int size) = 0;
+        virtual void Decode(const unsigned char *code, size_t size) = 0;
         virtual void Clear() = 0;
         virtual ~InterfaceDisassembler() {};
         virtual const std::vector<std::string>& getOperands() const = 0;
@@ -18,7 +18,6 @@ class InterfaceDisassembler {
 
 class AbstractDisassembler : public InterfaceDisassembler {
     public:
-        virtual void Decode(const unsigned char *code, int size) = 0;
         virtual ~AbstractDisassembler() {}
         friend std::ostream& operator<< (std::ostream& out, const AbstractDisassembler& aDis);
         virtual const std::vector<std::string>& getOperands() const { return operands;}

@@ -16,14 +16,20 @@ endif()
 endfunction(download_xed)
 
 function(build_xed)
-execute_process (
+if(WIN32)
+    execute_process (
+        COMMAND powershell.exe -ExecutionPolicy Bypass -File "${CMAKE_SOURCE_DIR}/scripts/buildXED.ps1"
+    )
+else()
     #Linux builds with download_xed but doesn't run
     #seems like lack of abi stability
-    COMMAND bash -c "${CMAKE_SOURCE_DIR}/scripts/buildXED.sh"
+    execute_process (
+        COMMAND bash -c "${CMAKE_SOURCE_DIR}/scripts/buildXED.sh"
 )
+endif()
 endfunction(build_xed)
 
-if(LINUX) 
+if(LINUX OR WIN32) 
     build_xed()
 else()
     download_xed()
@@ -36,9 +42,10 @@ set(SOURCE_FILES xedDisassembler.cpp)
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
 
 set(XED_LDFLAGS -L${XED}/lib -lxed)
-
 if(MSVC)
-    set(XED_LDFLAGS ${XED}/lib/xed.lib)
+    add_library(lib${PROJECT_NAME} STATIC ${SOURCE_FILES})
+    set(XED_LDFLAGS "${XED}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}xed${CMAKE_STATIC_LIBRARY_SUFFIX}")
+    target_link_libraries(lib${PROJECT_NAME} PRIVATE  ${XED_LDFLAGS})
 endif()
 
 link_directories(${XED}/lib)

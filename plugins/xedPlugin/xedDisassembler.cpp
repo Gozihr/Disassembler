@@ -37,7 +37,6 @@ namespace {
                 std::cerr << "unsupported arch" << std::endl;
                 throw;
         }
-        return nullptr;
     }
 
     std::string printInstruction(const unsigned char *addr, xed_decoded_inst_t* xinstr) {
@@ -90,7 +89,7 @@ XedDisassembler::XedDisassembler(Archtype archType)
 XedDisassembler::~XedDisassembler(){
 }
 
-int XedDisassembler::decodeInstruction(const unsigned char *code, int size) {
+int XedDisassembler::decodeInstruction(const unsigned char *code) {
     for (int currByte = 1; currByte <= XED_MAX_INSTRUCTION_BYTES; currByte++) {
         xed_decoded_inst_t xedd;
         xed_decoded_inst_zero_set_mode(&xedd, &this->xedInternal->state);
@@ -112,11 +111,11 @@ int XedDisassembler::decodeInstruction(const unsigned char *code, int size) {
     return -1;
 }
 
-void XedDisassembler::Decode(const unsigned char *code, int size) {
+void XedDisassembler::Decode(const unsigned char *code, size_t size) {
     size_t currCount = 0;
     unsigned char* currInst = const_cast<unsigned char*>(code);
     while(currCount < size) {
-        size_t count = decodeInstruction(currInst, size);
+        size_t count = decodeInstruction(currInst);
         if(count == -1) {
             break;
         }

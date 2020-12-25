@@ -8,4 +8,9 @@ download_file(https://github.com/catchorg/Catch2/releases/download/v2.13.0/catch
 
 include_directories(${CMAKE_SOURCE_DIR}/packages/ ${CMAKE_SOURCE_DIR}/src)
 add_executable(${PROJECT_NAME} test.cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_PROJECT_NAME})
+#if(MSVC)
+#    set(CMAKE_PROJECT_NAME_LIB "${CMAKE_STATIC_LIBRARY_PREFIX}CMAKE_PROJECT_NAME${CMAKE_STATIC_LIBRARY_SUFFIX}")
+#    target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_PROJECT_NAME_LIB})
+#else()
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_PROJECT_NAME})
+#endif()

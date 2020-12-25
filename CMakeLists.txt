@@ -21,7 +21,11 @@ if(NOT EXISTS ${path})
     if(WIN32)
         execute_process (
             COMMAND cmd.exe /c mkdir ${path}
-            COMMAND 7z x ${tarfile}  -o${path}
+            #COMMAND 7z x ${tarfile}  -o${path} #Note Expand-Archive can be slow can replace with 7z
+            COMMAND powershell.exe -ExecutionPolicy Bypass Expand-Archive -LiteralPath ${tarfile} -DestinationPath ${path}
+        )
+        execute_process (
+            COMMAND powershell.exe -ExecutionPolicy Bypass -Command "${CMAKE_SOURCE_DIR}/scripts/moveFiles.ps1 ${path} ${tarfile}"
         )
     else()
         execute_process (
@@ -59,7 +63,9 @@ endif()
 if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++latest /W4")
     # Default debug flags are OK 
-    set(CMAKE_CXX_FLAGS_RELEASE "{CMAKE_CXX_FLAGS_RELEASE} /O2")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /O2")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
 else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -std=c++14" )
 endif()

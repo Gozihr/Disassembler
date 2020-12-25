@@ -17,7 +17,7 @@ Disassembler::Disassembler(Archtype archtype, DisassemblerType disamType) :
     pDisasm = std::unique_ptr<AbstractDisassembler>(pickDisam(archtype, disamType));
 }
 
-void Disassembler::Decode(const unsigned char *code, int size) {
+void Disassembler::Decode(const unsigned char *code, size_t size) {
     pDisasm->Decode(code,size);
 }
 

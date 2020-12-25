@@ -10,4 +10,9 @@ set(XED ${CMAKE_SOURCE_DIR}/packages/xed)
 include_directories(${XED}/include ${CMAKE_SOURCE_DIR}/packages/ ${CMAKE_SOURCE_DIR}/plugins/xedPlugin)
 add_executable(${PROJECT_NAME} test.cpp)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE xedPlugin)
+if(MSVC)
+    # Note this is an inelegant hack to get tests building on windows
+    target_link_libraries(${PROJECT_NAME} PRIVATE libxedPlugin)
+else()
+    target_link_libraries(${PROJECT_NAME} PRIVATE xedPlugin)
+endif()

@@ -15,7 +15,7 @@ enum class DisassemblerType {
 class Disassembler : public InterfaceDisassembler {
 public:
     Disassembler(Archtype Archtype, DisassemblerType type=DisassemblerType::CAPSTONE);
-    virtual void Decode(const unsigned char *code, int size) final;
+    virtual void Decode(const unsigned char *code, size_t size) final;
     virtual ~Disassembler() {}
     friend std::ostream& operator<< (std::ostream& out, const Disassembler& aDis);
     //const std::unique_ptr<AbstractDisassembler>& getDisassembler() const { return pDisasm;}

@@ -1,8 +1,8 @@
 project(${CMAKE_PROJECT_NAME})
 cmake_minimum_required(VERSION 3.10)
 
-set(LIEF ${CMAKE_SOURCE_DIR}/packages/LIEF)
-set(LIEF_LDFLAGS -L${LIEF}/lib -lLIEF)
+set(LIEF_DIR ${CMAKE_SOURCE_DIR}/packages/LIEF)
+set(LIEF_LDFLAGS -L${LIEF_DIR}/lib -lLIEF)
 #find dependencies
 if(UNIX)
         include(FindPkgConfig)
@@ -16,26 +16,30 @@ elseif(WIN32)
         set(CAPSTONE_DIR ${CMAKE_SOURCE_DIR}/packages/capstone)
         # find-pkg gives the path include/capstone. To stay consistent I will do the same.
         set(CAPSTONE_INCLUDE_DIRS ${CAPSTONE_DIR}/include/capstone)
-        set(CAPSTONE_LDFLAGS ${CAPSTONE_DIR}/capstone.lib)
-        include_directories(${CAPSTONE_INCLUDE_DIRS}
-                    ${LIEF}/include)
-        
-        set(LIEF_LDFLAGS ${LIEF}/lib/LIEF.lib)
+
+        set(CAPSTONE_LDFLAGS "${CAPSTONE_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}capstone${CMAKE_STATIC_LIBRARY_SUFFIX}")
+        set(LIEF_LDFLAGS "${LIEF_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}LIEF${CMAKE_STATIC_LIBRARY_SUFFIX}")
 endif()
 
 include_directories(${CAPSTONE_INCLUDE_DIRS}/..
-                    ${LIEF}/include)
+                    ${LIEF_DIR}/include)
 
-if(MSVC)
-    # since this builds a shared lib set the right flags
-    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
-    set(BUILD_SHARED_LIBS TRUE)
-endif()
 
 set(SOURCE_FILES disassemble.cpp capstoneDisassembler.cpp parser.cpp)
-add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
+add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
+
 target_link_libraries(${PROJECT_NAME} ${CAPSTONE_LDFLAGS}  ${LIEF_LDFLAGS})
+
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER disassemble.h)
+
+if(MSVC)
+    # Used for the 'and', 'or' ... keywords - See: http://www.cplusplus.com/reference/ciso646/
+    target_compile_options(${PROJECT_NAME} PUBLIC /FIiso646.h)
+    
+    #TODO experiment with the below as a replacement for /MT to fix cmake warnings
+    #set_property(TARGET ${PROJECT_NAME} PROPERTY LINK_FLAGS /NODEFAULTLIB:MSVCRT)
+    #set_property(TARGET ${PROJECT_NAME} PROPERTY LINK_FLAGS /NODEFAULTLIB:LIBCMT)
+endif()
 
 INSTALL(TARGETS ${PROJECT_NAME} 
         LIBRARY DESTINATION ${CMAKE_SOURCE_DIR}/bin/
