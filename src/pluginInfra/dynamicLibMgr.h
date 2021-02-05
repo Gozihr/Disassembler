@@ -16,28 +16,26 @@ typedef struct disasmImpl {
     bool(*isInitalized)();
     bool(*isEnabled)();
 
-    static const int NUM_FUNCTIONS = 3;
+    static const int NUM_FUNCTIONS = 4;
 } disasmImpl;
 
 typedef union {
     disasmImpl by_type;
     func_ptr_t func_ptr[disasmImpl::NUM_FUNCTIONS];
-}
+} function_union;
 
 class DynamicLibMgr {
     private:
         DynamicLibMgr() = delete;
-    public 
-        static int loadDynamicLibs();
-        // returns an id 
-        static std::string loadDynamicLib(std::string sLoadPath);
-        static void unloadDynamicLib(std::string  id);
-        static void setDefaultDynamicLib(std::string  id);
+    public: 
+        static int loadDynamicLibs(std::vector<std::string> &dylibPaths);
+        static bool loadDynamicLib(const std::string &sLoadPath);
+        static void unloadDynamicLib(const std::string &dylibPath);
+        static void setDefaultDynamicLib(const std::string &dylibPath);
         static const char* getDynamicLibFunctionName(int index);
-
-        static bool isInitialized();
+        static bool isInitalized();
         static bool isEnabled();
-        static int initalize():
+        static int initalize();
         static int shutdown();
 };
 

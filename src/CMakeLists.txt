@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 
 set(LIEF_DIR ${CMAKE_SOURCE_DIR}/packages/LIEF)
 set(LIEF_LDFLAGS -L${LIEF_DIR}/lib -lLIEF)
+set(DISASSEMBLER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 #find dependencies
 if(UNIX)
         include(FindPkgConfig)
@@ -25,8 +26,21 @@ include_directories(${CAPSTONE_INCLUDE_DIRS}/..
                     ${LIEF_DIR}/include)
 
 
-set(SOURCE_FILES disassemble.cpp capstoneDisassembler.cpp parser.cpp)
-add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
+set(SourceFiles disassemble.cpp 
+                capstoneDisassembler.cpp 
+                parser.cpp
+)
+
+set(HeaderFiles
+    capstoneDisassembler.h
+    disassemble.h
+    parser.h
+)
+
+add_library(${PROJECT_NAME} STATIC ${SourceFiles} ${HeaderFiles}
+            $<TARGET_OBJECTS:Disassembler.Plugin>
+            $<TARGET_OBJECTS:Disassembler.DataPattern>
+)
 
 target_link_libraries(${PROJECT_NAME} ${CAPSTONE_LDFLAGS}  ${LIEF_LDFLAGS})
 
@@ -46,7 +60,15 @@ INSTALL(TARGETS ${PROJECT_NAME}
         PUBLIC_HEADER DESTINATION ${CMAKE_SOURCE_DIR}/include/
 )
 
+target_include_directories(${PROJECT_NAME}
+  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
+  # Add include_directories here
+  plugininfra
+)
+
 add_subdirectory (cli)
 add_subdirectory (test)
+add_subdirectory(pluginInfra)
+add_subdirectory(dataPattern)
 
 

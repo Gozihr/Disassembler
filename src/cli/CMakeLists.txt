@@ -8,5 +8,25 @@ download_file(https://raw.githubusercontent.com/farzonl/CmdParser/feature/custom
 
 
 include_directories(${CMAKE_SOURCE_DIR}/packages/ ${CMAKE_SOURCE_DIR}/src)
-add_executable(${PROJECT_NAME} main.cpp autocli.cpp rawcli.cpp rawDisassemble.cpp binaryfilecli.cpp binaryDisassemble.cpp)
+
+set (SourceFiles
+     main.cpp 
+     autocli.cpp 
+     rawcli.cpp 
+     rawDisassemble.cpp 
+     binaryfilecli.cpp 
+     binaryDisassemble.cpp
+)
+
+set(HeaderFiles
+    autocli.h
+    basecli.h
+    binaryDisassemble.h
+    binaryfilecli.h
+    rawcli.h
+    rawDisassemble.h
+)
+
+add_executable(${PROJECT_NAME} ${SourceFiles} ${HeaderFiles})
+
 target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_PROJECT_NAME})
