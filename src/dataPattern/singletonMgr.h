@@ -1,8 +1,6 @@
 #ifndef singleton_mgr_h
 #define singleton_mgr_h
 
-#include "Singleton.h"
-
 class SingletonMgr {
 public:
 	typedef void (SingletonReleaseFunc)();

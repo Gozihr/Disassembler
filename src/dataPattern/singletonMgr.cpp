@@ -1,4 +1,5 @@
 #include <set>
+#include <cassert>
 #include "singletonMgr.h"
 #include "singleton.h"
 
@@ -18,7 +19,7 @@ Singleton_Members::Singleton_Members() {}
 
 Singleton_Members::~Singleton_Members() {
 	for (auto pRelease : m_setSingletonReleases) {
-		_ASSERT(!SingletonMgr::areEqual(pRelease));
+		assert(!SingletonMgr::areEqual(pRelease));
 		pRelease();
 	}
 }
