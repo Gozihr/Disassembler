@@ -1,48 +1,43 @@
-#include <set>
-#include <cassert>
 #include "singletonMgr.h"
 #include "singleton.h"
+#include <cassert>
+#include <set>
 
-namespace
-{
-	struct Singleton_Members
-	{
-		typedef std::set<SingletonMgr::SingletonReleaseFunc*> Set;
-		Set		m_setSingletonReleases;
-		Singleton_Members();
-		virtual ~Singleton_Members();
-		bool registerSingleton(SingletonMgr::SingletonReleaseFunc*);
-	};
-}
+namespace {
+struct Singleton_Members {
+  typedef std::set<SingletonMgr::SingletonReleaseFunc *> Set;
+  Set m_setSingletonReleases;
+  Singleton_Members();
+  virtual ~Singleton_Members();
+  bool registerSingleton(SingletonMgr::SingletonReleaseFunc *);
+};
+} // namespace
 
 Singleton_Members::Singleton_Members() {}
 
 Singleton_Members::~Singleton_Members() {
-	for (auto pRelease : m_setSingletonReleases) {
-		assert(!SingletonMgr::areEqual(pRelease));
-		pRelease();
-	}
+  for (auto pRelease : m_setSingletonReleases) {
+    assert(!SingletonMgr::areEqual(pRelease));
+    pRelease();
+  }
 }
 
-bool Singleton_Members::registerSingleton(SingletonMgr::SingletonReleaseFunc* pRelease)
-{
-	if (!SingletonMgr::areEqual(pRelease))
-	{
-		m_setSingletonReleases.insert(pRelease);
-	}
-	return true;
+bool Singleton_Members::registerSingleton(
+    SingletonMgr::SingletonReleaseFunc *pRelease) {
+  if (!SingletonMgr::areEqual(pRelease)) {
+    m_setSingletonReleases.insert(pRelease);
+  }
+  return true;
 }
-
 
 typedef SingletonBase<Singleton_Members> Singleton;
 DECLARE_SINGLETON_STATICS(Singleton);
 
-bool SingletonMgr::areEqual(SingletonReleaseFunc* pSingletonRelease) {
-	return pSingletonRelease == Singleton::release;
+bool SingletonMgr::areEqual(SingletonReleaseFunc *pSingletonRelease) {
+  return pSingletonRelease == Singleton::release;
 }
 
-
-void SingletonMgr::registerSingleton(SingletonReleaseFunc* pSingletonRelease) {
-	auto& instance = Singleton::get();
-	instance.registerSingleton(pSingletonRelease);
+void SingletonMgr::registerSingleton(SingletonReleaseFunc *pSingletonRelease) {
+  auto &instance = Singleton::get();
+  instance.registerSingleton(pSingletonRelease);
 }

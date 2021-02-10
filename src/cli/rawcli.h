@@ -4,26 +4,24 @@
 #include "basecli.h"
 #include "rawDisassemble.h"
 
-class RawCLI : public BaseCLI
-{
+class RawCLI : public BaseCLI {
 public:
-	static const std::string name;
-	static const std::string altName;
-	static const std::string description;
+  static const std::string name;
+  static const std::string altName;
+  static const std::string description;
 
 protected:
-	RawDisassemble m_disassemble;
-	virtual void configure_parser() override;
+  RawDisassemble m_disassemble;
+  virtual void configure_parser() override;
 
-public: 
-	RawCLI(int argc, char** argv);
-	virtual ~RawCLI();
-	virtual void executeAction() override final;
+public:
+  RawCLI(int argc, char **argv);
+  virtual ~RawCLI();
+  virtual void executeAction() override final;
 
 private:
-    std::string arch;
-    std::string assembly;
-
+  std::string arch;
+  std::string assembly;
 };
 
 #endif // __raw_cli_h__
