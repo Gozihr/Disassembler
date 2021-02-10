@@ -2,8 +2,6 @@
 #define __abstract_factory_h__
 #include <memory>
 #include <string>
-#include <type_traits>
-#include <utility>
 #include <vector>
 
 #include "dynamicLibMgr.h"
@@ -18,14 +16,8 @@ public:
 typedef std::shared_ptr<ILoad> Load_ptr;
 
 namespace Helper {
-#if _WIN32
-template <typename Derived, typename = std::enable_if<
-                                std::is_base_of<ILoad, Derived>::value>::type>
-#else
-template <typename Derived,
-          typename std::enable_if<std::is_base_of<ILoad, Derived>::value>::type>
-#endif
-std::shared_ptr<ILoad> makeShared() {
+
+template <typename Derived> std::shared_ptr<ILoad> makeShared() {
   return std::make_shared<Derived>();
 }
 }; // namespace Helper

@@ -18,7 +18,7 @@ public:
 
 class WindowsFactory : public AbstractOSFactory {
 public:
-  virtual Load_ptr getLoadLib();
+  virtual Load_ptr getLoadLib() final;
 };
 
 #endif //__windows_factory_h__

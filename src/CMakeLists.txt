@@ -22,8 +22,28 @@ elseif(WIN32)
         set(LIEF_LDFLAGS "${LIEF_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}LIEF${CMAKE_STATIC_LIBRARY_SUFFIX}")
 endif()
 
-include_directories(${CAPSTONE_INCLUDE_DIRS}/..
-                    ${LIEF_DIR}/include)
+set(IncludeDirs ${CAPSTONE_INCLUDE_DIRS}/..
+                ${LIEF_DIR}/include
+)
+set(TargetLibraries ${CAPSTONE_LDFLAGS}
+                    ${LIEF_LDFLAGS}
+)
+
+if(LINUX)
+    pkg_check_modules (GLIB2 REQUIRED glib-2.0)
+    pkg_check_modules (GLIB2_MODULE REQUIRED gmodule-2.0)
+    list(APPEND IncludeDirs
+        ${GLIB2_INCLUDE_DIRS}
+        ${GLIB2_MODULE}
+    )
+    list(APPEND TargetLibraries
+         ${GLIB2_LIBRARIES}
+         ${GLIB2_MODULE_LIBRARIES}
+    )
+endif()
+
+
+include_directories(${IncludeDirs})
 
 
 set(SourceFiles disassemble.cpp 
@@ -42,7 +62,7 @@ add_library(${PROJECT_NAME} STATIC ${SourceFiles} ${HeaderFiles}
             $<TARGET_OBJECTS:Disassembler.DataPattern>
 )
 
-target_link_libraries(${PROJECT_NAME} ${CAPSTONE_LDFLAGS}  ${LIEF_LDFLAGS})
+target_link_libraries(${PROJECT_NAME} ${TargetLibraries})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER disassemble.h)
 
