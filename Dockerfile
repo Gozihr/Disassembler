@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt install -y --no-install-recommends \
     git build-essential cmake vim openssl curl ca-certificates \
-    nasm python3 libcapstone-dev pkg-config wget
+    libglib2.0-dev nasm python3 libcapstone-dev pkg-config wget
 
 # Set the working directory to root (ie $HOME)
 WORKDIR root
