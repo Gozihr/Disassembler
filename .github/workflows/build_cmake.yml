@@ -1,0 +1,29 @@
+name: CMake Build Matrix
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+       - name: configure-cmake
+         run: cmake -Bbuild
+       - name: build
+         run: make -C build
+       - name: unittests
+         run: ./build/src/test/Disassembler_TEST
+  build-windows:
+    runs-on: windows-latest
+    steps:
+       - name: configure-cmake
+         run: cmake -Bbuild -DCMAKE_BUILD_TYPE=Release
+       - name: build
+         run: msbuild build\Disassembler.sln -t:Build -p:Configuration=Release
+       - name: unittests
+         run: ./build/src/test/Disassembler_TEST
