@@ -52,7 +52,7 @@ msbuild build\Disassembler.sln -t:Build -p:Configuration=Release
     - in the process of building this project i've found differences between clang and gcc. First step I try is to swap the compilers
     - `cmake -D CMAKE_C_COMPILER=clang -D CMAKE_CXX_COMPILER=clang++ ..`
 - Build with Debug symbols
-    - If you need unoptimized replace -O3 with -O0 whereever you find CMAKE_CXX_FLAGS. If you don'y just run below
+    - If you need unoptimized replace -O3 with -O0 whereever you find CMAKE_CXX_FLAGS. If you don't just run below
     - `cmake -DCMAKE_BUILD_TYPE=Debug ..`
 - Check for Dwarf Version
     - `readelf --debug-dump=info src/cli/disasm | grep "Version" | uniq`
