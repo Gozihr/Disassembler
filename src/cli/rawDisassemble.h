@@ -4,12 +4,12 @@
 
 #include <string>
 
-class  RawDisassemble
-{
+class RawDisassemble {
 public:
-	RawDisassemble() { }
+  RawDisassemble() {}
+
 public:
-	virtual bool action(std::string assembly, std::string arch);
+  virtual bool action(std::string assembly, std::string arch);
 };
 
 #endif // __raw_disassemble_h__

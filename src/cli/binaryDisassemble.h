@@ -4,12 +4,12 @@
 
 #include <string>
 
-class  BinaryDisassemble
-{
+class BinaryDisassemble {
 public:
-	BinaryDisassemble() { }
+  BinaryDisassemble() {}
+
 public:
-	virtual bool action(std::string filename);
+  virtual bool action(std::string filename);
 };
 
 #endif // __binary_disassemble_h__
