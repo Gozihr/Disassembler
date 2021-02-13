@@ -6,9 +6,9 @@
 Load_ptr MacFactory::getLoadLib() { return Helpers::makeShared<MacDylibLoad>(); }
 
 bool MacDylibLoad::LoadLibraryFromPath(std::string sLoadPath) {
-  if (AbstractOSFactory::doesFileExist(sLoadPath)) {
-    return false;
-  }
+  //if (AbstractOSFactory::doesFileExist(sLoadPath)) {
+  //  return false;
+  //}
   mDylib = dlopen(sLoadPath.c_str(), RTLD_LAZY);
   if (mDylib == nullptr) {
     return false;

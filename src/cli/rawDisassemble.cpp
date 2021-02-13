@@ -46,7 +46,8 @@ bool RawDisassemble::action(std::string assembly, std::string arch, const std::s
 
   DisassemblerType dType = DisassemblerType::CAPSTONE;
   if(!dynamicLibPaths.empty()) {
-    std::vector<std::string> vecDynamicLibPaths = Helpers::Split(dynamicLibPaths);
+    std::vector<std::string> vecDynamicLibPaths;
+    StringHelpers::Split(dynamicLibPaths, vecDynamicLibPaths);
     DynamicLibMgr::loadDynamicLibs(vecDynamicLibPaths);
     dType = DisassemblerType::DYNAMIC;
   }
