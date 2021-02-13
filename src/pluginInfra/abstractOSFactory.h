@@ -30,7 +30,6 @@ public:
   virtual Load_ptr getLoadLib() = 0;
 
   static AbstractOSFactory_ptr createFactory();
-  static bool doesFileExist(const std::string &filePath);
 };
 
 #endif // __abstract_factory_h__

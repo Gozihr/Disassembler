@@ -8,9 +8,6 @@ Load_ptr WindowsFactory::getLoadLib() {
 }
 
 bool WindowsDLibLoad::LoadLibraryFromPath(std::string sLoadPath) {
-  if (AbstractOSFactory::doesFileExist(sLoadPath)) {
-    return false;
-  }
   mProcHinstance = LoadLibraryA(sLoadPath.c_str());
   if (mProcHinstance == nullptr) {
     return false;

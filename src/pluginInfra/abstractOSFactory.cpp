@@ -1,6 +1,3 @@
-//#include <stdio.h>
-#include <fstream>
-
 #include "abstractOSFactory.h"
 #if defined(_WIN32) || defined(_WIN64)
 #include "windowsFactory.h"
@@ -20,14 +17,4 @@ AbstractOSFactory_ptr AbstractOSFactory::createFactory() {
 #else
   return AbstractOSFactory_ptr();
 #endif
-}
-
-bool AbstractOSFactory::doesFileExist(const std::string &filePath) {
-  std::ifstream fileStream(filePath.c_str());
-  return fileStream.good();
-  // if (FILE *file = fopen(filePath.c_str(), "r")) {
-  //      fclose(file);
-  //      return true;
-  //}
-  // return false;
 }

@@ -8,9 +8,6 @@ Load_ptr MacFactory::getLoadLib() {
 }
 
 bool MacDylibLoad::LoadLibraryFromPath(std::string sLoadPath) {
-  // if (AbstractOSFactory::doesFileExist(sLoadPath)) {
-  //  return false;
-  //}
   mDylib = dlopen(sLoadPath.c_str(), RTLD_LAZY);
   if (mDylib == nullptr) {
     std::cerr << dlerror() << std::endl;

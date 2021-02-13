@@ -74,15 +74,6 @@ extern "C" void Initalize(Archtype archType) {
   }
 }
 
-// extern "C" void Shutdown() {
-//     auto &instance = Singleton::get();
-//     auto lock(instance.getLock());
-//     if(instance.pXedDisassembler){
-//        delete instance.pXedDisassembler;
-//        instance.pXedDisassembler = nullptr;
-//     }
-//}
-
 extern "C" bool IsInitalized() {
   auto &instance = Singleton::get();
   auto lock(instance.getLock());

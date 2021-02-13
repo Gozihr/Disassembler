@@ -7,9 +7,6 @@ Load_ptr LinuxFactory::getLoadLib() {
 }
 
 bool LinuxSOLoad::LoadLibraryFromPath(std::string sLoadPath) {
-  // if (AbstractOSFactory::doesFileExist(sLoadPath)) {
-  //  return false;
-  //}
   mGmodule = g_module_open(sLoadPath.c_str(), G_MODULE_BIND_LAZY);
   if (mGmodule == nullptr) {
     return false;
