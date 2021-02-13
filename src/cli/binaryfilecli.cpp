@@ -20,7 +20,10 @@ void BinaryFileCLI::configure_parser() {
   parser.set_required<std::string>("f", "filename",
                                    "input file to disassemble.");
   parser.set_required<bool>(name, altName, description);
-  parser.set_optional<std::string>("d", "dynamic", "", "input to the dynamic lib we want to load.");
+  parser.set_optional<std::string>("d", "dynamic", "",
+                                   "input to the dynamic lib we want to load.");
 }
 
-void BinaryFileCLI::executeAction() { m_disassemble.action(this->filename, this->dynamicLibs); }
+void BinaryFileCLI::executeAction() {
+  m_disassemble.action(this->filename, this->dynamicLibs);
+}

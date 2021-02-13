@@ -20,7 +20,7 @@ bool WindowsDLibLoad::LoadLibraryFromPath(std::string sLoadPath) {
     mDllFunctions.func_ptr[i] = reinterpret_cast<func_ptr_t>(GetProcAddress(
         mProcHinstance, DynamicLibMgr::getDynamicLibFunctionName(i)));
     assert(mDllFunctions.func_ptr[i] != nullptr);
-    if(mDllFunctions.func_ptr[i] == nullptr) {
+    if (mDllFunctions.func_ptr[i] == nullptr) {
       return false;
     }
   }
@@ -31,8 +31,6 @@ function_union &WindowsDLibLoad::getLoadedLibrary() { return mDllFunctions; }
 
 WindowsDLibLoad::~WindowsDLibLoad() {
   if (mProcHinstance != nullptr) {
-    mDllFunctions.by_type.Shutdown();
-    assert(mDllFunctions.by_type.IsInitalized() == false);
     FreeLibrary(mProcHinstance);
   }
 }

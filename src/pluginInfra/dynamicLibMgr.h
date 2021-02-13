@@ -9,21 +9,21 @@
 #endif
 
 #include "interfaces/types.h"
+#include <memory>
 
 class AbstractDisassembler;
 typedef int(CALL_CONV *func_ptr_t)();
 
 typedef struct disasmImpl {
   void (*Initalize)(Archtype archType);
-  void (*Shutdown)();
   bool (*IsInitalized)();
-  AbstractDisassembler* (*GetDisassembler)();
-  void (*Decode)(const unsigned char*,size_t);
+  AbstractDisassembler *(*GetDisassembler)();
+  void (*Decode)(const unsigned char *, size_t);
   void (*Clear)();
-  void (*GetOperands)(std::vector<std::string>&);
-  void (*GetOpCodes)(std::vector<std::string>&);
+  void (*GetOperands)(std::vector<std::string> &);
+  void (*GetOpCodes)(std::vector<std::string> &);
 
-  static const int NUM_FUNCTIONS = 8;
+  static const int NUM_FUNCTIONS = 7;
 } disasmImpl;
 
 typedef union {
@@ -43,12 +43,11 @@ public:
   static const char *getDynamicLibFunctionName(int index);
   static bool isInitalized();
   static void initalize(Archtype archType);
-  static void shutdown();
-  static AbstractDisassembler* getDisassembler();
+  static AbstractDisassembler *getDisassembler();
   static void decode(const unsigned char *code, size_t size);
   static void clear();
-  static void getOperands(std::vector<std::string>& operands);
-  static void getOpCodes(std::vector<std::string>& opCodes);
+  static void getOperands(std::vector<std::string> &operands);
+  static void getOpCodes(std::vector<std::string> &opCodes);
 };
 
 #endif // __Dynamic_Lib_Mgr_H__

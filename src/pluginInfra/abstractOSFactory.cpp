@@ -25,9 +25,9 @@ AbstractOSFactory_ptr AbstractOSFactory::createFactory() {
 bool AbstractOSFactory::doesFileExist(const std::string &filePath) {
   std::ifstream fileStream(filePath.c_str());
   return fileStream.good();
-  //if (FILE *file = fopen(filePath.c_str(), "r")) {
+  // if (FILE *file = fopen(filePath.c_str(), "r")) {
   //      fclose(file);
   //      return true;
   //}
-  //return false;
+  // return false;
 }

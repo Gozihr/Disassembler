@@ -48,12 +48,15 @@ include_directories(${IncludeDirs})
 
 set(SourceFiles disassemble.cpp 
                 capstoneDisassembler.cpp 
+                disassemble.cpp
+                dynamicDisassembler.cpp
                 parser.cpp
 )
 
 set(HeaderFiles
     capstoneDisassembler.h
     disassemble.h
+    dynamicDisassembler.h
     parser.h
 )
 

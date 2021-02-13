@@ -1,21 +1,21 @@
 #include "binaryDisassemble.h"
 #include "disassemble.h"
+#include "interfaces/helpers.h"
+#include "interfaces/types.h"
 #include "parser.h"
 #include "pluginInfra/dynamicLibMgr.h"
 #include <iostream>
-#include "interfaces/helpers.h"
-#include "interfaces/types.h"
 
-bool BinaryDisassemble::action(const std::string &filename, 
+bool BinaryDisassemble::action(const std::string &filename,
                                const std::string &dynamicLibPaths) {
   ASMParser asmParser(filename);
   std::cout << "OS: " << asmParser.OS() << std::endl;
   std::cout << "ISA: " << asmParser.Arch() << std::endl;
   std::cout << "Text section size: " << asmParser.Instructions().size()
             << std::endl;
-  
+
   DisassemblerType dType = DisassemblerType::CAPSTONE;
-  if(!dynamicLibPaths.empty()) {
+  if (!dynamicLibPaths.empty()) {
     std::vector<std::string> vecDynamicLibPaths;
     StringHelpers::Split(dynamicLibPaths, vecDynamicLibPaths);
     DynamicLibMgr::loadDynamicLibs(vecDynamicLibPaths);

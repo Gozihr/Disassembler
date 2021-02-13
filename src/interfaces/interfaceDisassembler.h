@@ -25,7 +25,7 @@ public:
     return operands;
   }
   virtual const std::vector<std::string> &getOpCodes() const { return opCodes; }
-  virtual void Clear() final {
+  virtual void Clear() {
     operands.clear();
     opCodes.clear();
   }

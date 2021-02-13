@@ -1,16 +1,19 @@
+#include "macFactory.h"
 #include <cassert>
 #include <dlfcn.h>
+#include <iostream>
 
-#include "macFactory.h"
-
-Load_ptr MacFactory::getLoadLib() { return Helpers::makeShared<MacDylibLoad>(); }
+Load_ptr MacFactory::getLoadLib() {
+  return Helpers::makeShared<MacDylibLoad>();
+}
 
 bool MacDylibLoad::LoadLibraryFromPath(std::string sLoadPath) {
-  //if (AbstractOSFactory::doesFileExist(sLoadPath)) {
+  // if (AbstractOSFactory::doesFileExist(sLoadPath)) {
   //  return false;
   //}
   mDylib = dlopen(sLoadPath.c_str(), RTLD_LAZY);
   if (mDylib == nullptr) {
+    std::cerr << dlerror() << std::endl;
     return false;
   }
 
@@ -18,7 +21,7 @@ bool MacDylibLoad::LoadLibraryFromPath(std::string sLoadPath) {
     mDyLibFunctions.func_ptr[i] = reinterpret_cast<func_ptr_t>(
         dlsym(mDylib, DynamicLibMgr::getDynamicLibFunctionName(i)));
     assert(mDyLibFunctions.func_ptr[i] != nullptr);
-    if(mDyLibFunctions.func_ptr[i] == nullptr) {
+    if (mDyLibFunctions.func_ptr[i] == nullptr) {
       return false;
     }
   }
@@ -30,8 +33,6 @@ function_union &MacDylibLoad::getLoadedLibrary() { return mDyLibFunctions; }
 
 MacDylibLoad::~MacDylibLoad() {
   if (mDylib != nullptr) {
-    mDyLibFunctions.by_type.Shutdown();
-    assert(mDyLibFunctions.by_type.IsInitalized() == false);
     dlclose(mDylib);
     mDylib = nullptr;
   }

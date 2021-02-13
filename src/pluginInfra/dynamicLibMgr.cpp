@@ -27,10 +27,9 @@ Singleton_DynamicLibMgr_Members::Singleton_DynamicLibMgr_Members() {}
 
 typedef SingletonBase<Singleton_DynamicLibMgr_Members> Singleton;
 
-const char *arrDylibFunctionNames[] = {"Initalize", "Shutdown", "IsInitalized",
-                                       "GetDisassembler", "Decode", "Clear",
-                                       "GetOperands", "GetOpCodes"
-                                      };
+const char *arrDylibFunctionNames[] = {
+    "Initalize", "IsInitalized", "GetDisassembler", "Decode",
+    "Clear",     "GetOperands",  "GetOpCodes"};
 
 function_union *Singleton_DynamicLibMgr_Members::getFunctions(
     const std::string &sChosenDylibPath) {
@@ -82,6 +81,7 @@ bool Singleton_DynamicLibMgr_Members::loadDynamicLib(
   Load_ptr dylibLoader = factory->getLoadLib();
   if (dylibLoader->LoadLibraryFromPath(sLoadPath)) {
     mapFilePathToDylibFunctions[sLoadPath] = dylibLoader;
+    setDefaultDynamicLib(sLoadPath);
     return true;
   }
   return false;
@@ -136,51 +136,42 @@ void DynamicLibMgr::initalize(Archtype archType) {
   dylibFunctions->by_type.Initalize(archType);
 }
 
-void DynamicLibMgr::shutdown() {
+AbstractDisassembler *DynamicLibMgr::getDisassembler() {
   auto &instance = Singleton::get();
   auto lock(instance.getLock());
   function_union *dylibFunctions = instance.getFunctions();
   assert(dylibFunctions != nullptr);
-  dylibFunctions->by_type.Shutdown();
+  return dylibFunctions->by_type.GetDisassembler();
 }
 
-  AbstractDisassembler* DynamicLibMgr::getDisassembler() {
-    auto &instance = Singleton::get();
-    auto lock(instance.getLock());
-    function_union *dylibFunctions = instance.getFunctions();
-    assert(dylibFunctions != nullptr);
-    return dylibFunctions->by_type.GetDisassembler();
-  }
+void DynamicLibMgr::decode(const unsigned char *code, size_t size) {
+  auto &instance = Singleton::get();
+  auto lock(instance.getLock());
+  function_union *dylibFunctions = instance.getFunctions();
+  assert(dylibFunctions != nullptr);
+  dylibFunctions->by_type.Decode(code, size);
+}
 
-  void DynamicLibMgr::decode(const unsigned char *code, size_t size) {
-    auto &instance = Singleton::get();
-    auto lock(instance.getLock());
-    function_union *dylibFunctions = instance.getFunctions();
-    assert(dylibFunctions != nullptr);
-    dylibFunctions->by_type.Decode(code,size);
+void DynamicLibMgr::clear() {
+  auto &instance = Singleton::get();
+  auto lock(instance.getLock());
+  function_union *dylibFunctions = instance.getFunctions();
+  assert(dylibFunctions != nullptr);
+  dylibFunctions->by_type.Clear();
+}
 
-  }
+void DynamicLibMgr::getOperands(std::vector<std::string> &operands) {
+  auto &instance = Singleton::get();
+  auto lock(instance.getLock());
+  function_union *dylibFunctions = instance.getFunctions();
+  assert(dylibFunctions != nullptr);
+  dylibFunctions->by_type.GetOperands(operands);
+}
 
-  void DynamicLibMgr::clear() {
-    auto &instance = Singleton::get();
-    auto lock(instance.getLock());
-    function_union *dylibFunctions = instance.getFunctions();
-    assert(dylibFunctions != nullptr);
-    dylibFunctions->by_type.Clear();
-  }
-
-  void DynamicLibMgr::getOperands(std::vector<std::string>& operands) {
-    auto &instance = Singleton::get();
-    auto lock(instance.getLock());
-    function_union *dylibFunctions = instance.getFunctions();
-    assert(dylibFunctions != nullptr);
-    dylibFunctions->by_type.GetOperands(operands);
-  }
-
-  void DynamicLibMgr::getOpCodes(std::vector<std::string>& opCodes) {
-    auto &instance = Singleton::get();
-    auto lock(instance.getLock());
-    function_union *dylibFunctions = instance.getFunctions();
-    assert(dylibFunctions != nullptr);
-    dylibFunctions->by_type.GetOpCodes(opCodes);
-  }
+void DynamicLibMgr::getOpCodes(std::vector<std::string> &opCodes) {
+  auto &instance = Singleton::get();
+  auto lock(instance.getLock());
+  function_union *dylibFunctions = instance.getFunctions();
+  assert(dylibFunctions != nullptr);
+  dylibFunctions->by_type.GetOpCodes(opCodes);
+}

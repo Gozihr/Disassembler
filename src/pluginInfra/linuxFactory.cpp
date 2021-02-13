@@ -7,9 +7,9 @@ Load_ptr LinuxFactory::getLoadLib() {
 }
 
 bool LinuxSOLoad::LoadLibraryFromPath(std::string sLoadPath) {
-  if (AbstractOSFactory::doesFileExist(sLoadPath)) {
-    return false;
-  }
+  // if (AbstractOSFactory::doesFileExist(sLoadPath)) {
+  //  return false;
+  //}
   mGmodule = g_module_open(sLoadPath.c_str(), G_MODULE_BIND_LAZY);
   if (mGmodule == nullptr) {
     return false;
@@ -18,11 +18,11 @@ bool LinuxSOLoad::LoadLibraryFromPath(std::string sLoadPath) {
     g_module_symbol(mGmodule, DynamicLibMgr::getDynamicLibFunctionName(i),
                     (gpointer *)&mSOLibFunctions.func_ptr[i]);
     assert(mSOLibFunctions.func_ptr[i] != nullptr);
-    if(mSOLibFunctions.func_ptr[i] == nullptr) {
+    if (mSOLibFunctions.func_ptr[i] == nullptr) {
       return false;
     }
   }
-  
+
   return true;
 }
 
@@ -30,8 +30,6 @@ function_union &LinuxSOLoad::getLoadedLibrary() { return mSOLibFunctions; }
 
 LinuxSOLoad::~LinuxSOLoad() {
   if (mGmodule != nullptr) {
-    mSOLibFunctions.by_type.Shutdown();
-    assert(mSOLibFunctions.by_type.IsInitalized() == false);
     g_module_close(mGmodule);
     mGmodule = nullptr;
   }

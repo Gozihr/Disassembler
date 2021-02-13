@@ -1,7 +1,7 @@
 #ifndef __Capstone_Disassembler_H__
 #define __Capstone_Disassembler_H__
 
-#include "disassemble.h"
+#include "interfaces/interfaceDisassembler.h"
 
 struct cs_insn;
 class CapstoneDisassembler : public AbstractDisassembler {

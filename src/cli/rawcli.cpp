@@ -22,7 +22,8 @@ void RawCLI::configure_parser() {
   parser.set_required<std::string>("i", "input",
                                    "input string to disassemble.");
   parser.set_required<bool>(name, altName, description);
-  parser.set_optional<std::string>("d", "dynamic", "", "input to the dynamic lib we want to load.");
+  parser.set_optional<std::string>("d", "dynamic", "",
+                                   "input to the dynamic lib we want to load.");
 }
 
 void RawCLI::executeAction() {

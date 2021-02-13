@@ -6,11 +6,10 @@
 #include <sstream>
 #include <vector>
 
-#include "interfaces/types.h"
-#include "rawDisassemble.h"
-#include "pluginInfra/dynamicLibMgr.h"
 #include "interfaces/helpers.h"
 #include "interfaces/types.h"
+#include "pluginInfra/dynamicLibMgr.h"
+#include "rawDisassemble.h"
 
 namespace {
 std::vector<unsigned char> HexToBytes(const std::string &hex) {
@@ -35,7 +34,8 @@ std::vector<unsigned char> HexToBytesFormat(const std::string &hex) {
 }
 } // namespace
 
-bool RawDisassemble::action(std::string assembly, std::string arch, const std::string &dynamicLibPaths) {
+bool RawDisassemble::action(std::string assembly, std::string arch,
+                            const std::string &dynamicLibPaths) {
   std::vector<unsigned char> bytesArr;
   bytesArr = ::HexToBytesFormat(assembly);
   Arch_iterator archFound = ArchTypeMap.find(arch);
@@ -45,7 +45,7 @@ bool RawDisassemble::action(std::string assembly, std::string arch, const std::s
   }
 
   DisassemblerType dType = DisassemblerType::CAPSTONE;
-  if(!dynamicLibPaths.empty()) {
+  if (!dynamicLibPaths.empty()) {
     std::vector<std::string> vecDynamicLibPaths;
     StringHelpers::Split(dynamicLibPaths, vecDynamicLibPaths);
     DynamicLibMgr::loadDynamicLibs(vecDynamicLibPaths);
