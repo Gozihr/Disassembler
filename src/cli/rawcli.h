@@ -22,6 +22,7 @@ public:
 private:
   std::string arch;
   std::string assembly;
+  std::string dynamicLibs;
 };
 
 #endif // __raw_cli_h__

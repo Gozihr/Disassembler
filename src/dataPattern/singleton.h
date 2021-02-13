@@ -1,62 +1,32 @@
 #ifndef singleton_h
 #define singleton_h
 
-#include <atomic>
-#include <future>
 #include <memory>
 #include <mutex>
-#include <thread>
 
-#include "singletonMgr.h"
-
+// typedef std::lock_guard<std::mutex> Lock;
+typedef std::unique_lock<std::mutex> Lock;
 template <class T> class SingletonBase : public T {
-public:
-  typedef std::atomic<SingletonBase *> pointer;
-  static SingletonBase &get();
+  SingletonBase<T>(const SingletonBase<T> &) = delete;
+  SingletonBase<T> &operator=(const SingletonBase<T> &) = delete;
+  SingletonBase<T>() = default;
 
-private:
-  // prevent this class from ever being instantiated directly
-  SingletonBase();
-  // to allow for determanistic singleton destruction (only to be called by
-  // SingletonMgr)
-  static void release();
-  static SingletonBase *getPtr();
-  // prevent this class from ever being copied or moved
-  SingletonBase(const SingletonBase &) = delete;
-  SingletonBase(SingletonBase &&) = delete;
-  static std::mutex s_guardMutex;
-  static pointer m_pInstance;
-  friend class SingletonMgr;
-  // NOTE: MSVC triggers internal error on the below line.
-  // friend SingletonMgr::areEqual(SingletonMgr::SingletonReleaseFunc*
-  // pSingletonRelease);
+  static std::unique_ptr<SingletonBase<T>> m_pInstance;
+  static std::once_flag m_once;
+  std::mutex m_mutex;
+
+public:
+  virtual ~SingletonBase<T>() = default;
+  static SingletonBase<T> *getPtr() {
+    std::call_once(m_once, []() { m_pInstance.reset(new SingletonBase<T>); });
+    return m_pInstance.get();
+  }
+  static SingletonBase<T> &get() { return *getPtr(); }
+  Lock getLock() { return Lock(m_mutex); }
 };
 
-template <class T> SingletonBase<T>::SingletonBase() {
-  SingletonMgr::registerSingleton(SingletonBase<T>::release);
-}
-
-template <class T> void SingletonBase<T>::release() { delete getPtr(); }
-
-template <class T> SingletonBase<T> &SingletonBase<T>::get() {
-  return *getPtr();
-}
-
-#define DECLARE_SINGLETON_STATICS(T)                                           \
-  template <> T::pointer T::m_pInstance;                                       \
-  template <> std::mutex T::s_guardMutex;                                      \
-                                                                               \
-  template <> T *T::getPtr() {                                                 \
-    T *ptr = m_pInstance.load(std::memory_order_acquire);                      \
-    if (!ptr) {                                                                \
-      std::lock_guard<std::mutex> Lock(s_guardMutex);                          \
-      ptr = m_pInstance.load(std::memory_order_relaxed);                       \
-      if (!ptr) {                                                              \
-        ptr = new T();                                                         \
-        m_pInstance.store(ptr, std::memory_order_release);                     \
-      }                                                                        \
-    }                                                                          \
-    return ptr;                                                                \
-  }
+template <typename T>
+std::unique_ptr<SingletonBase<T>> SingletonBase<T>::m_pInstance;
+template <typename T> std::once_flag SingletonBase<T>::m_once;
 
 #endif // singleton_h

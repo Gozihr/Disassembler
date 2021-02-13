@@ -9,7 +9,8 @@ public:
   BinaryDisassemble() {}
 
 public:
-  virtual bool action(std::string filename);
+  virtual bool action(const std::string &filename,
+                      const std::string &dynamicLibPaths);
 };
 
 #endif // __binary_disassemble_h__

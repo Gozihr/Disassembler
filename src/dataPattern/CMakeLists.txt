@@ -1,10 +1,9 @@
 set (SourceFiles
-     singletonMgr.cpp
+    singleton.cpp
 )
 
 set(HeaderFiles
     singleton.h
-    singletonMgr.h
 )
 
 add_library (Disassembler.DataPattern OBJECT

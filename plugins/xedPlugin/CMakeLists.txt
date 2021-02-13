@@ -38,12 +38,21 @@ endif()
 set(XED ${CMAKE_SOURCE_DIR}/packages/xed)
 include_directories(${CMAKE_SOURCE_DIR}/src/interfaces ${XED}/include)
 
-set(SOURCE_FILES xedDisassembler.cpp)
-add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
+set (SourceFiles
+     xedDisassembler.cpp
+     xedLibInterface.cpp
+)
+
+set(HeaderFiles
+    xedDisassembler.h
+
+)
+
+add_library(${PROJECT_NAME} SHARED ${SourceFiles} ${HeaderFiles})
 
 set(XED_LDFLAGS -L${XED}/lib -lxed)
 if(MSVC)
-    add_library(lib${PROJECT_NAME} STATIC ${SOURCE_FILES})
+    add_library(lib${PROJECT_NAME} STATIC ${SourceFiles} ${HeaderFiles})
     set(XED_LDFLAGS "${XED}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}xed${CMAKE_STATIC_LIBRARY_SUFFIX}")
     target_link_libraries(lib${PROJECT_NAME} PRIVATE  ${XED_LDFLAGS})
 endif()

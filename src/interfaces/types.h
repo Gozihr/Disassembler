@@ -1,6 +1,7 @@
 #ifndef __Types_H__
 #define __Types_H__
 
+#include <sstream>
 #include <string>
 #include <unordered_map>
 

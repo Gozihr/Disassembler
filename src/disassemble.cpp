@@ -1,11 +1,16 @@
 #include "disassemble.h"
 #include "capstoneDisassembler.h"
+#include "dynamicDisassembler.h"
 
 namespace {
-AbstractDisassembler *pickDisam(Archtype archType, DisassemblerType disamType) {
+std::unique_ptr<AbstractDisassembler> pickDisam(Archtype archType,
+                                                DisassemblerType disamType) {
   switch (disamType) {
   case DisassemblerType::CAPSTONE: {
-    return new CapstoneDisassembler(archType);
+    return std::make_unique<CapstoneDisassembler>(archType);
+  }
+  case DisassemblerType::DYNAMIC: {
+    return std::make_unique<DynamicDisassembler>(archType);
   }
   }
   return nullptr;
@@ -14,8 +19,7 @@ AbstractDisassembler *pickDisam(Archtype archType, DisassemblerType disamType) {
 
 Disassembler::Disassembler(Archtype archtype, DisassemblerType disamType)
     : InterfaceDisassembler() {
-  pDisasm =
-      std::unique_ptr<AbstractDisassembler>(pickDisam(archtype, disamType));
+  pDisasm = pickDisam(archtype, disamType);
 }
 
 void Disassembler::Decode(const unsigned char *code, size_t size) {

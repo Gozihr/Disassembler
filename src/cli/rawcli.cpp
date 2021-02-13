@@ -11,6 +11,7 @@ RawCLI::RawCLI(int argc, char **argv) : BaseCLI(argc, argv) {
 
   this->arch = parser.get<std::string>("a");
   this->assembly = parser.get<std::string>("i");
+  this->dynamicLibs = parser.get<std::string>("d");
 }
 
 RawCLI::~RawCLI() {}
@@ -21,8 +22,10 @@ void RawCLI::configure_parser() {
   parser.set_required<std::string>("i", "input",
                                    "input string to disassemble.");
   parser.set_required<bool>(name, altName, description);
+  parser.set_optional<std::string>("d", "dynamic", "",
+                                   "input to the dynamic lib we want to load.");
 }
 
 void RawCLI::executeAction() {
-  m_disassemble.action(this->assembly, this->arch);
+  m_disassemble.action(this->assembly, this->arch, this->dynamicLibs);
 }

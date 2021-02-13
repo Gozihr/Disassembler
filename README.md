@@ -18,7 +18,7 @@ ninja XED_TEST Disassembler_TEST
 Windows is still experimental and for now you can just build release
 - Using Ninja
 ```powershell
-cmake -GNinja -Bbuild -DCMAKE_BUILD_TYPE=Release
+cmake -GNinja -Bbuild
 ninja -C./build
 ```
 - Using MSBUILD
@@ -41,6 +41,10 @@ msbuild build\Disassembler.sln -t:Build -p:Configuration=Release
 - `./disasm --raw -a x86_64 -i "0x 55 48 8b 05 b8 13 00 00"`
 - `./disasm --raw -a x86_64 -i "55 48 8b 05 b8 13 00 00"`
 - `./disasm --binary -f /bin/ls`
+### Dynamic Lib Usage
+- `./disasm --binary -f src/test/hello.linux.out -d build/plugins/xedPlugin/libxedPlugin.so`
+- `./disasm --raw -a x86_64 -i 0x55488b05b8130000 -d build/plugins/xedPlugin/libxedPlugin.so`
+
 
 ## Docker Build & Run
 - build: `docker build -t disassembler:latest .`
@@ -50,10 +54,10 @@ msbuild build\Disassembler.sln -t:Build -p:Configuration=Release
 ## Debuging 
 - Switch compiler
     - in the process of building this project i've found differences between clang and gcc. First step I try is to swap the compilers
-    - `cmake -D CMAKE_C_COMPILER=clang -D CMAKE_CXX_COMPILER=clang++ ..`
+    - `cmake -D CMAKE_C_COMPILER=clang -D CMAKE_CXX_COMPILER=clang++ -B build`
 - Build with Debug symbols
     - If you need unoptimized replace -O3 with -O0 whereever you find CMAKE_CXX_FLAGS. If you don't just run below
-    - `cmake -DCMAKE_BUILD_TYPE=Debug ..`
+    - `cmake -DCMAKE_BUILD_TYPE=Debug -B build`
 - Check for Dwarf Version
     - `readelf --debug-dump=info src/cli/disasm | grep "Version" | uniq`
 
@@ -67,9 +71,10 @@ msbuild build\Disassembler.sln -t:Build -p:Configuration=Release
 - [ ] input/output files
     - [x] input
     - [ ] output
-- [ ] elf/pe/mach-O
+- [x] elf/pe/mach-O
     - [x] mach-O
     - [x] elf
+    - [x] pe
 - add support for more disassemblers (compare output)
     - [x] XED
-- [ ] Allow for dynamic loading of disassemblers (plugin model)
+- [x] Allow for dynamic loading of disassemblers (plugin model)
