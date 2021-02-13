@@ -1,12 +1,17 @@
 #include "disassemble.h"
 #include "capstoneDisassembler.h"
+#include "pluginInfra/dynamicLibMgr.h"
 
 namespace {
 AbstractDisassembler *pickDisam(Archtype archType, DisassemblerType disamType) {
   switch (disamType) {
-  case DisassemblerType::CAPSTONE: {
-    return new CapstoneDisassembler(archType);
-  }
+    case DisassemblerType::CAPSTONE: {
+      return new CapstoneDisassembler(archType);
+    }
+    case DisassemblerType::DYNAMIC: {
+      DynamicLibMgr::initalize(archType);
+      return DynamicLibMgr::getDisassembler();
+    }
   }
   return nullptr;
 }

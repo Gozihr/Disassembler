@@ -32,31 +32,35 @@ private:
   // pSingletonRelease);
 };
 
-template <class T> SingletonBase<T>::SingletonBase() {
-  SingletonMgr::registerSingleton(SingletonBase<T>::release);
-}
 
-template <class T> void SingletonBase<T>::release() { delete getPtr(); }
-
-template <class T> SingletonBase<T> &SingletonBase<T>::get() {
-  return *getPtr();
-}
-
-#define DECLARE_SINGLETON_STATICS(T)                                           \
-  template <> T::pointer T::m_pInstance;                                       \
-  template <> std::mutex T::s_guardMutex;                                      \
-                                                                               \
-  template <> T *T::getPtr() {                                                 \
-    T *ptr = m_pInstance.load(std::memory_order_acquire);                      \
-    if (!ptr) {                                                                \
-      std::lock_guard<std::mutex> Lock(s_guardMutex);                          \
-      ptr = m_pInstance.load(std::memory_order_relaxed);                       \
-      if (!ptr) {                                                              \
-        ptr = new T();                                                         \
-        m_pInstance.store(ptr, std::memory_order_release);                     \
-      }                                                                        \
-    }                                                                          \
-    return ptr;                                                                \
-  }
+#define DECLARE_SINGLETON_STATICS(T)                                            \
+    template<>T::pointer T::m_pInstance;                                        \
+    template<>std::mutex T::s_guardMutex;                                       \
+    template<>T* T::getPtr() {                                                  \
+        T* ptr = m_pInstance.load(std::memory_order_acquire);                   \
+        if (!ptr) {                                                             \
+            std::lock_guard<std::mutex> Lock(s_guardMutex);                     \
+            ptr = m_pInstance.load(std::memory_order_relaxed);                  \
+            if(!ptr) {                                                          \
+                ptr = new T();                                                  \
+                m_pInstance.store(ptr, std::memory_order_release);              \
+            }                                                                   \
+        }                                                                       \
+        return ptr;                                                             \
+    }                                                                           \
+                                                                                \
+    template<>void T::release()                                                 \
+    {                                                                           \
+        delete getPtr();                                                        \
+    }                                                                           \
+                                                                                \
+    template<>T::SingletonBase()                                                \
+    {                                                                           \
+        SingletonMgr::registerSingleton(T::release);                            \
+    }                                                                           \
+                                                                                \
+    template<>T& T::get() {                                                     \
+        return *getPtr();                                                       \
+    }                                                                           \
 
 #endif // singleton_h

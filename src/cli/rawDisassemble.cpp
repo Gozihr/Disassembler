@@ -8,6 +8,9 @@
 
 #include "interfaces/types.h"
 #include "rawDisassemble.h"
+#include "pluginInfra/dynamicLibMgr.h"
+#include "interfaces/helpers.h"
+#include "interfaces/types.h"
 
 namespace {
 std::vector<unsigned char> HexToBytes(const std::string &hex) {
@@ -32,7 +35,7 @@ std::vector<unsigned char> HexToBytesFormat(const std::string &hex) {
 }
 } // namespace
 
-bool RawDisassemble::action(std::string assembly, std::string arch) {
+bool RawDisassemble::action(std::string assembly, std::string arch, const std::string &dynamicLibPaths) {
   std::vector<unsigned char> bytesArr;
   bytesArr = ::HexToBytesFormat(assembly);
   Arch_iterator archFound = ArchTypeMap.find(arch);
@@ -40,8 +43,16 @@ bool RawDisassemble::action(std::string assembly, std::string arch) {
     std::cerr << "architecture not found!" << std::endl;
     return false;
   }
+
+  DisassemblerType dType = DisassemblerType::CAPSTONE;
+  if(!dynamicLibPaths.empty()) {
+    std::vector<std::string> vecDynamicLibPaths = Helpers::Split(dynamicLibPaths);
+    DynamicLibMgr::loadDynamicLibs(vecDynamicLibPaths);
+    dType = DisassemblerType::DYNAMIC;
+  }
+
   Archtype archType = archFound->second;
-  Disassembler disasm(archType);
+  Disassembler disasm(archType, dType);
   disasm.Decode(bytesArr.data(), bytesArr.size());
 
   std::cout << disasm << std::endl;

@@ -4,7 +4,7 @@
 #include "windowsFactory.h"
 
 Load_ptr WindowsFactory::getLoadLib() {
-  return Helper::makeShared<WindowsDLibLoad>();
+  return Helpers::makeShared<WindowsDLibLoad>();
 }
 
 bool WindowsDLibLoad::LoadLibraryFromPath(std::string sLoadPath) {
@@ -20,17 +20,19 @@ bool WindowsDLibLoad::LoadLibraryFromPath(std::string sLoadPath) {
     mDllFunctions.func_ptr[i] = reinterpret_cast<func_ptr_t>(GetProcAddress(
         mProcHinstance, DynamicLibMgr::getDynamicLibFunctionName(i)));
     assert(mDllFunctions.func_ptr[i] != nullptr);
+    if(mDllFunctions.func_ptr[i] == nullptr) {
+      return false;
+    }
   }
-  mDllFunctions.by_type.initalize();
-  return mDllFunctions.by_type.isInitalized();
+  return true;
 }
 
 function_union &WindowsDLibLoad::getLoadedLibrary() { return mDllFunctions; }
 
 WindowsDLibLoad::~WindowsDLibLoad() {
   if (mProcHinstance != nullptr) {
-    mDllFunctions.by_type.shutdown();
-    assert(mDllFunctions.by_type.isInitalized() == false);
+    mDllFunctions.by_type.Shutdown();
+    assert(mDllFunctions.by_type.IsInitalized() == false);
     FreeLibrary(mProcHinstance);
   }
 }

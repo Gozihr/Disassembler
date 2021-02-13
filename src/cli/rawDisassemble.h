@@ -9,7 +9,8 @@ public:
   RawDisassemble() {}
 
 public:
-  virtual bool action(std::string assembly, std::string arch);
+  virtual bool action(std::string assembly, std::string arch, const std::string &dynamicLibPaths);
+  
 };
 
 #endif // __raw_disassemble_h__

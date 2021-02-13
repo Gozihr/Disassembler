@@ -15,12 +15,12 @@ public:
 
 typedef std::shared_ptr<ILoad> Load_ptr;
 
-namespace Helper {
+namespace Helpers {
 
 template <typename Derived> std::shared_ptr<ILoad> makeShared() {
   return std::make_shared<Derived>();
 }
-}; // namespace Helper
+}; // namespace Helpers
 
 class AbstractOSFactory;
 typedef std::shared_ptr<AbstractOSFactory> AbstractOSFactory_ptr;

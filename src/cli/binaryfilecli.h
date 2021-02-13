@@ -21,6 +21,7 @@ public:
 
 private:
   std::string filename;
+  std::string dynamicLibs;
 };
 
 #endif // __binary_file_cli_h__

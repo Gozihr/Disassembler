@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-enum class DisassemblerType { CAPSTONE };
+enum class DisassemblerType { CAPSTONE, DYNAMIC };
 
 class Disassembler : public InterfaceDisassembler {
 public:
