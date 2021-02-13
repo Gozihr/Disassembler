@@ -18,7 +18,7 @@ ninja XED_TEST Disassembler_TEST
 Windows is still experimental and for now you can just build release
 - Using Ninja
 ```powershell
-cmake -GNinja -Bbuild -DCMAKE_BUILD_TYPE=Release
+cmake -GNinja -Bbuild
 ninja -C./build
 ```
 - Using MSBUILD
