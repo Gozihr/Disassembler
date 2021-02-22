@@ -5,12 +5,18 @@
 #include "types.h"
 #include <memory>
 
-extern "C" AbstractDisassembler *GetDisassembler();
-extern "C" void Decode(const unsigned char *code, size_t size);
-extern "C" void Clear();
-extern "C" void GetOperands(std::vector<std::string> &operands);
-extern "C" void GetOpCodes(std::vector<std::string> &opCodes);
-extern "C" void Initalize(Archtype archType);
-extern "C" bool IsInitalized();
+#if defined(_WIN32) || defined(_WIN64)
+#define EXPORT(type) extern "C" __declspec(dllexport) type __cdecl
+#else
+#define EXPORT(type) extern "C" type
+#endif
+
+EXPORT(AbstractDisassembler*) GetDisassembler();
+EXPORT(void) Decode(const unsigned char *code, size_t size);
+EXPORT(void) Clear();
+EXPORT(const std::vector<std::string>&) GetOperands();
+EXPORT(const std::vector<std::string>&) GetOpCodes();
+EXPORT(void) Initalize(Archtype archType);
+EXPORT(bool) IsInitalized();
 
 #endif //__lib_Interface_H__

@@ -19,11 +19,12 @@ elseif(WIN32)
         set(CAPSTONE_INCLUDE_DIRS ${CAPSTONE_DIR}/include/capstone)
 
         set(CAPSTONE_LDFLAGS "${CAPSTONE_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}capstone${CMAKE_STATIC_LIBRARY_SUFFIX}")
-        set(LIEF_LDFLAGS "${LIEF_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}LIEF${CMAKE_STATIC_LIBRARY_SUFFIX}")
+        set(LIEF_LDFLAGS "${LIEF_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}LIEF${MTPOSTFIX}${CMAKE_STATIC_LIBRARY_SUFFIX}")
+        set(LIEF_INCLUDE_DIR ${LIEF_DIR}/include)
 endif()
 
 set(IncludeDirs ${CAPSTONE_INCLUDE_DIRS}/..
-                ${LIEF_DIR}/include
+                ${LIEF_INCLUDE_DIR}
 )
 set(TargetLibraries ${CAPSTONE_LDFLAGS}
                     ${LIEF_LDFLAGS}
@@ -72,10 +73,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER disassemble.h)
 if(MSVC)
     # Used for the 'and', 'or' ... keywords - See: http://www.cplusplus.com/reference/ciso646/
     target_compile_options(${PROJECT_NAME} PUBLIC /FIiso646.h)
-    
-    #TODO experiment with the below as a replacement for /MT to fix cmake warnings
-    #set_property(TARGET ${PROJECT_NAME} PROPERTY LINK_FLAGS /NODEFAULTLIB:MSVCRT)
-    #set_property(TARGET ${PROJECT_NAME} PROPERTY LINK_FLAGS /NODEFAULTLIB:LIBCMT)
 endif()
 
 INSTALL(TARGETS ${PROJECT_NAME} 

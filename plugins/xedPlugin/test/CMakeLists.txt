@@ -6,7 +6,6 @@ download_file(https://github.com/catchorg/Catch2/releases/download/v2.13.0/catch
               MD5
               209cbb2f8f37224cc5f7261cf9388bc2)
 
-set(XED ${CMAKE_SOURCE_DIR}/packages/xed)
 include_directories(${XED}/include ${CMAKE_SOURCE_DIR}/packages/ ${CMAKE_SOURCE_DIR}/plugins/xedPlugin)
 add_executable(${PROJECT_NAME} test.cpp)
 

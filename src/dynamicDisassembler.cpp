@@ -5,7 +5,10 @@ DynamicDisassembler::DynamicDisassembler(Archtype archType) {
   DynamicLibMgr::initalize(archType);
 }
 
-DynamicDisassembler::~DynamicDisassembler() {}
+DynamicDisassembler::~DynamicDisassembler() { 
+	AbstractDisassembler::Clear();
+	Clear(); 
+}
 
 void DynamicDisassembler::Decode(const unsigned char *code, size_t size) {
   DynamicLibMgr::decode(code, size);

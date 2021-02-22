@@ -18,46 +18,93 @@ endfunction(download_file)
 
 function(decompress tarfile path)
 if(NOT EXISTS ${path})
+    get_filename_component(FILE_EXT ${tarfile} LAST_EXT)
+    get_filename_component(PATH_PARENT ${path} DIRECTORY)
     if(WIN32)
         execute_process (
-            COMMAND cmd.exe /c mkdir ${path}
-            #COMMAND 7z x ${tarfile}  -o${path} #Note Expand-Archive can be slow can replace with 7z
-            COMMAND powershell.exe -ExecutionPolicy Bypass Expand-Archive -LiteralPath ${tarfile} -DestinationPath ${path}
+            COMMAND powershell.exe -ExecutionPolicy Bypass Expand-Archive -LiteralPath ${tarfile} -DestinationPath ${PATH_PARENT}
         )
         execute_process (
-            COMMAND powershell.exe -ExecutionPolicy Bypass -Command "${CMAKE_SOURCE_DIR}/scripts/moveFiles.ps1 ${path} ${tarfile}"
+            COMMAND powershell.exe -ExecutionPolicy Bypass -Command "${CMAKE_SOURCE_DIR}/scripts/renameDir.ps1 ${path} ${tarfile}"
+        )
+    elseif(LINUX AND ${FILE_EXT} STREQUAL ".zip")
+        execute_process (
+            COMMAND unzip -qq ${tarfile} -d ${PATH_PARENT}
+        )
+        execute_process (
+            COMMAND bash -c "${CMAKE_SOURCE_DIR}/scripts/renameDir.sh ${path} ${tarfile}"
         )
     else()
-        execute_process (
-            COMMAND mkdir ${path}
-            COMMAND tar -xzvf ${tarfile} -C ${path} --strip-components 1    
-        )
+        execute_process ( COMMAND mkdir -p ${path})
+        execute_process (COMMAND tar -xzvf ${tarfile} -C ${path} --strip-components 1)
     endif()
 endif()
-
 endfunction(decompress)
 
 
-if(LINUX)
-    download_file(https://github.com/lief-project/LIEF/releases/download/0.10.1/LIEF-0.10.1-Linux.tar.gz
-              ${CMAKE_SOURCE_DIR}/packages/LIEF-0.10.1.tar.gz
-              MD5
-              15f14210a342616def57e8344b9a5d5c)
-    decompress(${CMAKE_SOURCE_DIR}/packages/LIEF-0.10.1.tar.gz ${CMAKE_SOURCE_DIR}/packages/LIEF)
-elseif(WIN32)
-    download_file(https://github.com/lief-project/LIEF/releases/download/0.10.1/LIEF-0.10.1-win64.zip
-              ${CMAKE_SOURCE_DIR}/packages/LIEF-0.10.1.zip
-              MD5
-              a3bcf27708f46278519c5443857627c4)
-    decompress(${CMAKE_SOURCE_DIR}/packages/LIEF-0.10.1.zip ${CMAKE_SOURCE_DIR}/packages/LIEF)
-elseif(APPLE)
-    download_file(https://github.com/lief-project/LIEF/releases/download/0.10.1/LIEF-0.10.1-Darwin.tar.gz
-              ${CMAKE_SOURCE_DIR}/packages/LIEF-0.10.1.tar.gz
-              MD5
-              88ce790a24fd4683950b3aa1536128ae)
-    decompress(${CMAKE_SOURCE_DIR}/packages/LIEF-0.10.1.tar.gz ${CMAKE_SOURCE_DIR}/packages/LIEF)
+function(buildLIEF srcPath buildPath installPath buildType)
+    if(WIN32)
+        string(TOUPPER ${buildType} buildTypeUpper)
+        set(LIEFCRTTYPE -DLIEF_USE_CRT_${buildTypeUpper}=${MTPOSTFIX})
+    endif()
+    
+    execute_process (
+        COMMAND cmake -S ${srcPath} -B ${buildPath} -DCMAKE_BUILD_TYPE=${buildType} ${LIEFCRTTYPE} 
+    )
+    execute_process (
+        #COMMAND msbuild ${buildPath}\LIEF.sln -t:Build -p:Configuration=${buildType}
+        COMMAND cmake --build ${buildPath} --target LIB_LIEF --config ${buildType}
+    )
+    execute_process (
+        COMMAND cmake --install ${buildPath} --prefix ${installPath} --config ${buildType}
+    )
+endfunction(buildLIEF)
+
+if(WIN32)
+    if(CMAKE_BUILD_TYPE MATCHES Release)
+        set(MTPOSTFIX MT)
+    elseif(CMAKE_BUILD_TYPE MATCHES Debug)
+        set(MTPOSTFIX MTd)
+    endif()
+endif()
+
+if( DEFINED BUILDLIEFSRC OR (WIN32 AND CMAKE_BUILD_TYPE MATCHES Debug))
+    message(STATUS  "starting a LIEF source build")
+    download_file(https://github.com/lief-project/LIEF/archive/0.11.0.zip
+                  ${CMAKE_SOURCE_DIR}/packages/LIEF-0.11.0.zip
+                  MD5
+                  1539a836b9d111c69b7e8be09f3308c2
+    )
+    decompress(${CMAKE_SOURCE_DIR}/packages/LIEF-0.11.0.zip ${CMAKE_SOURCE_DIR}/packages/LIEF-src)
+    buildLIEF(${CMAKE_SOURCE_DIR}/packages/LIEF-src
+              ${CMAKE_SOURCE_DIR}/packages/LIEF-build
+              ${CMAKE_SOURCE_DIR}/packages/LIEF
+              ${CMAKE_BUILD_TYPE}
+    )
+    #if it isn't set, set it to true          
+    set(BUILDLIEFSRC true)
 else()
-message(FATAL_ERROR  "No other platforms are supported.")
+    if(LINUX)
+        download_file(https://github.com/lief-project/LIEF/releases/download/0.10.1/LIEF-0.10.1-Linux.tar.gz
+                  ${CMAKE_SOURCE_DIR}/packages/LIEF-0.10.1.tar.gz
+                  MD5
+                  15f14210a342616def57e8344b9a5d5c)
+        decompress(${CMAKE_SOURCE_DIR}/packages/LIEF-0.10.1.tar.gz ${CMAKE_SOURCE_DIR}/packages/LIEF)
+    elseif(WIN32)
+        download_file(https://github.com/lief-project/LIEF/releases/download/0.10.1/LIEF-0.10.1-win64.zip
+                  ${CMAKE_SOURCE_DIR}/packages/LIEF-0.10.1.zip
+                  MD5
+                  a3bcf27708f46278519c5443857627c4)
+        decompress(${CMAKE_SOURCE_DIR}/packages/LIEF-0.10.1.zip ${CMAKE_SOURCE_DIR}/packages/LIEF)
+    elseif(APPLE)
+        download_file(https://github.com/lief-project/LIEF/releases/download/0.10.1/LIEF-0.10.1-Darwin.tar.gz
+                  ${CMAKE_SOURCE_DIR}/packages/LIEF-0.10.1.tar.gz
+                  MD5
+                  88ce790a24fd4683950b3aa1536128ae)
+        decompress(${CMAKE_SOURCE_DIR}/packages/LIEF-0.10.1.tar.gz ${CMAKE_SOURCE_DIR}/packages/LIEF)
+    else()
+    message(FATAL_ERROR  "No other platforms are supported.")
+    endif()
 endif()
 
 if(MSVC)

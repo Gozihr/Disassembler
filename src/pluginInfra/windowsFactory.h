@@ -10,7 +10,9 @@ private:
   function_union mDllFunctions;
 
 public:
-  WindowsDLibLoad() : ILoad() {}
+  WindowsDLibLoad() : ILoad(), mProcHinstance(nullptr) {
+    memset(&mDllFunctions, 0, sizeof(mDllFunctions));
+  }
   virtual bool LoadLibraryFromPath(std::string sLoadPath) override;
   virtual function_union &getLoadedLibrary() override;
   ~WindowsDLibLoad();
