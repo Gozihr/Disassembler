@@ -12,8 +12,6 @@ struct Singleton_XedDisassembler_Members {
 
 typedef SingletonBase<Singleton_XedDisassembler_Members> Singleton;
 
-std::vector<std::string> vecEmpty;
-
 // FL TODO: This api is not used for safety reasons.
 // However in perf testing it seems faster to pass a pointer
 // than to call the class functions in a c wrapper
@@ -46,24 +44,24 @@ EXPORT(void) Clear() {
   instance.pXedDisassembler->Clear();
 }
 
-EXPORT(const std::vector<std::string>&) GetOperands() {
+EXPORT(const std::vector<std::string>*) GetOperands() {
   auto &instance = Singleton::get();
   auto lock(instance.getLock());
   if (instance.pXedDisassembler == nullptr) {
     std::cerr << "XedDisassembler is not Initalize!" << std::endl;
-    return vecEmpty;
+    return nullptr;
   }
-  return instance.pXedDisassembler->getOperands();
+  return &(instance.pXedDisassembler->getOperands());
 }
 
-EXPORT(const std::vector<std::string>&) GetOpCodes() {
+EXPORT(const std::vector<std::string>*) GetOpCodes() {
   auto &instance = Singleton::get();
   auto lock(instance.getLock());
   if (instance.pXedDisassembler == nullptr) {
     std::cerr << "XedDisassembler is not Initalize!" << std::endl;
-    return vecEmpty;
+    return nullptr;
   }
-  return instance.pXedDisassembler->getOpCodes();
+  return &(instance.pXedDisassembler->getOpCodes());
 }
 
 EXPORT(void) Initalize(Archtype archType) {

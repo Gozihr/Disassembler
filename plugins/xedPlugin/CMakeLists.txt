@@ -48,25 +48,15 @@ set(HeaderFiles
 
 )
 
-if(WIN32)
-    list(APPEND SourceFiles
-         ../dllmain.cpp
-    )
-endif()
-
-set(XED_LIB_FULL_PATH "${XED}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}xed${CMAKE_STATIC_LIBRARY_SUFFIX}")
-add_library(xedLib STATIC IMPORTED)
-SET_TARGET_PROPERTIES(xedLib PROPERTIES IMPORTED_LOCATION ${XED_LIB_FULL_PATH})
-
 add_library(${PROJECT_NAME} SHARED ${SourceFiles} ${HeaderFiles})
+
 set(XED_LDFLAGS -L${XED}/lib -lxed)
+
 if(MSVC)
-    add_library(lib${PROJECT_NAME} STATIC ${SourceFiles} ${HeaderFiles})
-    target_link_libraries(lib${PROJECT_NAME} PUBLIC  xedLib)
-    set(XED_LDFLAGS ${XED_LIB_FULL_PATH})
+    set(XED_LDFLAGS "${XED}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}xed${CMAKE_STATIC_LIBRARY_SUFFIX}")
 endif()
 
 link_directories(${XED}/lib)
-target_link_libraries(${PROJECT_NAME} PUBLIC  xedLib)
+target_link_libraries(${PROJECT_NAME} PRIVATE  ${XED_LDFLAGS})
 
 add_subdirectory (test)

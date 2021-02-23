@@ -2,12 +2,20 @@ project(${CMAKE_PROJECT_NAME})
 cmake_minimum_required(VERSION 3.10)
 
 set(LIEF_DIR ${CMAKE_SOURCE_DIR}/packages/LIEF)
-set(LIEF_LDFLAGS -L${LIEF_DIR}/lib -lLIEF)
+set(LIEF_INCLUDE_DIR ${LIEF_DIR}/include)
+#set(LIEF_LDFLAGS -L${LIEF_DIR}/lib -lLIEF)
 set(DISASSEMBLER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+set(TargetLibraries "")
 #find dependencies
 if(UNIX)
         include(FindPkgConfig)
         pkg_check_modules (CAPSTONE REQUIRED capstone)
+        set(LIEF__LIB_FULL_PATH "${LIEF_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}LIEF${CMAKE_STATIC_LIBRARY_SUFFIX}")
+        add_library(LibLIEF STATIC IMPORTED)
+        SET_TARGET_PROPERTIES(LibLIEF PROPERTIES IMPORTED_LOCATION ${LIEF__LIB_FULL_PATH})
+        list(APPEND TargetLibraries
+             LibLIEF
+        )   
 elseif(WIN32)
         download_file(https://github.com/aquynh/capstone/releases/download/4.0.2/capstone-4.0.2-win64.zip
               ${CMAKE_SOURCE_DIR}/packages/capstone-4.0.2-win64.zip
@@ -20,14 +28,16 @@ elseif(WIN32)
 
         set(CAPSTONE_LDFLAGS "${CAPSTONE_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}capstone${CMAKE_STATIC_LIBRARY_SUFFIX}")
         set(LIEF_LDFLAGS "${LIEF_DIR}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}LIEF${MTPOSTFIX}${CMAKE_STATIC_LIBRARY_SUFFIX}")
-        set(LIEF_INCLUDE_DIR ${LIEF_DIR}/include)
+        list(APPEND TargetLibraries
+             ${LIEF_LDFLAGS}
+        )
 endif()
 
 set(IncludeDirs ${CAPSTONE_INCLUDE_DIRS}/..
                 ${LIEF_INCLUDE_DIR}
 )
-set(TargetLibraries ${CAPSTONE_LDFLAGS}
-                    ${LIEF_LDFLAGS}
+list(APPEND TargetLibraries
+             ${CAPSTONE_LDFLAGS}
 )
 
 if(LINUX)

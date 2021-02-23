@@ -166,7 +166,9 @@ void DynamicLibMgr::getOperands(std::vector<std::string> &operands) {
   function_union *dylibFunctions = instance.getFunctions();
   assert(dylibFunctions != nullptr);
   auto libOperands = dylibFunctions->by_type.GetOperands();
-  operands.assign(libOperands.begin(), libOperands.end());
+  if(libOperands) {
+    operands.assign(libOperands->begin(), libOperands->end());
+  }
 }
 
 void DynamicLibMgr::getOpCodes(std::vector<std::string> &opCodes) {
@@ -175,5 +177,7 @@ void DynamicLibMgr::getOpCodes(std::vector<std::string> &opCodes) {
   function_union *dylibFunctions = instance.getFunctions();
   assert(dylibFunctions != nullptr);
   auto libOpCodes = dylibFunctions->by_type.GetOpCodes();
-  opCodes.assign(libOpCodes.begin(), libOpCodes.end());
+  if(libOpCodes) {
+    opCodes.assign(libOpCodes->begin(), libOpCodes->end());
+  }
 }

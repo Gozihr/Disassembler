@@ -20,8 +20,8 @@ typedef struct disasmImpl {
   AbstractDisassembler *(*GetDisassembler)();
   void (*Decode)(const unsigned char *, size_t);
   void (*Clear)();
-  const std::vector<std::string>& (*GetOperands)();
-  const std::vector<std::string>& (*GetOpCodes)();
+  const std::vector<std::string>* (*GetOperands)();
+  const std::vector<std::string>* (*GetOpCodes)();
 
   static const int NUM_FUNCTIONS = 7;
 } disasmImpl;

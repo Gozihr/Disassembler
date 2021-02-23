@@ -9,9 +9,4 @@ download_file(https://github.com/catchorg/Catch2/releases/download/v2.13.0/catch
 include_directories(${XED}/include ${CMAKE_SOURCE_DIR}/packages/ ${CMAKE_SOURCE_DIR}/plugins/xedPlugin)
 add_executable(${PROJECT_NAME} test.cpp)
 
-if(MSVC)
-    # Note this is an inelegant hack to get tests building on windows
-    target_link_libraries(${PROJECT_NAME} PRIVATE libxedPlugin)
-else()
-    target_link_libraries(${PROJECT_NAME} PRIVATE xedPlugin)
-endif()
+target_link_libraries(${PROJECT_NAME} PRIVATE xedPlugin)
