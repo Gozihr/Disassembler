@@ -1,7 +1,7 @@
+#include "windowsFactory.h"
 #include <Windows.h>
 #include <cassert>
 #include <iostream>
-#include "windowsFactory.h"
 
 Load_ptr WindowsFactory::getLoadLib() {
   return Helpers::makeShared<WindowsDLibLoad>();
@@ -10,7 +10,8 @@ Load_ptr WindowsFactory::getLoadLib() {
 bool WindowsDLibLoad::LoadLibraryFromPath(std::string sLoadPath) {
   mProcHinstance = LoadLibrary(sLoadPath.c_str());
   if (mProcHinstance == nullptr) {
-    std::cerr << "LoadLibrary  failed with error code " << GetLastError() << std::endl;
+    std::cerr << "LoadLibrary  failed with error code " << GetLastError()
+              << std::endl;
     return false;
   }
 

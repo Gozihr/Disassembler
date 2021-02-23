@@ -18,7 +18,7 @@ typedef SingletonBase<Singleton_XedDisassembler_Members> Singleton;
 // like the functions below. Investigate if there is a
 // safe way to pass a pointer that you don't want anyone outside
 // the dll to own. Good resource maybe to lookup how com proxies work again.
-EXPORT(AbstractDisassembler*) GetDisassembler() {
+EXPORT(AbstractDisassembler *) GetDisassembler() {
   auto &instance = Singleton::get();
   auto lock(instance.getLock());
   return instance.pXedDisassembler.get();
@@ -44,7 +44,7 @@ EXPORT(void) Clear() {
   instance.pXedDisassembler->Clear();
 }
 
-EXPORT(const std::vector<std::string>*) GetOperands() {
+EXPORT(const std::vector<std::string> *) GetOperands() {
   auto &instance = Singleton::get();
   auto lock(instance.getLock());
   if (instance.pXedDisassembler == nullptr) {
@@ -54,7 +54,7 @@ EXPORT(const std::vector<std::string>*) GetOperands() {
   return &(instance.pXedDisassembler->getOperands());
 }
 
-EXPORT(const std::vector<std::string>*) GetOpCodes() {
+EXPORT(const std::vector<std::string> *) GetOpCodes() {
   auto &instance = Singleton::get();
   auto lock(instance.getLock());
   if (instance.pXedDisassembler == nullptr) {

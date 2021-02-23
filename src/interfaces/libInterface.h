@@ -11,11 +11,11 @@
 #define EXPORT(type) extern "C" type
 #endif
 
-EXPORT(AbstractDisassembler*) GetDisassembler();
+EXPORT(AbstractDisassembler *) GetDisassembler();
 EXPORT(void) Decode(const unsigned char *code, size_t size);
 EXPORT(void) Clear();
-EXPORT(const std::vector<std::string>*) GetOperands();
-EXPORT(const std::vector<std::string>*) GetOpCodes();
+EXPORT(const std::vector<std::string> *) GetOperands();
+EXPORT(const std::vector<std::string> *) GetOpCodes();
 EXPORT(void) Initalize(Archtype archType);
 EXPORT(bool) IsInitalized();
 
