@@ -18,13 +18,13 @@ typedef SingletonBase<Singleton_XedDisassembler_Members> Singleton;
 // like the functions below. Investigate if there is a
 // safe way to pass a pointer that you don't want anyone outside
 // the dll to own. Good resource maybe to lookup how com proxies work again.
-extern "C" AbstractDisassembler *GetDisassembler() {
+EXPORT(AbstractDisassembler *) GetDisassembler() {
   auto &instance = Singleton::get();
   auto lock(instance.getLock());
   return instance.pXedDisassembler.get();
 }
 
-extern "C" void Decode(const unsigned char *code, size_t size) {
+EXPORT(void) Decode(const unsigned char *code, size_t size) {
   auto &instance = Singleton::get();
   auto lock(instance.getLock());
   if (instance.pXedDisassembler == nullptr) {
@@ -34,7 +34,7 @@ extern "C" void Decode(const unsigned char *code, size_t size) {
   instance.pXedDisassembler->Decode(code, size);
 }
 
-extern "C" void Clear() {
+EXPORT(void) Clear() {
   auto &instance = Singleton::get();
   auto lock(instance.getLock());
   if (instance.pXedDisassembler == nullptr) {
@@ -44,29 +44,27 @@ extern "C" void Clear() {
   instance.pXedDisassembler->Clear();
 }
 
-extern "C" void GetOperands(std::vector<std::string> &operands) {
+EXPORT(const std::vector<std::string> *) GetOperands() {
   auto &instance = Singleton::get();
   auto lock(instance.getLock());
   if (instance.pXedDisassembler == nullptr) {
     std::cerr << "XedDisassembler is not Initalize!" << std::endl;
-    return;
+    return nullptr;
   }
-  auto xedOperands = instance.pXedDisassembler->getOperands();
-  operands.assign(xedOperands.begin(), xedOperands.end());
+  return &(instance.pXedDisassembler->getOperands());
 }
 
-extern "C" void GetOpCodes(std::vector<std::string> &opCodes) {
+EXPORT(const std::vector<std::string> *) GetOpCodes() {
   auto &instance = Singleton::get();
   auto lock(instance.getLock());
   if (instance.pXedDisassembler == nullptr) {
     std::cerr << "XedDisassembler is not Initalize!" << std::endl;
-    return;
+    return nullptr;
   }
-  auto xedOpCodes = instance.pXedDisassembler->getOpCodes();
-  opCodes.assign(xedOpCodes.begin(), xedOpCodes.end());
+  return &(instance.pXedDisassembler->getOpCodes());
 }
 
-extern "C" void Initalize(Archtype archType) {
+EXPORT(void) Initalize(Archtype archType) {
   auto &instance = Singleton::get();
   auto lock(instance.getLock());
   if (instance.pXedDisassembler == nullptr) {
@@ -74,7 +72,7 @@ extern "C" void Initalize(Archtype archType) {
   }
 }
 
-extern "C" bool IsInitalized() {
+EXPORT(bool) IsInitalized() {
   auto &instance = Singleton::get();
   auto lock(instance.getLock());
   return instance.pXedDisassembler != nullptr;

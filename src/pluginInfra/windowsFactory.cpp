@@ -1,15 +1,17 @@
+#include "windowsFactory.h"
 #include <Windows.h>
 #include <cassert>
-
-#include "windowsFactory.h"
+#include <iostream>
 
 Load_ptr WindowsFactory::getLoadLib() {
   return Helpers::makeShared<WindowsDLibLoad>();
 }
 
 bool WindowsDLibLoad::LoadLibraryFromPath(std::string sLoadPath) {
-  mProcHinstance = LoadLibraryA(sLoadPath.c_str());
+  mProcHinstance = LoadLibrary(sLoadPath.c_str());
   if (mProcHinstance == nullptr) {
+    std::cerr << "LoadLibrary  failed with error code " << GetLastError()
+              << std::endl;
     return false;
   }
 

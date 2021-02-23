@@ -14,8 +14,7 @@ ninja -C./build
 # or if you just want to build the tests
 ninja XED_TEST Disassembler_TEST
 ```
-### Building on Windows (Experimental)
-Windows is still experimental and for now you can just build release
+### Building on Windows
 - Using Ninja
 ```powershell
 cmake -GNinja -Bbuild
@@ -64,7 +63,7 @@ msbuild build\Disassembler.sln -t:Build -p:Configuration=Release
 ## Supported Platform(s)
 - OS X
 - Linux
-- Windows (Experimental) (Release Only Builds)
+- Windows
 
 ## Coming Soon
 - [x] flags

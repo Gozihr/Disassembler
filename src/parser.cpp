@@ -1,16 +1,20 @@
 #include "parser.h"
 //#include <LIEF/Abstract/Parser.hpp>
 
+#include <LIEF/ELF/Binary.hpp>
 #include <LIEF/ELF/Parser.hpp>
+#include <LIEF/ELF/Section.hpp>
 #include <LIEF/ELF/utils.hpp>
 
 #include <LIEF/PE/Binary.hpp>
 #include <LIEF/PE/Parser.hpp>
+#include <LIEF/PE/Section.hpp>
 #include <LIEF/PE/utils.hpp>
 
 #include <LIEF/MachO/Binary.hpp>
 #include <LIEF/MachO/FatBinary.hpp>
 #include <LIEF/MachO/Parser.hpp>
+#include <LIEF/MachO/Section.hpp>
 #include <LIEF/MachO/utils.hpp>
 
 #include <iostream>
@@ -83,16 +87,6 @@ ASMParser::ASMParser(std::string filename) {
   } else {
     std::cerr << "This binary is not currently supported." << std::endl;
   }
-  // auto binaryData = LIEF::Parser::parse(path);
-  // if( binaryData->is<LIEF::ELF::Binary>()) {
-  //    this->os = OStype::LINUX;
-  //} else if(binaryData->is<LIEF::MachO::Binary>()) {
-  //    this->os = OStype::MACOS;
-  //    //auto textSection =
-  //    (binaryData->as<LIEF::MachO::Binary>())->get_section("__text");
-  //} else if(binaryData->is<LIEF::PE::Binary>()) {
-  //    this->os = OStype::WINDOWS;
-  //}
 }
 
 const std::vector<uint8_t> &ASMParser::Instructions() const {

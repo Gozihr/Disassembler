@@ -14,7 +14,7 @@ if (!(Test-Path $XED_BUILD)) {
     mkdir build
     pushd build
     #Invoke-Expression "../xed/mfile.py --shared --limit-strings install" | Out-Null
-    $proc = Start-Process -Wait -FilePath "python" -ArgumentList "../xed/mfile.py --shared --limit-strings install"
+    $proc = Start-Process -Wait -FilePath "python" -ArgumentList "../xed/mfile.py --static --limit-strings install"
     popd
     popd
 }

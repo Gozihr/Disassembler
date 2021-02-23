@@ -51,6 +51,7 @@ set(HeaderFiles
 add_library(${PROJECT_NAME} SHARED ${SourceFiles} ${HeaderFiles})
 
 set(XED_LDFLAGS -L${XED}/lib -lxed)
+
 if(MSVC)
     add_library(lib${PROJECT_NAME} STATIC ${SourceFiles} ${HeaderFiles})
     set(XED_LDFLAGS "${XED}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}xed${CMAKE_STATIC_LIBRARY_SUFFIX}")
