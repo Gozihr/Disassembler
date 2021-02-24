@@ -48,6 +48,20 @@ Archtype GetArch(LIEF::ELF::ARCH cputype) {
   }
 }
 
+Archtype GetArch(LIEF::PE::MACHINE_TYPES cputype) {
+  switch (cputype) {
+  case LIEF::PE::MACHINE_TYPES::IMAGE_FILE_MACHINE_ARM64:
+    return Archtype::ARM64;
+  case LIEF::PE::MACHINE_TYPES::IMAGE_FILE_MACHINE_I386:
+    return Archtype::X86;
+  case LIEF::PE::MACHINE_TYPES::IMAGE_FILE_MACHINE_AMD64:
+    return Archtype::X86_64;
+  default:
+    std::cerr << "This not a unsupported Architecture." << std::endl;
+    throw;
+  }
+}
+
 } // namespace
 
 ASMParser::ASMParser(std::string filename) {
@@ -82,6 +96,7 @@ ASMParser::ASMParser(std::string filename) {
     this->os = OStype::WINDOWS;
     auto peBinary = LIEF::PE::Parser::parse(filename);
     LIEF::PE::Section &textSection = peBinary->get_section(".text");
+    this->arch = ::GetArch(peBinary->header().machine());
     textSection.content().swap(this->instructions);
     // TODO fetch cpu type
   } else {
