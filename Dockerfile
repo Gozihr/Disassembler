@@ -11,7 +11,7 @@ WORKDIR root
 
 COPY . .
 
-RUN cmake -B build -DCMAKE_BUILD_TYPE=Debug
+RUN cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-coverage"
 RUN make -C./build
 
 RUN ./build/src/test/Disassembler_TEST
@@ -27,3 +27,5 @@ RUN scripts/elfLinuxBuildAndRun.sh src/test/hello.linux.asm \
 
 RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$XED_LIB_PATH \
     && ./build/src/cli/disasm --binary -f src/test/hello.linux.out -d build/plugins/xedPlugin/libxedPlugin.so
+
+RUN scripts/runGcov.sh

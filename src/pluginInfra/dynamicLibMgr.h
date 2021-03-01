@@ -8,6 +8,7 @@
 #define CALL_CONV
 #endif
 
+#include "interfaces/instruction.h"
 #include "interfaces/types.h"
 #include <memory>
 
@@ -20,10 +21,9 @@ typedef struct disasmImpl {
   AbstractDisassembler *(*GetDisassembler)();
   void (*Decode)(const unsigned char *, size_t);
   void (*Clear)();
-  const std::vector<std::string> *(*GetOperands)();
-  const std::vector<std::string> *(*GetOpCodes)();
+  const std::vector<Instruction> *(*GetInstructions)();
 
-  static const int NUM_FUNCTIONS = 7;
+  static const int NUM_FUNCTIONS = 6;
 } disasmImpl;
 
 typedef union {
@@ -46,8 +46,7 @@ public:
   static AbstractDisassembler *getDisassembler();
   static void decode(const unsigned char *code, size_t size);
   static void clear();
-  static void getOperands(std::vector<std::string> &operands);
-  static void getOpCodes(std::vector<std::string> &opCodes);
+  static void getInstructions(std::vector<Instruction> &instructions);
 };
 
 #endif // __Dynamic_Lib_Mgr_H__

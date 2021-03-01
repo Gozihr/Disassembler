@@ -13,8 +13,7 @@ DynamicDisassembler::~DynamicDisassembler() {
 void DynamicDisassembler::Decode(const unsigned char *code, size_t size) {
   DynamicLibMgr::decode(code, size);
   AbstractDisassembler::Clear();
-  DynamicLibMgr::getOperands(operands);
-  DynamicLibMgr::getOpCodes(opCodes);
+  DynamicLibMgr::getInstructions(instructions);
 }
 
 void DynamicDisassembler::Clear() { DynamicLibMgr::clear(); }

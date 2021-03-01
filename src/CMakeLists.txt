@@ -73,6 +73,10 @@ set(HeaderFiles
     disassemble.h
     dynamicDisassembler.h
     parser.h
+    interfaces/helpers.h
+    interfaces/instruction.h
+    interfaces/types.h
+    interfaces/interfaceDisassembler.h
 )
 
 add_library(${PROJECT_NAME} STATIC ${SourceFiles} ${HeaderFiles}
