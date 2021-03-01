@@ -1,6 +1,7 @@
 #ifndef __Disassembler_H__
 #define __Disassembler_H__
 
+#include "interfaces/instruction.h"
 #include "interfaces/interfaceDisassembler.h"
 #include <iostream>
 #include <iterator>
@@ -17,13 +18,8 @@ public:
   virtual void Decode(const unsigned char *code, size_t size) final;
   virtual ~Disassembler() {}
   friend std::ostream &operator<<(std::ostream &out, const Disassembler &aDis);
-  // const std::unique_ptr<AbstractDisassembler>& getDisassembler() const {
-  // return pDisasm;}
-  const std::vector<std::string> &getOperands() const final {
-    return pDisasm->getOperands();
-  }
-  const std::vector<std::string> &getOpCodes() const final {
-    return pDisasm->getOpCodes();
+  const std::vector<Instruction> &getInstructions() const final {
+    return pDisasm->getInstructions();
   }
   virtual void Clear() final;
 
@@ -42,13 +38,20 @@ inline std::ostream &operator<<(std::ostream &out, const std::vector<T> &v) {
 }
 
 inline std::ostream &operator<<(std::ostream &out, const Disassembler &aDis) {
-  auto operands = aDis.pDisasm->getOperands();
-  auto opCodes = aDis.pDisasm->getOpCodes();
-  out << "Instruction count: " << opCodes.size() << std::endl;
-  for (size_t i = 0; i < opCodes.size(); i++) {
-    out << opCodes[i] << " " << operands[i] << std::endl;
+  if (aDis.pDisasm.get()) {
+    out << *(aDis.pDisasm.get()) << std::endl;
   }
   return out;
 }
+
+/*inline std::ostream &operator<<(std::ostream &out,
+                                const Disassembler &aDis) {
+  auto instructions = aDis.pDisasm->getInstructions();
+  out << "Instruction count: " << instructions.size() << std::endl;
+  for (size_t i = 0; i < instructions.size(); i++) {
+    out << instructions[i] << std::endl;
+  }
+  return out;
+}*/
 
 #endif // __Disassembler_H__

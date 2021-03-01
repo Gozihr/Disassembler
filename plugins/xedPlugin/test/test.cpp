@@ -8,12 +8,11 @@ TEST_CASE("test 2 instructions") {
   unsigned char assembly[] = "\x55\x48\x8b\x05\xb8\x13\x00\x00";
   XedDisassembler disasm(Archtype::X86_64);
   disasm.Decode(assembly, sizeof(assembly) - 1);
-  auto operands = disasm.getOperands();
-  auto opCodes = disasm.getOpCodes();
-  REQUIRE(opCodes[0] == "pushq");
-  REQUIRE(operands[0] == "%rbp");
-  REQUIRE(opCodes[1] == "movq");
-  REQUIRE(operands[1] == "0x13b8(%rip), %rax");
+  auto instructions = disasm.getInstructions();
+  REQUIRE(instructions[0].opcode == "pushq");
+  REQUIRE(instructions[0].operandsStr == "%rbp");
+  REQUIRE(instructions[1].opcode == "movq");
+  REQUIRE(instructions[1].operandsStr == "0x13b8(%rip), %rax");
 }
 
 TEST_CASE("test more instructions") {

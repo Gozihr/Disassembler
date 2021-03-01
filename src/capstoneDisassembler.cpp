@@ -1,6 +1,6 @@
 #include "capstoneDisassembler.h"
+#include "interfaces/instruction.h"
 #include <capstone/capstone.h>
-
 struct platform {
   cs_arch arch;
   cs_mode mode;
@@ -44,8 +44,8 @@ void CapstoneDisassembler::Decode(const unsigned char *code, size_t size) {
   size_t count = decodeInstruction(code, size, insn);
   if (count > 0) {
     for (size_t i = 0; i < count; i++) {
-      opCodes.push_back(insn[i].mnemonic);
-      operands.push_back(insn[i].op_str);
+      instructions.push_back(
+          Instruction(insn[i].address, insn[i].mnemonic, insn[i].op_str));
     }
   }
   freeInstruction(insn, count);

@@ -1,4 +1,5 @@
 #include "../dataPattern/singleton.h"
+#include "instruction.h"
 #include "libInterface.h"
 #include "xedDisassembler.h"
 #include <iostream>
@@ -44,24 +45,14 @@ EXPORT(void) Clear() {
   instance.pXedDisassembler->Clear();
 }
 
-EXPORT(const std::vector<std::string> *) GetOperands() {
+EXPORT(const std::vector<Instruction> *) GetInstructions() {
   auto &instance = Singleton::get();
   auto lock(instance.getLock());
   if (instance.pXedDisassembler == nullptr) {
     std::cerr << "XedDisassembler is not Initalize!" << std::endl;
     return nullptr;
   }
-  return &(instance.pXedDisassembler->getOperands());
-}
-
-EXPORT(const std::vector<std::string> *) GetOpCodes() {
-  auto &instance = Singleton::get();
-  auto lock(instance.getLock());
-  if (instance.pXedDisassembler == nullptr) {
-    std::cerr << "XedDisassembler is not Initalize!" << std::endl;
-    return nullptr;
-  }
-  return &(instance.pXedDisassembler->getOpCodes());
+  return &(instance.pXedDisassembler->getInstructions());
 }
 
 EXPORT(void) Initalize(Archtype archType) {
