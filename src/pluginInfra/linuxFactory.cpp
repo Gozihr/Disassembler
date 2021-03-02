@@ -1,5 +1,5 @@
-#include <cassert>
 
+#include "interfaces/pch.h"
 #include "linuxFactory.h"
 
 Load_ptr LinuxFactory::getLoadLib() {

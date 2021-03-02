@@ -1,6 +1,5 @@
-#include <cassert>
 #include <map>
-#include <vector>
+#include "interfaces/pch.h"
 
 #include "abstractOSFactory.h"
 #include "dataPattern/singleton.h"

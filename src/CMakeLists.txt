@@ -77,11 +77,13 @@ set(HeaderFiles
     interfaces/instruction.h
     interfaces/types.h
     interfaces/interfaceDisassembler.h
+    interfaces/pch.h
 )
 
 add_library(${PROJECT_NAME} STATIC ${SourceFiles} ${HeaderFiles}
             $<TARGET_OBJECTS:Disassembler.Plugin>
             $<TARGET_OBJECTS:Disassembler.DataPattern>
+            $<TARGET_OBJECTS:Disassembler.Diff>
 )
 
 target_link_libraries(${PROJECT_NAME} ${TargetLibraries})
@@ -105,6 +107,7 @@ target_include_directories(${PROJECT_NAME}
 )
 
 add_subdirectory (cli)
+add_subdirectory (diff)
 add_subdirectory (test)
 add_subdirectory(pluginInfra)
 add_subdirectory(dataPattern)

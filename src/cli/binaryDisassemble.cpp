@@ -3,7 +3,6 @@
 #include "interfaces/helpers.h"
 #include "interfaces/types.h"
 #include "parser.h"
-#include "pluginInfra/dynamicLibMgr.h"
 #include <iostream>
 
 bool BinaryDisassemble::action(const std::string &filename,
@@ -14,13 +13,9 @@ bool BinaryDisassemble::action(const std::string &filename,
   std::cout << "Text section size: " << asmParser.Instructions().size()
             << std::endl;
 
-  DisassemblerType dType = DisassemblerType::CAPSTONE;
-  if (!dynamicLibPaths.empty()) {
-    std::vector<std::string> vecDynamicLibPaths;
-    StringHelpers::Split(dynamicLibPaths, vecDynamicLibPaths);
-    DynamicLibMgr::loadDynamicLibs(vecDynamicLibPaths);
-    dType = DisassemblerType::DYNAMIC;
-  }
+  DisassemblerType dType =
+      Disassembler::checkAndInitDynamicDisassemblers(dynamicLibPaths);
+
   Disassembler disasm(asmParser.Arch(), dType);
   disasm.Decode(asmParser.Instructions().data(),
                 asmParser.Instructions().size());

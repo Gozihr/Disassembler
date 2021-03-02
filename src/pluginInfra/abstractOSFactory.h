@@ -1,8 +1,7 @@
 #ifndef __abstract_factory_h__
 #define __abstract_factory_h__
 #include <memory>
-#include <string>
-#include <vector>
+#include "interfaces/pch.h"
 
 #include "dynamicLibMgr.h"
 

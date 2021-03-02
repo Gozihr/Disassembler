@@ -1,13 +1,11 @@
 #ifndef __Disassembler_H__
 #define __Disassembler_H__
 
-#include "interfaces/instruction.h"
+#include "interfaces/pch.h"
 #include "interfaces/interfaceDisassembler.h"
-#include <iostream>
+#include "interfaces/instruction.h"
 #include <iterator>
 #include <memory>
-#include <string>
-#include <vector>
 
 enum class DisassemblerType { CAPSTONE, DYNAMIC };
 
@@ -21,7 +19,13 @@ public:
   const std::vector<Instruction> &getInstructions() const final {
     return pDisasm->getInstructions();
   }
+  void moveInstructions(std::vector<Instruction> &instructions) {
+    // pDisasm->moveInstructions(Instructions);
+  }
   virtual void Clear() final;
+
+  static DisassemblerType
+  checkAndInitDynamicDisassemblers(const std::string &dynamicLibPaths);
 
 private:
   std::unique_ptr<AbstractDisassembler> pDisasm;
@@ -43,15 +47,5 @@ inline std::ostream &operator<<(std::ostream &out, const Disassembler &aDis) {
   }
   return out;
 }
-
-/*inline std::ostream &operator<<(std::ostream &out,
-                                const Disassembler &aDis) {
-  auto instructions = aDis.pDisasm->getInstructions();
-  out << "Instruction count: " << instructions.size() << std::endl;
-  for (size_t i = 0; i < instructions.size(); i++) {
-    out << instructions[i] << std::endl;
-  }
-  return out;
-}*/
 
 #endif // __Disassembler_H__

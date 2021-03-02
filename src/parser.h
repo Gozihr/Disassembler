@@ -2,8 +2,7 @@
 #define __Parser_H__
 
 #include "interfaces/types.h"
-#include <string>
-#include <vector>
+#include "interfaces/pch.h"
 
 class ASMParser {
 public:

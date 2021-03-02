@@ -1,7 +1,6 @@
+#include "interfaces/pch.h"
 #include "windowsFactory.h"
 #include <Windows.h>
-#include <cassert>
-#include <iostream>
 
 Load_ptr WindowsFactory::getLoadLib() {
   return Helpers::makeShared<WindowsDLibLoad>();

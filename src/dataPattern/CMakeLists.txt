@@ -13,5 +13,5 @@ add_library (Disassembler.DataPattern OBJECT
 #include_directories(${DISASSEMBLER_SOURCE_DIR})
 
 target_include_directories (
-    Disassembler.Plugin PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
+    Disassembler.Diff PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
 )

@@ -1,6 +1,7 @@
 #include "disassemble.h"
 #include "capstoneDisassembler.h"
 #include "dynamicDisassembler.h"
+#include "pluginInfra/dynamicLibMgr.h"
 
 namespace {
 std::unique_ptr<AbstractDisassembler> pickDisam(Archtype archType,
@@ -27,3 +28,15 @@ void Disassembler::Decode(const unsigned char *code, size_t size) {
 }
 
 void Disassembler::Clear() { pDisasm->Clear(); }
+
+DisassemblerType Disassembler::checkAndInitDynamicDisassemblers(
+    const std::string &dynamicLibPaths) {
+  DisassemblerType dType = DisassemblerType::CAPSTONE;
+  if (!dynamicLibPaths.empty()) {
+    std::vector<std::string> vecDynamicLibPaths;
+    StringHelpers::Split(dynamicLibPaths, vecDynamicLibPaths);
+    DynamicLibMgr::loadDynamicLibs(vecDynamicLibPaths);
+    dType = DisassemblerType::DYNAMIC;
+  }
+  return dType;
+}

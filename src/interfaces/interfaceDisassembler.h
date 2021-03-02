@@ -3,11 +3,8 @@
 
 #include "instruction.h"
 #include "types.h"
-#include <iomanip>
-#include <iostream>
 #include <iterator>
-#include <string>
-#include <vector>
+#include "pch.h"
 
 class InterfaceDisassembler {
 public:
@@ -39,9 +36,7 @@ inline std::ostream &operator<<(std::ostream &out,
   out << "Instruction count: " << instructions.size() << std::endl;
   out << "address | opcode | operands" << std::endl;
   out << "---------------------------" << std::endl;
-  for (size_t i = 0; i < instructions.size(); i++) {
-    out << instructions[i] << std::endl;
-  }
+  out << instructions << std::endl;
   return out;
 }
 

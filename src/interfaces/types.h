@@ -1,8 +1,7 @@
 #ifndef __Types_H__
 #define __Types_H__
 
-#include <sstream>
-#include <string>
+#include "pch.h"
 #include <unordered_map>
 
 enum class Archtype { UNKNOWN, ARM64, X86, X86_64 };
@@ -59,5 +58,25 @@ inline std::ostream &operator<<(std::ostream &out, const OStype ostype) {
   out << OSStrMap.at(ostype);
   return out;
 }
+
+class LookupHelpers {
+    LookupHelpers() = delete;
+    public:
+ static Archtype ArchFind(std::string arch) {
+  Arch_iterator archFound = ArchTypeMap.find(arch);
+  if (archFound == ArchTypeMap.end()) {
+    std::cerr << "architecture not found!" << std::endl;
+    return Archtype::UNKNOWN;
+  }
+  return archFound->second;
+}
+};
+
+struct Config {
+  std::string arch;
+  std::string libpath;
+  std::string binaryPath;
+  std::string rawAsm;
+};
 
 #endif //__Types_H__
