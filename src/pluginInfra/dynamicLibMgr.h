@@ -4,7 +4,6 @@
  * license that can be found in the LICENSE file.
  */
 
-
 #ifndef __Dynamic_Lib_Mgr_H__
 #define __Dynamic_Lib_Mgr_H__
 

@@ -4,12 +4,12 @@
  * license that can be found in the LICENSE file.
  */
 
-#ifndef __binary_file_cli_h__
-#define __binary_file_cli_h__
+#ifndef __config_cli_h__
+#define __config_cli_h__
 
 #include "basecli.h"
 
-class BinaryFileCLI : public BaseCLI {
+class ConfigCLI : public BaseCLI {
 public:
   static const std::string name;
   static const std::string altName;
@@ -19,13 +19,12 @@ protected:
   virtual void configure_parser() override;
 
 public:
-  BinaryFileCLI(int argc, char **argv);
-  virtual ~BinaryFileCLI();
+  ConfigCLI(int argc, char **argv);
+  virtual ~ConfigCLI();
   virtual void executeAction() override final;
 
 private:
-  std::string filename;
-  std::string dynamicLibs;
+  std::string jsonConfigFilePath;
 };
 
-#endif // __binary_file_cli_h__
+#endif // __config_cli_h__

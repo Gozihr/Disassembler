@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-#include "interfaces/pch.h"
 #include "macFactory.h"
+#include "interfaces/pch.h"
 #include <dlfcn.h>
 
 Load_ptr MacFactory::getLoadLib() {

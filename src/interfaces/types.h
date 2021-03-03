@@ -65,24 +65,37 @@ inline std::ostream &operator<<(std::ostream &out, const OStype ostype) {
   return out;
 }
 
-class LookupHelpers {
-    LookupHelpers() = delete;
-    public:
- static Archtype ArchFind(std::string arch) {
-  Arch_iterator archFound = ArchTypeMap.find(arch);
-  if (archFound == ArchTypeMap.end()) {
-    std::cerr << "architecture not found!" << std::endl;
-    return Archtype::UNKNOWN;
-  }
-  return archFound->second;
-}
-};
+enum class ConfigAction { UNKNOWN, RAW, BINARY, DIFF };
 
-struct Config {
-  std::string arch;
-  std::string libpath;
-  std::string binaryPath;
-  std::string rawAsm;
+static const std::unordered_map<std::string, ConfigAction> ConfigActionMap = {
+
+    {"raw", ConfigAction::RAW},
+    {"binary", ConfigAction::BINARY},
+    {"diff", ConfigAction::DIFF}};
+typedef std::unordered_map<std::string, ConfigAction>::const_iterator
+    Action_iterator;
+
+class LookupHelpers {
+  LookupHelpers() = delete;
+
+public:
+  static Archtype ArchFind(std::string arch) {
+    Arch_iterator archFound = ArchTypeMap.find(arch);
+    if (archFound == ArchTypeMap.end()) {
+      std::cerr << "architecture not found!" << std::endl;
+      return Archtype::UNKNOWN;
+    }
+    return archFound->second;
+  }
+
+  static ConfigAction ActionFind(std::string action) {
+    Action_iterator actionFound = ConfigActionMap.find(action);
+    if (actionFound == ConfigActionMap.end()) {
+      std::cerr << "action not found!" << std::endl;
+      return ConfigAction::UNKNOWN;
+    }
+    return actionFound->second;
+  }
 };
 
 #endif //__Types_H__

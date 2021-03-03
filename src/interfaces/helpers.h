@@ -4,15 +4,14 @@
  * license that can be found in the LICENSE file.
  */
 
-
 #ifndef __helper_h__
 #define __helper_h__
 
+#include "pch.h"
 #include <algorithm>
 #include <cctype>
 #include <functional>
 #include <locale>
-#include "pch.h"
 
 class StringHelpers {
 public:

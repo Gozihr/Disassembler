@@ -8,9 +8,9 @@
 #define __Interface_Disassembler_H__
 
 #include "instruction.h"
+#include "pch.h"
 #include "types.h"
 #include <iterator>
-#include "pch.h"
 
 class InterfaceDisassembler {
 public:

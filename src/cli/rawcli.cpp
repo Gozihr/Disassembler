@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 #include "rawcli.h"
+#include "rawDisassemble.h"
 
 const std::string RawCLI::name = "r";
 const std::string RawCLI::altName = "raw";
@@ -31,5 +32,5 @@ void RawCLI::configure_parser() {
 }
 
 void RawCLI::executeAction() {
-  m_disassemble.action(this->assembly, this->arch, this->dynamicLibs);
+  RawDisassemble::action(this->assembly, this->arch, this->dynamicLibs);
 }

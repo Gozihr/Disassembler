@@ -2,16 +2,17 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-#include "interfaces/pch.h"
 #include "diff.h"
 #include "disassemble.h"
+#include "interfaces/pch.h"
 #include "myers-diff/myersDiff.hpp"
 #include "parser.h"
 
 DiffTool::DiffTool(DiffConfig &dconfig) : config(dconfig) {}
 
 namespace {
-void GetInstructions(Config &config, std::vector<Instruction> &instructions) {
+void GetInstructions(jObjects::Config &config,
+                     std::vector<Instruction> &instructions) {
   DisassemblerType dType =
       Disassembler::checkAndInitDynamicDisassemblers(config.libpath);
   if (config.binaryPath.empty() && config.rawAsm.empty() &&
@@ -63,6 +64,6 @@ void DiffTool::compute() {
   GetInstructions(config.config2, instructions);
   ss << instructions;
   std::string right = ss.str();
-  auto strPair = Diff::compute(left,right);
+  auto strPair = Diff::compute(left, right);
   std::cout << strPair.first << " | " << strPair.second;
 }

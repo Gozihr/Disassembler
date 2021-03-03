@@ -6,8 +6,8 @@
 
 #ifndef __abstract_factory_h__
 #define __abstract_factory_h__
-#include <memory>
 #include "interfaces/pch.h"
+#include <memory>
 
 #include "dynamicLibMgr.h"
 

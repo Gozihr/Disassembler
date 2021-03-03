@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 #include "binaryfilecli.h"
+#include "binaryDisassemble.h"
 
 const std::string BinaryFileCLI::name = "b";
 const std::string BinaryFileCLI::altName = "binary";
@@ -29,5 +30,5 @@ void BinaryFileCLI::configure_parser() {
 }
 
 void BinaryFileCLI::executeAction() {
-  m_disassemble.action(this->filename, this->dynamicLibs);
+  BinaryDisassemble::action(this->filename, this->dynamicLibs);
 }

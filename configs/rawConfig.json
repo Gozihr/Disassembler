@@ -1,0 +1,9 @@
+{
+    "action": "raw",
+    "configs": [
+      {
+        "arch": "x86_64", 
+        "rawAsm": "0x55488b05b8130000"
+      }
+    ]
+}

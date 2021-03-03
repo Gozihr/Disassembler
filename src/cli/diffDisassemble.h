@@ -4,18 +4,17 @@
  * license that can be found in the LICENSE file.
  */
 
-#ifndef __raw_disassemble_h__
-#define __raw_disassemble_h__
+#ifndef __diff_disassemble_h__
+#define __diff_disassemble_h__
 
 #include <string>
 
-class RawDisassemble {
+class DiffDisassemble {
 private:
-  RawDisassemble() = delete;
+  DiffDisassemble() = delete;
 
 public:
-  static bool action(std::string assembly, std::string arch,
-                     const std::string &dynamicLibPaths);
+  static bool action(std::string jsonConfigFilePath);
 };
 
 #endif // __raw_disassemble_h__

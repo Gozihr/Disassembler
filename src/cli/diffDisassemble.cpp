@@ -2,9 +2,6 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-#include "autocli.h"
+#include "diffDisassemble.h"
 
-int main(int argc, char **argv) {
-  AutoCLI parser(argc, argv);
-  return 0;
-}
+bool DiffDisassemble::action(std::string jsonConfigFilePath) { return true; }

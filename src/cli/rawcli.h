@@ -8,7 +8,6 @@
 #define __raw_cli_h__
 
 #include "basecli.h"
-#include "rawDisassemble.h"
 
 class RawCLI : public BaseCLI {
 public:
@@ -17,7 +16,6 @@ public:
   static const std::string description;
 
 protected:
-  RawDisassemble m_disassemble;
   virtual void configure_parser() override;
 
 public:

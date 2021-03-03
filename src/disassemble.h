@@ -7,9 +7,9 @@
 #ifndef __Disassembler_H__
 #define __Disassembler_H__
 
-#include "interfaces/pch.h"
-#include "interfaces/interfaceDisassembler.h"
 #include "interfaces/instruction.h"
+#include "interfaces/interfaceDisassembler.h"
+#include "interfaces/pch.h"
 #include <iterator>
 #include <memory>
 

@@ -1,0 +1,11 @@
+{
+  "action": "diff",
+  "configs": [
+    {
+      "binaryPath": "src/tests/hello.macos.out"
+    },
+    {
+      "binaryPath": "src/tests/hello.linux.out"
+    }
+  ]
+}

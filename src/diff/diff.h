@@ -7,11 +7,12 @@
 #ifndef __diff_h__
 #define __diff_h__
 
+#include "interfaces/jsonHelper.h"
 #include "interfaces/types.h"
 
 struct DiffConfig {
-  Config config1;
-  Config config2;
+  jObjects::Config config1;
+  jObjects::Config config2;
   bool perLineDiff = false;
 };
 

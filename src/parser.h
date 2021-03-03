@@ -7,8 +7,8 @@
 #ifndef __Parser_H__
 #define __Parser_H__
 
-#include "interfaces/types.h"
 #include "interfaces/pch.h"
+#include "interfaces/types.h"
 
 class ASMParser {
 public:

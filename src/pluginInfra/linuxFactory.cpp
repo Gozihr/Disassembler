@@ -2,9 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-
-#include "interfaces/pch.h"
 #include "linuxFactory.h"
+#include "interfaces/pch.h"
 
 Load_ptr LinuxFactory::getLoadLib() {
   return Helpers::makeShared<LinuxSOLoad>();
