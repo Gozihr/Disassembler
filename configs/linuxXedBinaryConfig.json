@@ -3,7 +3,7 @@
     "configs": [
       {
         "libpath": "build/plugins/xedPlugin/libxedPlugin.so",
-        "binaryPath": "src/tests/hello.linux.out"
+        "binaryPath": "src/test/hello.linux.out"
       }
     ]
 }

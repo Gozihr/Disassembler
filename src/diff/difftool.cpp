@@ -2,16 +2,14 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-#include "diff.h"
+#include "difftool.h"
 #include "disassemble.h"
 #include "interfaces/pch.h"
 #include "myers-diff/myersDiff.hpp"
 #include "parser.h"
 
-DiffTool::DiffTool(DiffConfig &dconfig) : config(dconfig) {}
-
 namespace {
-void GetInstructions(jObjects::Config &config,
+void GetInstructions(const jObjects::Config &config,
                      std::vector<Instruction> &instructions) {
   DisassemblerType dType =
       Disassembler::checkAndInitDynamicDisassemblers(config.libpath);
@@ -54,16 +52,20 @@ void GetInstructions(jObjects::Config &config,
 }
 } // namespace
 
-void DiffTool::compute() {
-  std::stringstream ss;
+bool DiffTool::action(const jObjects::Config &config1,
+                      const jObjects::Config &config2) {
+  std::stringstream ss1;
   std::vector<Instruction> instructions;
-  GetInstructions(config.config1, instructions);
-  ss << instructions;
-  std::string left = ss.str();
-  ss.clear();
-  GetInstructions(config.config2, instructions);
-  ss << instructions;
-  std::string right = ss.str();
+  GetInstructions(config1, instructions);
+  ss1 << instructions;
+  std::string left = ss1.str();
+
+  GetInstructions(config2, instructions);
+  std::stringstream ss2;
+  ss2 << instructions;
+  std::string right = ss2.str();
+
   auto strPair = Diff::compute(left, right);
-  std::cout << strPair.first << " | " << strPair.second;
+  std::cout << strPair.first << "\n" << strPair.second;
+  return true;
 }

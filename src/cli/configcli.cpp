@@ -3,10 +3,11 @@
 // license that can be found in the LICENSE file.
 
 #include "configcli.h"
+#include "binaryDisassemble.h"
+#include "diff/difftool.h"
 #include "interfaces/jsonHelper.h"
 #include "interfaces/types.h"
 #include "rawDisassemble.h"
-#include "binaryDisassemble.h"
 
 const std::string ConfigCLI::name = "c";
 const std::string ConfigCLI::altName = "Config";
@@ -30,19 +31,26 @@ void ConfigCLI::configure_parser() {
 
 void ConfigCLI::executeAction() {
   jObjects::ActionConfig config =
-      JsonHelper::readJsonToObj<jObjects::ActionConfig>(this->jsonConfigFilePath);
+      JsonHelper::readJsonToObj<jObjects::ActionConfig>(
+          this->jsonConfigFilePath);
 
   ConfigAction cAction = LookupHelpers::ActionFind(config.action);
-  jObjects::Config config1 = config.configs.front();
-  switch(cAction) {
-    case ConfigAction::RAW:
-    RawDisassemble::action(config1.rawAsm, config1.arch,
-                           config1.libpath);
+  auto configsArr = config.configs;
+  jObjects::Config config1 = configsArr.front();
+  switch (cAction) {
+  case ConfigAction::RAW:
+    RawDisassemble::action(config1.rawAsm, config1.arch, config1.libpath);
     break;
-    case ConfigAction::BINARY:
+  case ConfigAction::BINARY:
     BinaryDisassemble::action(config1.binaryPath, config1.libpath);
     break;
-    case ConfigAction::DIFF:
+  case ConfigAction::DIFF: {
+    assert(configsArr.size() == 2);
+    jObjects::Config config2 = configsArr[1];
+    DiffTool::action(config1, config2);
     break;
+  }
+  default:
+    std::cerr << "unknown action " << config.action << " requested. Exiting!";
   }
 }

@@ -6,11 +6,11 @@ download_file(https://raw.githubusercontent.com/farzonl/myers-diff/master/myersD
               90486b3453ab76ab2a1498dc64c79060)
 
 set (SourceFiles
-    diff.cpp
+    difftool.cpp
 )
 
 set(HeaderFiles
-    diff.h
+    difftool.h
 )
 
 add_library (Disassembler.Diff OBJECT

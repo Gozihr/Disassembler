@@ -4,25 +4,19 @@
  * license that can be found in the LICENSE file.
  */
 
-#ifndef __diff_h__
-#define __diff_h__
+#ifndef __diff_tool_h__
+#define __diff_tool_h__
 
 #include "interfaces/jsonHelper.h"
 #include "interfaces/types.h"
 
-struct DiffConfig {
-  jObjects::Config config1;
-  jObjects::Config config2;
-  bool perLineDiff = false;
-};
-
 class DiffTool {
 private:
-  DiffConfig config;
+  DiffTool() = delete;
 
 public:
-  DiffTool(DiffConfig &dconfig);
-  void compute();
+  static bool action(const jObjects::Config &config1,
+                     const jObjects::Config &config2);
 };
 
-#endif //__diff_h__
+#endif //__diff_tool_h__

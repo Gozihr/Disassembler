@@ -30,6 +30,10 @@ public:
     return instructions;
   }
 
+  void moveInstructions(std::vector<Instruction> &instructions) {
+    this->instructions.swap(instructions);
+  }
+
   virtual void Clear() { instructions.clear(); }
 
 protected:

@@ -2,6 +2,7 @@
     "action": "binary",
     "configs": [
       {
+        "libpath": "build/plugins/xedPlugin/libxedPlugin.dylib",
         "binaryPath": "src/test/hello.linux.out"
       }
     ]

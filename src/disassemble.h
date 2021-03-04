@@ -26,7 +26,7 @@ public:
     return pDisasm->getInstructions();
   }
   void moveInstructions(std::vector<Instruction> &instructions) {
-    // pDisasm->moveInstructions(Instructions);
+    pDisasm->moveInstructions(instructions);
   }
   virtual void Clear() final;
 

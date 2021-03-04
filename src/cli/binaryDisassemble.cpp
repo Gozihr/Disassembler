@@ -11,6 +11,7 @@
 
 bool BinaryDisassemble::action(const std::string &filename,
                                const std::string &dynamicLibPaths) {
+  std::cout << "filename: " << filename << std::endl;
   ASMParser asmParser(filename);
   std::cout << "OS: " << asmParser.OS() << std::endl;
   std::cout << "ISA: " << asmParser.Arch() << std::endl;

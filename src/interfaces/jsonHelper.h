@@ -32,19 +32,42 @@ struct Config {
   std::string libpath;
   std::string binaryPath;
   std::string rawAsm;
-  // static void to_json(json &j, const Config &c);
-  // static void from_json(const json &j, Config &c);
 };
 
 struct ActionConfig {
   std::string action;
   std::vector<Config> configs;
-  // static void to_json(json &j, const ActionConfig &c);
-  // static void from_json(const json &j, ActionConfig &c);
 };
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Config, arch, libpath, binaryPath, rawAsm);
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ActionConfig, action,configs);
+inline void to_json(nlohmann::json &j, const Config &c) {
+  if (!c.arch.empty() && !c.rawAsm.empty()) {
+    j["arch"] = c.arch;
+    j["rawAsm"] = c.rawAsm;
+  } else {
+    assert(!c.binaryPath.empty());
+    j["binaryPath"] = c.binaryPath;
+  }
+  if (!c.libpath.empty()) {
+    j["libpath"] = c.libpath;
+  }
+}
+
+inline void from_json(const nlohmann::json &j, Config &c) {
+  if (j.contains("arch")) {
+    j.at("arch").get_to(c.arch);
+  }
+  if (j.contains("rawAsm")) {
+    j.at("rawAsm").get_to(c.rawAsm);
+  }
+  if (j.contains("binaryPath")) {
+    j.at("binaryPath").get_to(c.binaryPath);
+  }
+  if (j.contains("libpath")) {
+    j.at("libpath").get_to(c.libpath);
+  }
+}
+
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(ActionConfig, action, configs);
 }; // namespace jObjects
 
 #endif // __json_helper_h__
