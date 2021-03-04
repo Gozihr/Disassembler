@@ -1,5 +1,10 @@
+// Copyright (c) 2021 Farzon Lotfi All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 #include "autocli.h"
 #include "binaryfilecli.h"
+#include "configcli.h"
 #include "rawcli.h"
 
 AutoCLI::AutoCLI(int argc, char **argv) {
@@ -21,6 +26,11 @@ void AutoCLI::initParser(int argc, char **argv) {
   if (parser.doesArgumentExist(BinaryFileCLI::name,
                                "--" + BinaryFileCLI::altName)) {
     CliParser = std::unique_ptr<BaseCLI>(new BinaryFileCLI(argc, argv));
+    return;
+  }
+
+  if (parser.doesArgumentExist(ConfigCLI::name, "--" + ConfigCLI::altName)) {
+    CliParser = std::unique_ptr<BaseCLI>(new ConfigCLI(argc, argv));
     return;
   }
 }

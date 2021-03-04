@@ -1,14 +1,17 @@
+/*
+ * Copyright (c) 2021 Farzon Lotfi All rights reserved.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
 
 #ifndef __helper_h__
 #define __helper_h__
 
+#include "pch.h"
 #include <algorithm>
 #include <cctype>
 #include <functional>
 #include <locale>
-#include <sstream>
-#include <string>
-#include <vector>
 
 class StringHelpers {
 public:
@@ -45,6 +48,27 @@ public:
   static inline void trim(std::string &s) {
     ltrim(s);
     rtrim(s);
+  }
+
+  static std::vector<unsigned char> HexToBytes(const std::string &hex) {
+    std::vector<unsigned char> bytes;
+    for (size_t i = 0; i < hex.length(); i += 2) {
+      std::string byteStr = hex.substr(i, 2);
+      unsigned char byte =
+          static_cast<unsigned char>(strtol(byteStr.c_str(), nullptr, 16));
+      bytes.push_back(byte);
+    }
+
+    return bytes;
+  }
+
+  static std::vector<unsigned char> HexToBytesFormat(const std::string &hex) {
+    std::string hexStr(hex);
+    hexStr.erase(std::remove(hexStr.begin(), hexStr.end(), ' '), hexStr.end());
+    if (hexStr[0] == '0' && (hexStr[1] == 'x' || hexStr[1] == 'X')) {
+      hexStr = hexStr.substr(2, hexStr.size() - 2);
+    }
+    return HexToBytes(hexStr);
   }
 
 private:

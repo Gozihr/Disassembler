@@ -1,0 +1,9 @@
+{
+    "action": "binary",
+    "configs": [
+      {
+        "libpath": "build/plugins/xedPlugin/libxedPlugin.so",
+        "binaryPath": "src/test/hello.linux.out"
+      }
+    ]
+}

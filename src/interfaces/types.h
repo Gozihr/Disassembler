@@ -1,8 +1,13 @@
+/*
+ * Copyright (c) 2021 Farzon Lotfi All rights reserved.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+
 #ifndef __Types_H__
 #define __Types_H__
 
-#include <sstream>
-#include <string>
+#include "pch.h"
 #include <unordered_map>
 
 enum class Archtype { UNKNOWN, ARM64, X86, X86_64 };
@@ -59,5 +64,38 @@ inline std::ostream &operator<<(std::ostream &out, const OStype ostype) {
   out << OSStrMap.at(ostype);
   return out;
 }
+
+enum class ConfigAction { UNKNOWN, RAW, BINARY, DIFF };
+
+static const std::unordered_map<std::string, ConfigAction> ConfigActionMap = {
+
+    {"raw", ConfigAction::RAW},
+    {"binary", ConfigAction::BINARY},
+    {"diff", ConfigAction::DIFF}};
+typedef std::unordered_map<std::string, ConfigAction>::const_iterator
+    Action_iterator;
+
+class LookupHelpers {
+  LookupHelpers() = delete;
+
+public:
+  static Archtype ArchFind(std::string arch) {
+    Arch_iterator archFound = ArchTypeMap.find(arch);
+    if (archFound == ArchTypeMap.end()) {
+      std::cerr << "architecture not found!" << std::endl;
+      return Archtype::UNKNOWN;
+    }
+    return archFound->second;
+  }
+
+  static ConfigAction ActionFind(std::string action) {
+    Action_iterator actionFound = ConfigActionMap.find(action);
+    if (actionFound == ConfigActionMap.end()) {
+      std::cerr << "action not found!" << std::endl;
+      return ConfigAction::UNKNOWN;
+    }
+    return actionFound->second;
+  }
+};
 
 #endif //__Types_H__

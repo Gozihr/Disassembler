@@ -1,8 +1,13 @@
+/*
+ * Copyright (c) 2021 Farzon Lotfi All rights reserved.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+
 #ifndef __abstract_factory_h__
 #define __abstract_factory_h__
+#include "interfaces/pch.h"
 #include <memory>
-#include <string>
-#include <vector>
 
 #include "dynamicLibMgr.h"
 

@@ -1,13 +1,16 @@
+/*
+ * Copyright (c) 2021 Farzon Lotfi All rights reserved.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+
 #ifndef __Interface_Disassembler_H__
 #define __Interface_Disassembler_H__
 
 #include "instruction.h"
+#include "pch.h"
 #include "types.h"
-#include <iomanip>
-#include <iostream>
 #include <iterator>
-#include <string>
-#include <vector>
 
 class InterfaceDisassembler {
 public:
@@ -27,6 +30,10 @@ public:
     return instructions;
   }
 
+  void moveInstructions(std::vector<Instruction> &instructions) {
+    this->instructions.swap(instructions);
+  }
+
   virtual void Clear() { instructions.clear(); }
 
 protected:
@@ -39,9 +46,7 @@ inline std::ostream &operator<<(std::ostream &out,
   out << "Instruction count: " << instructions.size() << std::endl;
   out << "address | opcode | operands" << std::endl;
   out << "---------------------------" << std::endl;
-  for (size_t i = 0; i < instructions.size(); i++) {
-    out << instructions[i] << std::endl;
-  }
+  out << instructions << std::endl;
   return out;
 }
 

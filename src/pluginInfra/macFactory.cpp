@@ -1,7 +1,10 @@
+// Copyright (c) 2021 Farzon Lotfi All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 #include "macFactory.h"
-#include <cassert>
+#include "interfaces/pch.h"
 #include <dlfcn.h>
-#include <iostream>
 
 Load_ptr MacFactory::getLoadLib() {
   return Helpers::makeShared<MacDylibLoad>();

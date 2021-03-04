@@ -1,10 +1,14 @@
+/*
+ * Copyright (c) 2021 Farzon Lotfi All rights reserved.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+
 #ifndef __INSTRUCTION_H__
 #define __INSTRUCTION_H__
 
 #include "helpers.h"
-#include <iomanip>
-#include <string>
-#include <vector>
+#include "pch.h"
 
 struct Instruction {
   uint64_t address;
@@ -13,16 +17,25 @@ struct Instruction {
   std::vector<std::string> operands;
   Instruction(uint64_t address, std::string opcode, std::string operandsStr)
       : address(address), opcode(opcode), operandsStr(operandsStr) {
-    using namespace std::placeholders;
-    StringHelpers::stringFunc trim = std::bind(StringHelpers::trim, _1);
+
+    StringHelpers::stringFunc trim = StringHelpers::trim;
     StringHelpers::Split(operandsStr, operands, trim);
   }
 };
+
+typedef std::vector<Instruction> Instructions;
 
 inline std::ostream &operator<<(std::ostream &out,
                                 const Instruction &instruction) {
   out << std::left << "0x" << std::setw(8) << std::hex << instruction.address
       << std::setw(9) << instruction.opcode << instruction.operandsStr;
+  return out;
+}
+inline std::ostream &operator<<(std::ostream &out,
+                                const Instructions &instructions) {
+  for (size_t i = 0; i < instructions.size(); i++) {
+    out << instructions[i] << std::endl;
+  }
   return out;
 }
 

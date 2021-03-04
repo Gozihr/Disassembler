@@ -1,0 +1,12 @@
+{
+    "action": "diff",
+    "configs": [
+      {
+        "libpath": "build/plugins/xedPlugin/libxedPlugin.dylib",
+        "binaryPath": "src/test/hello.macos.out"
+      },
+      {
+        "binaryPath": "src/test/hello.linux.out"
+      }
+    ]
+}
