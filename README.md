@@ -33,6 +33,15 @@ msbuild build\Disassembler.sln -t:Build -p:Configuration=Release
 - XED (optional)
 - LIEF
 
+## Testing Dependencies
+- nasm
+- mingw-w64
+
+## Installing Test Dependencies
+- Ubuntu : `apt-get install nasm mingw-w64`
+- MacOS  : `brew install nasm mingw-w64`
+- Windows: `choco install nasm mingw`
+
 ## Usage
 - `echo 0x55488b05b8130000 | xargs ./disasm --raw -a x86_64 -i`
 - `./disasm --raw -a x86_64 -i 0x55488b05b8130000`
@@ -58,7 +67,7 @@ msbuild build\Disassembler.sln -t:Build -p:Configuration=Release
     - If you need unoptimized replace -O3 with -O0 whereever you find CMAKE_CXX_FLAGS. If you don't just run below
     - `cmake -DCMAKE_BUILD_TYPE=Debug -B build`
 - Check for Dwarf Version
-    - `readelf --debug-dump=info src/cli/disasm | grep "Version" | uniq`
+    - `readelf --debug-dump=info build/src/cli/disasm | grep "Version" | uniq`
 
 ## Supported Platform(s)
 - OS X

@@ -3,7 +3,7 @@
     "configs": [
       {
         "libpath": "build/plugins/xedPlugin/libxedPlugin.dylib",
-        "binaryPath": "src/test/hello.linux.out"
+        "binaryPath": "build/int-tests/linux/hello.linux.out"
       }
     ]
 }

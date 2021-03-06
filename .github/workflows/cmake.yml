@@ -20,11 +20,11 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
     - uses: actions/checkout@v2
-    - run: sudo apt install libcapstone-dev
+    - run: sudo apt install libcapstone-dev nasm mingw-w64
       if: matrix.os == 'ubuntu-latest'
-    - run: brew install capstone
+    - run: brew install capstone nasm mingw-w64
       if: matrix.os == 'macOS-latest'
-    - run: choco install python3
+    - run: choco install python3 nasm mingw
       if: matrix.os == 'windows-latest'
     - name: Create Build Environment
       # Some projects don't allow in-source building, so create a separate build directory
