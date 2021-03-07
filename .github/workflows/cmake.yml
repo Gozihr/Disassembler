@@ -20,18 +20,21 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
     - uses: actions/checkout@v2
-    - run: sudo apt install libcapstone-dev
+    - run: sudo apt install libcapstone-dev nasm mingw-w64
       if: matrix.os == 'ubuntu-latest'
-    - run: brew install capstone
+    - run: brew install capstone nasm mingw-w64
       if: matrix.os == 'macOS-latest'
-    - run: choco install python3
+    - run: choco install python3 nasm
       if: matrix.os == 'windows-latest'
     - name: Create Build Environment
       # Some projects don't allow in-source building, so create a separate build directory
       # We'll use this as our working directory for all subsequent commands
       run: cmake -E make_directory ${{github.workspace}}/build
 
-    - name: Configure CMake
+    #NOTE: this is temporary until i understand a bit more why i can't build binutil
+    # Monitored with issue-32 https://github.com/farzonl/Disassembler/issues/32
+    - name: Configure CMake (Mac)
+      if: matrix.os == 'macOS-latest'
       # Use a bash shell so we can use the same syntax for environment variable
       # access regardless of the host operating system
       shell: bash
@@ -40,6 +43,17 @@ jobs:
       # and build directories, but this is only available with CMake 3.13 and higher.  
       # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
       run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+    
+    - name: Configure CMake (Linux\Windows)
+      if: matrix.os == 'ubuntu-latest' || matrix.os == 'windows-latest'
+      # Use a bash shell so we can use the same syntax for environment variable
+      # access regardless of the host operating system
+      shell: bash
+      working-directory: ${{github.workspace}}/build
+      # Note the current convention is to use the -S and -B options here to specify source 
+      # and build directories, but this is only available with CMake 3.13 and higher.  
+      # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_INT_TESTS=true
 
     - name: Build
       working-directory: ${{github.workspace}}/build

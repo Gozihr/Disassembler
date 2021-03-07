@@ -3,7 +3,7 @@
     "configs": [
       {
         "libpath": "build/plugins/xedPlugin/libxedPlugin.dylib",
-        "binaryPath": "src/test/hello.macos.out"
+        "binaryPath": "build/int-tests/mac/hello.macos.out"
       }
     ]
 }

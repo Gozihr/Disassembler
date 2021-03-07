@@ -2,7 +2,7 @@
     "action": "binary",
     "configs": [
       {
-        "binaryPath": "src/test/hello.linux.out"
+        "binaryPath": "build/int-tests/linux/hello.linux.out"
       }
     ]
 }

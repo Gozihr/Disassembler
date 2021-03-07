@@ -2,7 +2,7 @@
   "action": "diff",
   "configs": [
     {
-      "binaryPath": "build/int-tests/mac/hello.macos.out"
+      "binaryPath": "build/int-tests/windows/mingw/ld/hello.win.exe"
     },
     {
       "binaryPath": "build/int-tests/linux/hello.linux.out"

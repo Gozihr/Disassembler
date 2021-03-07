@@ -68,13 +68,13 @@ if(WIN32)
     endif()
 endif()
 
-set(LIEF_VERSION "0.11.1")
+set(LIEF_VERSION "0.11.3")
 if( DEFINED BUILDLIEFSRC OR (WIN32 AND CMAKE_BUILD_TYPE MATCHES Debug))
     message(STATUS  "starting a LIEF source build")
     download_file(https://github.com/lief-project/LIEF/archive/${LIEF_VERSION}.zip
                   ${CMAKE_SOURCE_DIR}/packages/LIEF-${LIEF_VERSION}.zip
                   MD5
-                  4f4eaa7106527344d9ed26b908ab54c9
+                  fc6f9e277de0f25993007c0b10de2daf
     )
     decompress(${CMAKE_SOURCE_DIR}/packages/LIEF-${LIEF_VERSION}.zip ${CMAKE_SOURCE_DIR}/packages/LIEF-src)
     buildLIEF(${CMAKE_SOURCE_DIR}/packages/LIEF-src
@@ -82,14 +82,14 @@ if( DEFINED BUILDLIEFSRC OR (WIN32 AND CMAKE_BUILD_TYPE MATCHES Debug))
               ${CMAKE_SOURCE_DIR}/packages/LIEF
               ${CMAKE_BUILD_TYPE}
     )
-    #if it isn't set, set it to true          
+    #if it isn't set, set it to true
     set(BUILDLIEFSRC true)
 else()
     if(LINUX)
         download_file(https://github.com/lief-project/LIEF/releases/download/${LIEF_VERSION}/LIEF-${LIEF_VERSION}-Linux-x86_64.tar.gz
                   ${CMAKE_SOURCE_DIR}/packages/LIEF-${LIEF_VERSION}.tar.gz
                   MD5
-                  b282cc87982a863996c6ac45bd7a02db)
+                  cffdd77556bd35e8cc32ff9742605a4e)
         decompress(${CMAKE_SOURCE_DIR}/packages/LIEF-${LIEF_VERSION}.tar.gz ${CMAKE_SOURCE_DIR}/packages/LIEF)
     elseif(WIN32)
         set(LIEF_VERSION "0.10.1")
@@ -98,13 +98,13 @@ else()
                       MD5
                       a3bcf27708f46278519c5443857627c4)
         # TODO Tracked here: https://github.com/farzonl/Disassembler/issues/17
-        #             25aafa3e82cbf801fc22f5c490982e5b)
+        #             a5e6a5ef5933b1296739d859b198f857)
         decompress(${CMAKE_SOURCE_DIR}/packages/LIEF-${LIEF_VERSION}-win64.zip ${CMAKE_SOURCE_DIR}/packages/LIEF)
     elseif(APPLE)
         download_file(https://github.com/lief-project/LIEF/releases/download/${LIEF_VERSION}/LIEF-${LIEF_VERSION}-Darwin-x86_64.tar.gz
                       ${CMAKE_SOURCE_DIR}/packages/LIEF-${LIEF_VERSION}.tar.gz
                       MD5
-                      89b530fd9a030da1fdedf24dbd904e18)
+                      d033f69581f61386cca64ff0fb9b4e88)
         decompress(${CMAKE_SOURCE_DIR}/packages/LIEF-${LIEF_VERSION}.tar.gz ${CMAKE_SOURCE_DIR}/packages/LIEF)
     else()
     message(FATAL_ERROR  "No other platforms are supported.")
@@ -124,5 +124,8 @@ else()
 endif()
 
 add_subdirectory (src)
+if(BUILD_INT_TESTS)
+    add_subdirectory(int-tests)
+endif()
 add_subdirectory (plugins)
 

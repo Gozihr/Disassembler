@@ -2,7 +2,7 @@
     "action": "binary",
     "configs": [
       {
-        "binaryPath": "src/test/hello.macos.out"
+        "binaryPath": "build/int-tests/mac/hello.macos.out"
       }
     ]
 }
