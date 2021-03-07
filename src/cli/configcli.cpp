@@ -19,7 +19,7 @@ ConfigCLI::ConfigCLI(int argc, char **argv) : BaseCLI(argc, argv) {
   // NOTE Needs to be run after configure_parser and property initalization
   parser.run(); // TODO: figure out how to abstract this so its only in BaseCLI
 
-  this->jsonConfigFilePath = parser.get<std::string>("c");
+  this->jsonConfigFilePath = parser.get<std::string>(ConfigCLI::name);
 }
 
 ConfigCLI::~ConfigCLI() {}

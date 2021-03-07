@@ -57,6 +57,9 @@ if(LINUX)
     )
 endif()
 
+if(UNIX)
+    list(APPEND TargetLibraries "-ledit")
+endif()
 
 include_directories(${IncludeDirs})
 
@@ -84,6 +87,7 @@ add_library(${PROJECT_NAME} STATIC ${SourceFiles} ${HeaderFiles}
             $<TARGET_OBJECTS:Disassembler.Plugin>
             $<TARGET_OBJECTS:Disassembler.DataPattern>
             $<TARGET_OBJECTS:Disassembler.Diff>
+            $<TARGET_OBJECTS:Disassembler.Repl>
 )
 
 target_link_libraries(${PROJECT_NAME} ${TargetLibraries})
@@ -107,9 +111,11 @@ target_include_directories(${PROJECT_NAME}
 )
 
 add_subdirectory (cli)
-add_subdirectory (diff)
-add_subdirectory (test)
-add_subdirectory(pluginInfra)
 add_subdirectory(dataPattern)
+add_subdirectory (diff)
+add_subdirectory(pluginInfra)
+add_subdirectory(repl)
+add_subdirectory (test)
+
 
 

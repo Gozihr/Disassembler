@@ -20,8 +20,10 @@ set (SourceFiles
      binaryfilecli.cpp
      binaryDisassemble.cpp
      configcli.cpp
+     defaultcli.cpp
      rawcli.cpp
      rawDisassemble.cpp
+     replcli.cpp
 )
 
 set(HeaderFiles
@@ -30,8 +32,10 @@ set(HeaderFiles
     binaryDisassemble.h
     binaryfilecli.h
     configcli.h
+    defaultcli.h
     rawcli.h
     rawDisassemble.h
+    replcli.h
 )
 
 add_executable(${PROJECT_NAME} ${SourceFiles} ${HeaderFiles})

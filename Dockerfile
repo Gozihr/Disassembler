@@ -4,7 +4,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt install -y --no-install-recommends \
     git build-essential cmake vim openssl curl ca-certificates \
-    libglib2.0-dev mingw-w64 nasm python3 libcapstone-dev pkg-config wget
+    libglib2.0-dev mingw-w64 nasm python3 pkg-config wget \
+    libcapstone-dev libedit-dev
 
 # Set the working directory to root (ie $HOME)
 WORKDIR root
@@ -29,4 +30,4 @@ RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$XED_LIB_PATH \
 
 RUN ./configs/tempTest.sh
 
-RUN scripts/runGcov.sh
+#RUN scripts/runGcov.sh
