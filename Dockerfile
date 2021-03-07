@@ -29,4 +29,4 @@ RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$XED_LIB_PATH \
 
 RUN ./configs/tempTest.sh
 
-RUN scripts/runGcov.sh
+#RUN scripts/runGcov.sh

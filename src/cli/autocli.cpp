@@ -5,7 +5,9 @@
 #include "autocli.h"
 #include "binaryfilecli.h"
 #include "configcli.h"
+#include "defaultcli.h"
 #include "rawcli.h"
+#include "replcli.h"
 
 AutoCLI::AutoCLI(int argc, char **argv) {
   initParser(argc, argv);
@@ -14,7 +16,18 @@ AutoCLI::AutoCLI(int argc, char **argv) {
     CliParser->executeAction();
   }
 }
-
+namespace {
+void Register() {
+  DefaultCLIMgr::Register(BinaryFileCLI::name, BinaryFileCLI::altName,
+                          BinaryFileCLI::description, CLIType::tBool);
+  DefaultCLIMgr::Register(ConfigCLI::name, ConfigCLI::altName,
+                          ConfigCLI::description, CLIType::tString);
+  DefaultCLIMgr::Register(RawCLI::name, RawCLI::altName, RawCLI::description,
+                          CLIType::tBool);
+  DefaultCLIMgr::Register(ReplCLI::name, ReplCLI::altName, ReplCLI::description,
+                          CLIType::tBool);
+}
+} // namespace
 void AutoCLI::initParser(int argc, char **argv) {
   cli::Parser parser(argc, argv);
 
@@ -33,4 +46,12 @@ void AutoCLI::initParser(int argc, char **argv) {
     CliParser = std::unique_ptr<BaseCLI>(new ConfigCLI(argc, argv));
     return;
   }
+
+  if (parser.doesArgumentExist(ReplCLI::name, "--" + ReplCLI::altName)) {
+    CliParser = std::unique_ptr<BaseCLI>(new ReplCLI(argc, argv));
+    return;
+  }
+
+  ::Register();
+  CliParser = std::unique_ptr<BaseCLI>(new DefaultCLI(argc, argv));
 }
