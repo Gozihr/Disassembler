@@ -15,7 +15,8 @@ if(UNIX)
 endif(UNIX)
 
 if(APPLE)
-    set(CMAKE_ASM_NASM_LINK_FLAGS "${CMAKE_ASM_NASM_LINK_FLAGS} -L/usr/local/Cellar/mingw-w64/8.0.0_1/toolchain-i686/mingw/lib")
+    #set(CMAKE_ASM_NASM_LINK_FLAGS "${CMAKE_ASM_NASM_LINK_FLAGS} -L/usr/local/Cellar/mingw-w64/8.0.0_1/toolchain-i686/mingw/lib")
+    set(CMAKE_ASM_NASM_LINK_FLAGS "${CMAKE_ASM_NASM_LINK_FLAGS} -L/usr/local/Cellar/mingw-w64/8.0.0_3/toolchain-i686/mingw/lib")
 endif(APPLE)
 
 if(WIN32)
