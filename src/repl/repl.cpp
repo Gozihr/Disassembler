@@ -35,8 +35,8 @@ std::string Singleton_Repl_Members::consoleRead() {
   std::string line(buffer);
   free(buffer);
 #else
-  string line = "";
-  cout << ">>> ";
+  std::string line = "";
+  std::cout << ">>> ";
   std::getline(std::cin, line);
 #endif
   return executeLine(line);
