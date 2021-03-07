@@ -1,5 +1,5 @@
 # Project "win-tests"
-project(win-tests ASM_NASM)
+project(win--gcc-tests ASM_NASM)
 
 set(LINKER gcc)
 set(CMAKE_ASM_NASM_OBJECT_FORMAT win64)

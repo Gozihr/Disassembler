@@ -2,7 +2,7 @@
     "action": "binary",
     "configs": [
       {
-        "binaryPath": "build/int-tests/windows/ld/hello.win.exe"
+        "binaryPath": "build/int-tests/windows/mingw/ld/hello.win.exe"
       }
     ]
 }

@@ -124,6 +124,8 @@ else()
 endif()
 
 add_subdirectory (src)
-add_subdirectory(int-tests)
+if(BUILD_INT_TESTS)
+    add_subdirectory(int-tests)
+endif()
 add_subdirectory (plugins)
 

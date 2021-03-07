@@ -11,7 +11,7 @@ WORKDIR root
 
 COPY . .
 
-RUN cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-coverage"
+RUN cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-coverage" -DBUILD_INT_TESTS=true
 RUN make -C./build
 
 RUN ./build/src/test/Disassembler_TEST

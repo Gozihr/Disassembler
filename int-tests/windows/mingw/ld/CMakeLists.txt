@@ -1,5 +1,5 @@
 # Project "win-tests"
-project(win-tests ASM_NASM)
+project(win-ld-tests ASM_NASM)
 
 # nasm -f win32 hello.win.asm
 # i686-w64-mingw32-ld hello.win.obj -L/usr/local/Cellar/mingw-w64/8.0.0_1/toolchain-i686/mingw/lib -lkernel32 -o hello.win.exe
@@ -17,6 +17,10 @@ endif(UNIX)
 if(APPLE)
     set(CMAKE_ASM_NASM_LINK_FLAGS "${CMAKE_ASM_NASM_LINK_FLAGS} -L/usr/local/Cellar/mingw-w64/8.0.0_1/toolchain-i686/mingw/lib")
 endif(APPLE)
+
+if(WIN32)
+    set(CMAKE_ASM_NASM_LINK_FLAGS "${CMAKE_ASM_NASM_LINK_FLAGS} -LC:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\mingw\lib")
+endif(WIN32)
 
 set(CMAKE_ASM_NASM_LINK_FLAGS "${CMAKE_ASM_NASM_LINK_FLAGS} -lkernel32 -e go")
 # Specify ASM linker
