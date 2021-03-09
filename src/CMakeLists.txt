@@ -58,7 +58,7 @@ if(LINUX)
 endif()
 
 if(UNIX)
-    list(APPEND TargetLibraries "-ledit")
+    list(APPEND TargetLibraries "-ledit -lncurses")
 endif()
 
 include_directories(${IncludeDirs})

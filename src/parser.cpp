@@ -70,56 +70,61 @@ Archtype GetArch(LIEF::PE::MACHINE_TYPES cputype) {
 
 } // namespace
 
-void ASMParser::elfParser() {
-  
+void Binary::elfParser() {
+
   std::unique_ptr<LIEF::ELF::Binary> elfBinary =
-      LIEF::ELF::Parser::parse(this->mBinary.Path());
+      LIEF::ELF::Parser::parse(this->Path());
   auto header = elfBinary->header();
   LIEF::ELF::Section &textSection = elfBinary->get_section(".text");
-  textSection.content().swap(this->mBinary.mInstructions);
+  textSection.content().swap(this->mInstructions);
 
-  this->mBinary.os = OStype::LINUX;
-  this->mBinary.arch = ::GetArch(header.machine_type());
-  //this->mBinary.mBinaryInternal->elfBinary = std::move(elfBinary);
+  this->os = OStype::LINUX;
+  this->arch = ::GetArch(header.machine_type());
+  this->textSectionStartAddress = textSection.virtual_address();
+  this->mBinaryInternal->setElf(elfBinary);
 }
 
-void ASMParser::peParser() {
-   
-   auto peBinary = LIEF::PE::Parser::parse(this->mBinary.Path());
-   LIEF::PE::Section &textSection = peBinary->get_section(".text");
-   textSection.content().swap(this->mBinary.mInstructions);
-   this->mBinary.os = OStype::WINDOWS;
-   this->mBinary.arch = ::GetArch(peBinary->header().machine());
-   //this->mBinary.mBinaryInternal->peBinary = std::move(peBinary);
+void Binary::peParser() {
+
+  auto peBinary = LIEF::PE::Parser::parse(this->Path());
+  LIEF::PE::Section &textSection = peBinary->get_section(".text");
+  textSection.content().swap(this->mInstructions);
+  this->os = OStype::WINDOWS;
+  this->arch = ::GetArch(peBinary->header().machine());
+  this->textSectionStartAddress = textSection.virtual_address();
+  this->mBinaryInternal->setPE(peBinary);
 }
 
-void ASMParser::machOParser() {
-    // For fat binary we take the last one...
-    LIEF::MachO::FatBinary *fat =
-        LIEF::MachO::Parser::parse(this->mBinary.Path()).release();
-    LIEF::MachO::Binary *binaryData = nullptr;
-    if (fat) {
-      binaryData = fat->pop_back();
-      delete fat;
-    }
+void Binary::machOParser() {
+  // For fat binary we take the last one...
+  LIEF::MachO::FatBinary *fat =
+      LIEF::MachO::Parser::parse(this->Path()).release();
+  LIEF::MachO::Binary *binaryData = nullptr;
+  if (fat) {
+    binaryData = fat->pop_back();
+    delete fat;
+  }
 
-    auto header = binaryData->header();
-    LIEF::MachO::Section &textSection = binaryData->get_section("__text");
-    textSection.content().swap(this->mBinary.mInstructions);
+  auto header = binaryData->header();
+  LIEF::MachO::Section &textSection = binaryData->get_section("__text");
+  textSection.content().swap(this->mInstructions);
 
-    this->mBinary.os = OStype::MACOS;
-    this->mBinary.arch = ::GetArch(header.cpu_type());
-    //this->mBinary.mBinaryInternal->machOBinary = std::move(binaryData);
+  this->os = OStype::MACOS;
+  this->arch = ::GetArch(header.cpu_type());
+  this->textSectionStartAddress = textSection.virtual_address();
+  this->mBinaryInternal->setMachO(binaryData);
 }
 
-ASMParser::ASMParser(std::string filename) : mBinary(filename) {
+std::unique_ptr<Binary> ASMParser::Parser(std::string filename) {
+  auto binary = std::make_unique<Binary>(filename);
   if (LIEF::ELF::is_elf(filename)) {
-    elfParser();
+    binary->elfParser();
   } else if (LIEF::MachO::is_macho(filename)) {
-    machOParser();
+    binary->machOParser();
   } else if (LIEF::PE::is_pe(filename)) {
-    peParser();
+    binary->peParser();
   } else {
     std::cerr << "This binary is not currently supported." << std::endl;
   }
+  return binary;
 }

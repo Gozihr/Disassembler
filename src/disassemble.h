@@ -29,23 +29,13 @@ public:
     pDisasm->moveInstructions(instructions);
   }
   virtual void Clear() final;
-
+  void setStartAddress(uint64_t address);
   static DisassemblerType
   checkAndInitDynamicDisassemblers(const std::string &dynamicLibPaths);
 
 private:
   std::unique_ptr<AbstractDisassembler> pDisasm;
 };
-
-template <typename T>
-inline std::ostream &operator<<(std::ostream &out, const std::vector<T> &v) {
-  if (!v.empty()) {
-    out << '[';
-    std::copy(v.begin(), v.end(), std::ostream_iterator<T>(out, ", "));
-    out << "\b\b]";
-  }
-  return out;
-}
 
 inline std::ostream &operator<<(std::ostream &out, const Disassembler &aDis) {
   if (aDis.pDisasm.get()) {

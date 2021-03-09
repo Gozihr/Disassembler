@@ -18,10 +18,12 @@ public:
   virtual void Clear() = 0;
   virtual ~InterfaceDisassembler(){};
   virtual const std::vector<Instruction> &getInstructions() const = 0;
+  virtual void setStartAddress(uint64_t address) = 0;
 };
 
 class AbstractDisassembler : public InterfaceDisassembler {
 public:
+  AbstractDisassembler() : startAddress(0) {}
   virtual ~AbstractDisassembler() {}
   friend std::ostream &operator<<(std::ostream &out,
                                   const AbstractDisassembler &aDis);
@@ -35,9 +37,11 @@ public:
   }
 
   virtual void Clear() { instructions.clear(); }
+  virtual void setStartAddress(uint64_t address) { startAddress = address; }
 
 protected:
   std::vector<Instruction> instructions;
+  uint64_t startAddress;
 };
 
 inline std::ostream &operator<<(std::ostream &out,

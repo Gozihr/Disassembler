@@ -11,19 +11,14 @@
 
 bool BinaryDisassemble::action(const std::string &filename,
                                const std::string &dynamicLibPaths) {
-  std::cout << "filename: " << filename << std::endl;
-  ASMParser asmParser(filename);
-  std::cout << "OS: " << asmParser.OS() << std::endl;
-  std::cout << "ISA: " << asmParser.Arch() << std::endl;
-  std::cout << "Text section size: " << asmParser.Instructions().size()
-            << std::endl;
-
+  std::unique_ptr<Binary> binary = ASMParser::Parser(filename);
+  std::cout << *(binary.get()) << std::endl;
   DisassemblerType dType =
       Disassembler::checkAndInitDynamicDisassemblers(dynamicLibPaths);
 
-  Disassembler disasm(asmParser.Arch(), dType);
-  disasm.Decode(asmParser.Instructions().data(),
-                asmParser.Instructions().size());
+  Disassembler disasm(binary->Arch(), dType);
+  disasm.setStartAddress(binary->getStartAddress());
+  disasm.Decode(binary->Instructions().data(), binary->Instructions().size());
 
   std::cout << disasm << std::endl;
 

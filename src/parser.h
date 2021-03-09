@@ -12,19 +12,11 @@
 #include "runtime/runtime.h"
 
 class ASMParser {
-public:
-  ASMParser(std::string filename);
-  Archtype Arch() const { return mBinary.arch; }
-  OStype OS() const { return mBinary.os; }
-  const std::vector<uint8_t> &Instructions() const {
-    return mBinary.Instructions();
-  }
-
 private:
-  Binary mBinary;
-  void elfParser();
-  void peParser();
-  void machOParser();
+  ASMParser() = delete;
+
+public:
+  static std::unique_ptr<Binary> Parser(std::string filename);
 };
 
 #endif // __Parser_H__

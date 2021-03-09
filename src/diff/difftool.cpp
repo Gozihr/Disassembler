@@ -25,10 +25,9 @@ void GetInstructions(const jObjects::Config &config,
               << std::endl;
     return;
   } else if (!config.binaryPath.empty()) {
-    ASMParser asmParser(config.binaryPath);
-    Disassembler disasm(asmParser.Arch(), dType);
-    disasm.Decode(asmParser.Instructions().data(),
-                  asmParser.Instructions().size());
+    auto binary = ASMParser::Parser(config.binaryPath);
+    Disassembler disasm(binary->Arch(), dType);
+    disasm.Decode(binary->Instructions().data(), binary->Instructions().size());
     disasm.moveInstructions(instructions);
 
   } else if (!config.rawAsm.empty() && config.arch.empty()) {

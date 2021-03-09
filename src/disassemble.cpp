@@ -31,6 +31,10 @@ void Disassembler::Decode(const unsigned char *code, size_t size) {
   pDisasm->Decode(code, size);
 }
 
+void Disassembler::setStartAddress(uint64_t address) {
+  pDisasm->setStartAddress(address);
+}
+
 void Disassembler::Clear() { pDisasm->Clear(); }
 
 DisassemblerType Disassembler::checkAndInitDynamicDisassemblers(
@@ -38,7 +42,7 @@ DisassemblerType Disassembler::checkAndInitDynamicDisassemblers(
   DisassemblerType dType = DisassemblerType::CAPSTONE;
   if (!dynamicLibPaths.empty()) {
     std::vector<std::string> vecDynamicLibPaths;
-    StringHelpers::Split(dynamicLibPaths, vecDynamicLibPaths);
+    StringHelpers::Split(dynamicLibPaths, vecDynamicLibPaths, ',');
     DynamicLibMgr::loadDynamicLibs(vecDynamicLibPaths);
     dType = DisassemblerType::DYNAMIC;
   }

@@ -13,12 +13,27 @@
 #include <LIEF/MachO/Binary.hpp>
 #include <LIEF/PE/Binary.hpp>
 
-union BinaryInternal {
-  std::unique_ptr<LIEF::ELF::Binary> elfBinary;
-  std::unique_ptr<LIEF::PE::Binary> peBinary;
-  std::unique_ptr<LIEF::MachO::Binary> machOBinary;
+struct BinaryTypes {
+  std::unique_ptr<LIEF::ELF::Binary> elf;
+  std::unique_ptr<LIEF::PE::Binary> pe;
+  std::unique_ptr<LIEF::MachO::Binary> machO;
 };
 
-
+struct BinaryInternal {
+  BinaryInternal() {}
+  BinaryTypes binary;
+  void setElf(std::unique_ptr<LIEF::ELF::Binary> &elf) {
+    binary.elf = std::move(elf);
+  }
+  void setPE(std::unique_ptr<LIEF::PE::Binary> &pe) {
+    binary.pe = std::move(pe);
+  }
+  void setMachO(std::unique_ptr<LIEF::MachO::Binary> &machO) {
+    binary.machO = std::move(machO);
+  }
+  void setMachO(LIEF::MachO::Binary *machO) {
+    binary.machO = std::unique_ptr<LIEF::MachO::Binary>(machO);
+  }
+};
 
 #endif //__internal_data_h__

@@ -16,16 +16,19 @@
 class StringHelpers {
 public:
   typedef std::function<void(std::string &s)> stringFunc;
-  static void Split(const std::string &input, std::vector<std::string> &result,
+  static bool Split(const std::string &input, std::vector<std::string> &result,
+                    char delimiter,
                     std::function<void(std::string &s)> fn = doNothing) {
     result.clear();
     std::stringstream s_stream(input); // create string stream from the string
     while (s_stream.good()) {
       std::string substr;
-      getline(s_stream, substr, ','); // get first string delimited by comma
+      getline(s_stream, substr,
+              delimiter); // get first string delimited by comma
       fn(substr);
       result.push_back(substr);
     }
+    return result.size() != 0;
   }
   static inline void doNothing(std::string &) {}
 

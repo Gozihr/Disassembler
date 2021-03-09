@@ -121,7 +121,7 @@ void XedDisassembler::Decode(const unsigned char *code, size_t size) {
     // it will breakdown after the per function disassemble feature.
     // TODO investigate how to get instruction address using XED
     if (instructions.size() > 0) {
-      instructions[instructions.size() - 1].address = currCount;
+      instructions[instructions.size() - 1].address = startAddress + currCount;
     }
     currInst += count;
     currCount += count;
