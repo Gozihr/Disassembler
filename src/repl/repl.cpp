@@ -5,6 +5,7 @@
 
 #include "dataPattern/singleton.h"
 #include "interfaces/pch.h"
+#include "runtime/runtime.h"
 #include "repl.h"
 
 namespace {
@@ -12,7 +13,7 @@ struct Singleton_Repl_Members {
   Singleton_Repl_Members() {}
   std::string consoleRead();
   std::string executeLine(const std::string &line);
-  // These are place holde functions
+  // These are place holder functions
   std::string name() { return "disasm"; }
   std::string version() { return "0.0.1"; }
 

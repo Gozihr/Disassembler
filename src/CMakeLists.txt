@@ -88,6 +88,7 @@ add_library(${PROJECT_NAME} STATIC ${SourceFiles} ${HeaderFiles}
             $<TARGET_OBJECTS:Disassembler.DataPattern>
             $<TARGET_OBJECTS:Disassembler.Diff>
             $<TARGET_OBJECTS:Disassembler.Repl>
+            $<TARGET_OBJECTS:Disassembler.Runtime>
 )
 
 target_link_libraries(${PROJECT_NAME} ${TargetLibraries})
@@ -113,6 +114,7 @@ target_include_directories(${PROJECT_NAME}
 add_subdirectory (cli)
 add_subdirectory(dataPattern)
 add_subdirectory (diff)
+add_subdirectory (runtime)
 add_subdirectory(pluginInfra)
 add_subdirectory(repl)
 add_subdirectory (test)

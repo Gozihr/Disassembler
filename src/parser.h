@@ -9,18 +9,22 @@
 
 #include "interfaces/pch.h"
 #include "interfaces/types.h"
+#include "runtime/runtime.h"
 
 class ASMParser {
 public:
   ASMParser(std::string filename);
-  Archtype Arch() { return arch; }
-  OStype OS() { return os; }
-  const std::vector<uint8_t> &Instructions() const;
+  Archtype Arch() const { return mBinary.arch; }
+  OStype OS() const { return mBinary.os; }
+  const std::vector<uint8_t> &Instructions() const {
+    return mBinary.Instructions();
+  }
 
 private:
-  OStype os = OStype::UNKNOWN;
-  Archtype arch = Archtype::UNKNOWN;
-  std::vector<uint8_t> instructions;
+  Binary mBinary;
+  void elfParser();
+  void peParser();
+  void machOParser();
 };
 
 #endif // __Parser_H__

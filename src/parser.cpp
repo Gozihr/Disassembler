@@ -23,6 +23,8 @@
 
 #include <iostream>
 
+#include "runtime/internalData.h"
+
 namespace {
 Archtype GetArch(LIEF::MachO::CPU_TYPES cputype) {
   switch (cputype) {
@@ -68,23 +70,33 @@ Archtype GetArch(LIEF::PE::MACHINE_TYPES cputype) {
 
 } // namespace
 
-ASMParser::ASMParser(std::string filename) {
-  if (LIEF::ELF::is_elf(filename)) {
-    this->os = OStype::LINUX;
-    std::unique_ptr<LIEF::ELF::Binary> elfBinary =
-        LIEF::ELF::Parser::parse(filename);
+void ASMParser::elfParser() {
+  
+  std::unique_ptr<LIEF::ELF::Binary> elfBinary =
+      LIEF::ELF::Parser::parse(this->mBinary.Path());
+  auto header = elfBinary->header();
+  LIEF::ELF::Section &textSection = elfBinary->get_section(".text");
+  textSection.content().swap(this->mBinary.mInstructions);
 
-    auto header = elfBinary->header();
-    this->arch = ::GetArch(header.machine_type());
+  this->mBinary.os = OStype::LINUX;
+  this->mBinary.arch = ::GetArch(header.machine_type());
+  //this->mBinary.mBinaryInternal->elfBinary = std::move(elfBinary);
+}
 
-    LIEF::ELF::Section &textSection = elfBinary->get_section(".text");
-    textSection.content().swap(this->instructions);
-    // TODO fetch cpu type
-  } else if (LIEF::MachO::is_macho(filename)) {
-    this->os = OStype::MACOS;
+void ASMParser::peParser() {
+   
+   auto peBinary = LIEF::PE::Parser::parse(this->mBinary.Path());
+   LIEF::PE::Section &textSection = peBinary->get_section(".text");
+   textSection.content().swap(this->mBinary.mInstructions);
+   this->mBinary.os = OStype::WINDOWS;
+   this->mBinary.arch = ::GetArch(peBinary->header().machine());
+   //this->mBinary.mBinaryInternal->peBinary = std::move(peBinary);
+}
+
+void ASMParser::machOParser() {
     // For fat binary we take the last one...
     LIEF::MachO::FatBinary *fat =
-        LIEF::MachO::Parser::parse(filename).release();
+        LIEF::MachO::Parser::parse(this->mBinary.Path()).release();
     LIEF::MachO::Binary *binaryData = nullptr;
     if (fat) {
       binaryData = fat->pop_back();
@@ -92,22 +104,22 @@ ASMParser::ASMParser(std::string filename) {
     }
 
     auto header = binaryData->header();
-    this->arch = ::GetArch(header.cpu_type());
-
     LIEF::MachO::Section &textSection = binaryData->get_section("__text");
-    textSection.content().swap(this->instructions);
+    textSection.content().swap(this->mBinary.mInstructions);
+
+    this->mBinary.os = OStype::MACOS;
+    this->mBinary.arch = ::GetArch(header.cpu_type());
+    //this->mBinary.mBinaryInternal->machOBinary = std::move(binaryData);
+}
+
+ASMParser::ASMParser(std::string filename) : mBinary(filename) {
+  if (LIEF::ELF::is_elf(filename)) {
+    elfParser();
+  } else if (LIEF::MachO::is_macho(filename)) {
+    machOParser();
   } else if (LIEF::PE::is_pe(filename)) {
-    this->os = OStype::WINDOWS;
-    auto peBinary = LIEF::PE::Parser::parse(filename);
-    LIEF::PE::Section &textSection = peBinary->get_section(".text");
-    this->arch = ::GetArch(peBinary->header().machine());
-    textSection.content().swap(this->instructions);
-    // TODO fetch cpu type
+    peParser();
   } else {
     std::cerr << "This binary is not currently supported." << std::endl;
   }
-}
-
-const std::vector<uint8_t> &ASMParser::Instructions() const {
-  return instructions;
 }
