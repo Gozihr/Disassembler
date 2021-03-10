@@ -1,0 +1,21 @@
+name: LicenseChk
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+    steps:
+    - uses: actions/checkout@v2
+    - run: sudo apt install golang
+    - run: go get -u github.com/google/addlicense
+    - name: Run license check
+      run: ${{github.workspace}}/scripts/license-check.sh
