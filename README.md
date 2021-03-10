@@ -2,6 +2,15 @@
 
 This is hopefully the start of a really awesome custom tool for my own personal RE work.
 
+## Code status
+[![codecov](https://codecov.io/gh/farzonl/Disassembler/branch/master/graph/badge.svg)](https://codecov.io/gh/farzonl/Disassembler)
+
+## Demo
+### Binary Disassemble
+![](pics/elfDisasm.svg?sanitize=true)
+### Binary Diff
+![](pics/diff.svg?sanitize=true)
+
 ## Build Instructions
 ```bash
 cmake -B build

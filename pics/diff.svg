@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="terminal" baseProfile="full" viewBox="0 0 744 325" width="744" version="1.1">
+    <defs>
+        <termtosvg:template_settings xmlns:termtosvg="https://github.com/nbedos/termtosvg">
+            <termtosvg:screen_geometry columns="93" rows="19"/>
+            <termtosvg:animation type="css"/>
+        </termtosvg:template_settings>
+        <style type="text/css" id="generated-style"><![CDATA[#screen {
+                font-family: 'DejaVu Sans Mono', monospace;
+                font-style: normal;
+                font-size: 14px;
+            }
+
+        text {
+            dominant-baseline: text-before-edge;
+            white-space: pre;
+        }
+    
+            :root {
+                --animation-duration: 3420ms;
+            }
+
+            @keyframes roll {
+                0.000%{transform:translateY(0px)}
+15.234%{transform:translateY(-340px)}
+15.263%{transform:translateY(-680px)}
+31.345%{transform:translateY(-1020px)}
+31.725%{transform:translateY(-1360px)}
+31.842%{transform:translateY(-1700px)}
+50.556%{transform:translateY(-2040px)}
+56.374%{transform:translateY(-2380px)}
+58.743%{transform:translateY(-2720px)}
+63.655%{transform:translateY(-3060px)}
+70.643%{transform:translateY(-3400px)}
+70.760%{transform:translateY(-3740px)}
+100.000%{transform:translateY(-3740px)}
+            }
+
+            #screen_view {
+                animation-duration: 3420ms;
+                animation-iteration-count:infinite;
+                animation-name:roll;
+                animation-timing-function: steps(1,end);
+                animation-fill-mode: forwards;
+            }
+        ]]></style>
+        <style type="text/css" id="user-style">
+            /* The colors defined below are the default 16 colors used for rendering text of the terminal. Adjust
+               them as needed.
+               PowerShell colors based on https://en.wikipedia.org/wiki/ANSI_escape_code#Colors */
+            .foreground {fill: #cccccc;}
+            .background {fill: #0c0c0c;}
+            .color0 {fill: #0c0c0c;}
+            .color1 {fill: #c50f1f;}
+            .color2 {fill: #13a10e;}
+            .color3 {fill: #c19c00;}
+            .color4 {fill: #0037da;}
+            .color5 {fill: #881798;}
+            .color6 {fill: #3a96dd;}
+            .color7 {fill: #cccccc;}
+            .color8 {fill: #767676;}
+            .color9 {fill: #e74856;}
+            .color10 {fill: #16c60c;}
+            .color11 {fill: #f9f1a5;}
+            .color12 {fill: #3b78ff;}
+            .color13 {fill: #b4009e;}
+            .color14 {fill: #61d6d6;}
+            .color15 {fill: #f2f2f2;}
+        </style>
+    </defs>
+    <svg id="screen" width="744" height="323" viewBox="0 0 744 323" preserveAspectRatio="xMidYMin slice">
+    <rect class="background" height="100%" width="100%" x="0" y="0"/><defs><g id="g1"><text x="0" textLength="80" class="foreground">bash-3.2$ </text><text x="80" textLength="8" class="background"> </text></g><g id="g2"><text x="0" textLength="240" class="foreground">bash-3.2$ ./build/src/cli/disa</text><text x="240" textLength="8" class="background"> </text></g><g id="g3"><text x="0" textLength="472" class="foreground">bash-3.2$ ./build/src/cli/disasm -c configs/diffConfig.json</text><text x="472" textLength="8" class="background"> </text></g><g id="g4"><text x="0" textLength="472" class="foreground">bash-3.2$ ./build/src/cli/disasm -c configs/diffConfig.json</text></g><g id="g5"><text x="0" textLength="8" class="background"> </text></g><g id="g6"><text x="0" textLength="192" class="foreground">0x0       mov      eax, </text><text x="192" textLength="72" class="color1">0x2000004</text></g><g id="g7"><text x="0" textLength="200" class="foreground">0x5       mov      edi, 1</text></g><g id="g8"><text x="0" textLength="240" class="foreground">0xa       movabs   rsi, 0x2000</text></g><g id="g9"><text x="0" textLength="216" class="foreground">0x14      mov      edx, 0xd</text></g><g id="g10"><text x="0" textLength="152" class="foreground">0x19      syscall  </text></g><g id="g11"><text x="0" textLength="208" class="foreground">0x1b      mov      eax, 0x</text><text x="208" textLength="56" class="color1">2000001</text></g><g id="g12"><text x="0" textLength="216" class="foreground">0x20      xor      rdi, rdi</text></g><g id="g13"><text x="0" textLength="152" class="foreground">0x23      syscall  </text></g><g id="g14"><text x="0" textLength="192" class="foreground">0x0       mov      eax, </text><text x="192" textLength="8" class="color2">1</text></g><g id="g15"><text x="0" textLength="208" class="foreground">0xa       movabs   rsi, 0x</text><text x="208" textLength="16" class="color2">40</text><text x="224" textLength="32" class="foreground">2000</text></g><g id="g16"><text x="0" textLength="208" class="foreground">0x1b      mov      eax, 0x</text><text x="208" textLength="16" class="color2">3c</text></g><g id="g17"><text x="0" textLength="88" class="foreground">bash-3.2$ e</text><text x="88" textLength="8" class="background"> </text></g><g id="g18"><text x="0" textLength="96" class="foreground">bash-3.2$ ex</text><text x="96" textLength="8" class="background"> </text></g><g id="g19"><text x="0" textLength="104" class="foreground">bash-3.2$ exi</text><text x="104" textLength="8" class="background"> </text></g><g id="g20"><text x="0" textLength="112" class="foreground">bash-3.2$ exit</text><text x="112" textLength="8" class="background"> </text></g><g id="g21"><text x="0" textLength="112" class="foreground">bash-3.2$ exit</text></g><g id="g22"><text x="0" textLength="32" class="foreground">exit</text></g></defs><g id="screen_view"><g><rect x="80" y="0" width="8" height="17" class="foreground"/><use xlink:href="#g1" y="0"/></g><g><rect x="240" y="340" width="8" height="17" class="foreground"/><use xlink:href="#g2" y="340"/></g><g><rect x="472" y="680" width="8" height="17" class="foreground"/><use xlink:href="#g3" y="680"/></g><g><use xlink:href="#g4" y="1020"/><rect x="0" y="1037" width="8" height="17" class="foreground"/><use xlink:href="#g5" y="1037"/></g><g><use xlink:href="#g4" y="1360"/><use xlink:href="#g6" y="1377"/><use xlink:href="#g7" y="1394"/><use xlink:href="#g8" y="1411"/><use xlink:href="#g9" y="1428"/><use xlink:href="#g10" y="1445"/><use xlink:href="#g11" y="1462"/><use xlink:href="#g12" y="1479"/><use xlink:href="#g13" y="1496"/><use xlink:href="#g14" y="1530"/><use xlink:href="#g7" y="1547"/><use xlink:href="#g15" y="1564"/><use xlink:href="#g9" y="1581"/><use xlink:href="#g10" y="1598"/><use xlink:href="#g16" y="1615"/><use xlink:href="#g12" y="1632"/><use xlink:href="#g13" y="1649"/><rect x="0" y="1666" width="8" height="17" class="foreground"/><use xlink:href="#g5" y="1666"/></g><g><use xlink:href="#g4" y="1700"/><use xlink:href="#g6" y="1717"/><use xlink:href="#g7" y="1734"/><use xlink:href="#g8" y="1751"/><use xlink:href="#g9" y="1768"/><use xlink:href="#g10" y="1785"/><use xlink:href="#g11" y="1802"/><use xlink:href="#g12" y="1819"/><use xlink:href="#g13" y="1836"/><use xlink:href="#g14" y="1870"/><use xlink:href="#g7" y="1887"/><use xlink:href="#g15" y="1904"/><use xlink:href="#g9" y="1921"/><use xlink:href="#g10" y="1938"/><use xlink:href="#g16" y="1955"/><use xlink:href="#g12" y="1972"/><use xlink:href="#g13" y="1989"/><rect x="80" y="2006" width="8" height="17" class="foreground"/><use xlink:href="#g1" y="2006"/></g><g><use xlink:href="#g4" y="2040"/><use xlink:href="#g6" y="2057"/><use xlink:href="#g7" y="2074"/><use xlink:href="#g8" y="2091"/><use xlink:href="#g9" y="2108"/><use xlink:href="#g10" y="2125"/><use xlink:href="#g11" y="2142"/><use xlink:href="#g12" y="2159"/><use xlink:href="#g13" y="2176"/><use xlink:href="#g14" y="2210"/><use xlink:href="#g7" y="2227"/><use xlink:href="#g15" y="2244"/><use xlink:href="#g9" y="2261"/><use xlink:href="#g10" y="2278"/><use xlink:href="#g16" y="2295"/><use xlink:href="#g12" y="2312"/><use xlink:href="#g13" y="2329"/><rect x="88" y="2346" width="8" height="17" class="foreground"/><use xlink:href="#g17" y="2346"/></g><g><use xlink:href="#g4" y="2380"/><use xlink:href="#g6" y="2397"/><use xlink:href="#g7" y="2414"/><use xlink:href="#g8" y="2431"/><use xlink:href="#g9" y="2448"/><use xlink:href="#g10" y="2465"/><use xlink:href="#g11" y="2482"/><use xlink:href="#g12" y="2499"/><use xlink:href="#g13" y="2516"/><use xlink:href="#g14" y="2550"/><use xlink:href="#g7" y="2567"/><use xlink:href="#g15" y="2584"/><use xlink:href="#g9" y="2601"/><use xlink:href="#g10" y="2618"/><use xlink:href="#g16" y="2635"/><use xlink:href="#g12" y="2652"/><use xlink:href="#g13" y="2669"/><rect x="96" y="2686" width="8" height="17" class="foreground"/><use xlink:href="#g18" y="2686"/></g><g><use xlink:href="#g4" y="2720"/><use xlink:href="#g6" y="2737"/><use xlink:href="#g7" y="2754"/><use xlink:href="#g8" y="2771"/><use xlink:href="#g9" y="2788"/><use xlink:href="#g10" y="2805"/><use xlink:href="#g11" y="2822"/><use xlink:href="#g12" y="2839"/><use xlink:href="#g13" y="2856"/><use xlink:href="#g14" y="2890"/><use xlink:href="#g7" y="2907"/><use xlink:href="#g15" y="2924"/><use xlink:href="#g9" y="2941"/><use xlink:href="#g10" y="2958"/><use xlink:href="#g16" y="2975"/><use xlink:href="#g12" y="2992"/><use xlink:href="#g13" y="3009"/><rect x="104" y="3026" width="8" height="17" class="foreground"/><use xlink:href="#g19" y="3026"/></g><g><use xlink:href="#g4" y="3060"/><use xlink:href="#g6" y="3077"/><use xlink:href="#g7" y="3094"/><use xlink:href="#g8" y="3111"/><use xlink:href="#g9" y="3128"/><use xlink:href="#g10" y="3145"/><use xlink:href="#g11" y="3162"/><use xlink:href="#g12" y="3179"/><use xlink:href="#g13" y="3196"/><use xlink:href="#g14" y="3230"/><use xlink:href="#g7" y="3247"/><use xlink:href="#g15" y="3264"/><use xlink:href="#g9" y="3281"/><use xlink:href="#g10" y="3298"/><use xlink:href="#g16" y="3315"/><use xlink:href="#g12" y="3332"/><use xlink:href="#g13" y="3349"/><rect x="112" y="3366" width="8" height="17" class="foreground"/><use xlink:href="#g20" y="3366"/></g><g><use xlink:href="#g6" y="3400"/><use xlink:href="#g7" y="3417"/><use xlink:href="#g8" y="3434"/><use xlink:href="#g9" y="3451"/><use xlink:href="#g10" y="3468"/><use xlink:href="#g11" y="3485"/><use xlink:href="#g12" y="3502"/><use xlink:href="#g13" y="3519"/><use xlink:href="#g14" y="3553"/><use xlink:href="#g7" y="3570"/><use xlink:href="#g15" y="3587"/><use xlink:href="#g9" y="3604"/><use xlink:href="#g10" y="3621"/><use xlink:href="#g16" y="3638"/><use xlink:href="#g12" y="3655"/><use xlink:href="#g13" y="3672"/><use xlink:href="#g21" y="3689"/><rect x="0" y="3706" width="8" height="17" class="foreground"/><use xlink:href="#g5" y="3706"/></g><g><use xlink:href="#g7" y="3740"/><use xlink:href="#g8" y="3757"/><use xlink:href="#g9" y="3774"/><use xlink:href="#g10" y="3791"/><use xlink:href="#g11" y="3808"/><use xlink:href="#g12" y="3825"/><use xlink:href="#g13" y="3842"/><use xlink:href="#g14" y="3876"/><use xlink:href="#g7" y="3893"/><use xlink:href="#g15" y="3910"/><use xlink:href="#g9" y="3927"/><use xlink:href="#g10" y="3944"/><use xlink:href="#g16" y="3961"/><use xlink:href="#g12" y="3978"/><use xlink:href="#g13" y="3995"/><use xlink:href="#g21" y="4012"/><use xlink:href="#g22" y="4029"/><rect x="0" y="4046" width="8" height="17" class="foreground"/><use xlink:href="#g5" y="4046"/></g></g></svg>
+</svg>
