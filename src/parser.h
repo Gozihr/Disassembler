@@ -9,18 +9,14 @@
 
 #include "interfaces/pch.h"
 #include "interfaces/types.h"
+#include "runtime/runtime.h"
 
 class ASMParser {
-public:
-  ASMParser(std::string filename);
-  Archtype Arch() { return arch; }
-  OStype OS() { return os; }
-  const std::vector<uint8_t> &Instructions() const;
-
 private:
-  OStype os = OStype::UNKNOWN;
-  Archtype arch = Archtype::UNKNOWN;
-  std::vector<uint8_t> instructions;
+  ASMParser() = delete;
+
+public:
+  static std::unique_ptr<Binary> Parser(std::string filename);
 };
 
 #endif // __Parser_H__

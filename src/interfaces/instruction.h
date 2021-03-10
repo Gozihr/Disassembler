@@ -19,7 +19,7 @@ struct Instruction {
       : address(address), opcode(opcode), operandsStr(operandsStr) {
 
     StringHelpers::stringFunc trim = StringHelpers::trim;
-    StringHelpers::Split(operandsStr, operands, trim);
+    StringHelpers::Split(operandsStr, operands, ',', trim);
   }
 };
 

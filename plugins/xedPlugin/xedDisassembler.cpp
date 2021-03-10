@@ -102,7 +102,7 @@ int XedDisassembler::decodeInstruction(const unsigned char *code) {
     size_t split = instruction.find(' ');
     std::string opcode = instruction.substr(0, split);
     std::string strOperands = ::trim(instruction.substr(split + 1));
-    instructions.push_back(Instruction(0, opcode, strOperands));
+    mInstructions.push_back(Instruction(0, opcode, strOperands));
     return currByte;
   }
   return -1;
@@ -120,8 +120,8 @@ void XedDisassembler::Decode(const unsigned char *code, size_t size) {
     // NOTE: this will work if we are printing out all the instructions
     // it will breakdown after the per function disassemble feature.
     // TODO investigate how to get instruction address using XED
-    if (instructions.size() > 0) {
-      instructions[instructions.size() - 1].address = currCount;
+    if (mInstructions.size() > 0) {
+      mInstructions[mInstructions.size() - 1].address = startAddress + currCount;
     }
     currInst += count;
     currCount += count;

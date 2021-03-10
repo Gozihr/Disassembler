@@ -54,11 +54,16 @@ if(LINUX)
     list(APPEND TargetLibraries
          ${GLIB2_LIBRARIES}
          ${GLIB2_MODULE_LIBRARIES}
+         ${LIBEDIT_LIBRARIES}
     )
 endif()
 
 if(UNIX)
-    list(APPEND TargetLibraries "-ledit")
+    find_package(Curses REQUIRED)
+    list(APPEND TargetLibraries 
+        ${CURSES_LIBRARIES}
+        "-ledit"
+    )
 endif()
 
 include_directories(${IncludeDirs})
@@ -88,6 +93,7 @@ add_library(${PROJECT_NAME} STATIC ${SourceFiles} ${HeaderFiles}
             $<TARGET_OBJECTS:Disassembler.DataPattern>
             $<TARGET_OBJECTS:Disassembler.Diff>
             $<TARGET_OBJECTS:Disassembler.Repl>
+            $<TARGET_OBJECTS:Disassembler.Runtime>
 )
 
 target_link_libraries(${PROJECT_NAME} ${TargetLibraries})
@@ -113,6 +119,7 @@ target_include_directories(${PROJECT_NAME}
 add_subdirectory (cli)
 add_subdirectory(dataPattern)
 add_subdirectory (diff)
+add_subdirectory (runtime)
 add_subdirectory(pluginInfra)
 add_subdirectory(repl)
 add_subdirectory (test)
