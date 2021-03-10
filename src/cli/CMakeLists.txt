@@ -37,6 +37,9 @@ set(HeaderFiles
     rawDisassemble.h
     replcli.h
 )
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
+endif()
 
 add_executable(${PROJECT_NAME} ${SourceFiles} ${HeaderFiles})
 
