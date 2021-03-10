@@ -1,0 +1,6 @@
+name: "CodeQL config"
+paths:
+  - src
+  - plugins
+paths-ignore:
+  - packages
