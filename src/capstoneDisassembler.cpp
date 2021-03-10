@@ -49,7 +49,7 @@ void CapstoneDisassembler::Decode(const unsigned char *code, size_t size) {
   if (count > 0) {
     for (size_t i = 0; i < count; i++) {
       mInstructions.push_back(Instruction(this->startAddress + insn[i].address,
-                                         insn[i].mnemonic, insn[i].op_str));
+                                          insn[i].mnemonic, insn[i].op_str));
     }
   }
   freeInstruction(insn, count);
