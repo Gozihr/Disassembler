@@ -54,11 +54,16 @@ if(LINUX)
     list(APPEND TargetLibraries
          ${GLIB2_LIBRARIES}
          ${GLIB2_MODULE_LIBRARIES}
+         ${LIBEDIT_LIBRARIES}
     )
 endif()
 
 if(UNIX)
-    list(APPEND TargetLibraries "-ledit -lncurses")
+    find_package(Curses REQUIRED)
+    list(APPEND TargetLibraries 
+        ${CURSES_LIBRARIES}
+        "-ledit"
+    )
 endif()
 
 include_directories(${IncludeDirs})

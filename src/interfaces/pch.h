@@ -19,6 +19,7 @@
 #include <cassert>
 #include <iomanip>
 #include <iostream>
+#include <iterator>
 #include <memory>
 #include <sstream>
 #include <string>

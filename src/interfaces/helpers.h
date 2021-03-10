@@ -16,7 +16,7 @@
 class StringHelpers {
 public:
   typedef std::function<void(std::string &s)> stringFunc;
-  static bool Split(const std::string &input, std::vector<std::string> &result,
+  static void Split(const std::string &input, std::vector<std::string> &result,
                     char delimiter,
                     std::function<void(std::string &s)> fn = doNothing) {
     result.clear();
@@ -28,7 +28,6 @@ public:
       fn(substr);
       result.push_back(substr);
     }
-    return result.size() != 0;
   }
   static inline void doNothing(std::string &) {}
 

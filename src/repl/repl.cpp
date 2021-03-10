@@ -35,6 +35,8 @@ public:
   static Lookup callFunction(const std::string functionCall);
   static Lookup callFunction(const std::string &functionName,
                              const std::vector<std::string> &arguments);
+  static void parseArguments(const std::string &functionCall,
+                             std::vector<std::string> &argumentList);
   static size_t loadBinary(std::string path);
 };
 
@@ -81,7 +83,7 @@ void Singleton_Repl_Members::executeLine(const std::string &line) {
   std::string opcode = line.substr(0, 5);
   StringHelpers::trim(opcode);
   ReplActionType action = ReplLookupHelpers::ActionFind(opcode);
-  if(action == ReplActionType::UNKNOWN) {
+  if (action == ReplActionType::UNKNOWN) {
     opcode = line.substr(0, 10);
     action = ReplLookupHelpers::ActionFind(opcode);
   }
@@ -90,11 +92,12 @@ void Singleton_Repl_Members::executeLine(const std::string &line) {
     ReplActions::print(line.substr(6));
     break;
   case ReplActionType::LOADPLUGIN:
-    std::cerr << "Non-assignment "<< ReplActionType::LOADPLUGIN << " not handled yet, standby." << std::endl;
+  case ReplActionType::LOADBINARY: {
+    std::vector<std::string> argumentList;
+    ReplActions::parseArguments(line, argumentList);
+    ReplActions::callFunction(opcode, argumentList);
     break;
-  case ReplActionType::LOADBINARY:
-    std::cerr << "Non-assignment "<< ReplActionType::LOADBINARY << " not handled yet, standby." << std::endl;
-    break;
+  }
   case ReplActionType::QUIT:
     ReplActions::quit();
     break;
@@ -105,8 +108,9 @@ void Singleton_Repl_Members::executeLine(const std::string &line) {
     ReplActions::clear();
     break;
   default:
-    if (!ReplActions::assignment(line)) {
-      std::cerr << "Not handled yet, standby" << std::endl;
+    bool success = ReplActions::assignment(line);
+    if (!success) {
+      ReplActions::callFunction(line);
     }
   }
 }
@@ -140,18 +144,18 @@ void ReplActions::print(const std::string &assignment) {
   auto &instance = Singleton::get();
   auto iter = instance.mapAssignments.find(assignment);
   if (iter != instance.mapAssignments.end()) {
-      ReplActions::print(iter->second);
+    ReplActions::print(iter->second);
   } else {
     std::cerr << "identifier " << assignment << " Not found!" << std::endl;
   }
 }
 
 void ReplActions::print(const Lookup &lookup) {
-  std::cout << "called print" << std::endl;
   auto &instance = Singleton::get();
   switch (lookup.type) {
   case RuntimeTypes::BINARY:
-    std::cout << "called print on a binary with index: " << lookup.index << std::endl;
+    // std::cout << "called print on a binary with index: " << lookup.index <<
+    // std::endl;
     assert(lookup.index < instance.binaries.size());
     std::cout << *(instance.binaries[lookup.index].get()) << std::endl;
     break;
@@ -165,10 +169,9 @@ bool ReplActions::assignment(const std::string &line) {
 
   std::vector<std::string> assignmentExpr;
   StringHelpers::stringFunc trim = StringHelpers::trim;
-  bool success = StringHelpers::Split(line, assignmentExpr, '=', trim);
-  std::cout << "assignmentExpr: " << assignmentExpr << std::endl;
-  if (success) {
-    assert(assignmentExpr.size() == 2);
+  StringHelpers::Split(line, assignmentExpr, '=', trim);
+  if (assignmentExpr.size() == 2) {
+    // std::cout << "assignmentExpr: " << assignmentExpr << std::endl;
     std::string assignmentIdentifier = assignmentExpr[0];
     Lookup lookup = ReplActions::callFunction(assignmentExpr[1]);
     if (lookup.type != RuntimeTypes::UNKNOWN &&
@@ -182,25 +185,26 @@ bool ReplActions::assignment(const std::string &line) {
 }
 
 Lookup ReplActions::callFunction(const std::string functionCall) {
-  std::cout << "functionCall: " << functionCall << std::endl;
+  // std::cout << "functionCall: " << functionCall << std::endl;
   size_t openParenIndex = functionCall.find_first_of("(");
   std::string functionName = functionCall.substr(0, openParenIndex);
-  std::cout << "functionName: " << functionName << std::endl;
-  openParenIndex = functionCall.find_last_of("(");
-  size_t closeParenIndex = functionCall.find_first_of(")");
-  std::string functionArguments =
-      functionCall.substr(openParenIndex+1, closeParenIndex - openParenIndex - 1);
-  std::cout << "functionArguments: " << functionArguments << std::endl;
+  // std::cout << "functionName: " << functionName << std::endl;
+
   std::vector<std::string> argumentList;
+  ReplActions::parseArguments(functionCall, argumentList);
+  return ReplActions::callFunction(functionName, argumentList);
+}
+
+void ReplActions::parseArguments(const std::string &functionCall,
+                                 std::vector<std::string> &argumentList) {
+  size_t openParenIndex = functionCall.find_last_of("(");
+  size_t closeParenIndex = functionCall.find_first_of(")");
+  std::string functionArguments = functionCall.substr(
+      openParenIndex + 1, closeParenIndex - openParenIndex - 1);
+  // std::cout << "functionArguments: " << functionArguments << std::endl;
   StringHelpers::stringFunc trim = StringHelpers::trim;
-  bool success =
-      StringHelpers::Split(functionArguments, argumentList, ',', trim);
-  if (success) {
-    std::cout << "argumentList: " << argumentList << std::endl;
-    return ReplActions::callFunction(functionName, argumentList);
-  }
-  Lookup lookup{RuntimeTypes::UNKNOWN, static_cast<size_t>(-1)};
-  return lookup;
+  StringHelpers::Split(functionArguments, argumentList, ',', trim);
+  // std::cout << "argumentList: " << argumentList << std::endl;
 }
 
 Lookup ReplActions::callFunction(const std::string &functionName,
@@ -209,6 +213,11 @@ Lookup ReplActions::callFunction(const std::string &functionName,
   Lookup lookup{RuntimeTypes::UNKNOWN, static_cast<size_t>(-1)};
   ReplActionType action = ReplLookupHelpers::ActionFind(functionName);
   switch (action) {
+  case ReplActionType::PRINT:
+    for (auto arg : arguments) {
+      ReplActions::print(arg);
+    }
+    break;
   case ReplActionType::LOADBINARY:
     assert(arguments.size() == 1);
     lookup.index = ReplActions::loadBinary(arguments[0]);
@@ -217,6 +226,15 @@ Lookup ReplActions::callFunction(const std::string &functionName,
   case ReplActionType::LOADPLUGIN:
     std::cerr << "Error: " << functionName << " is not handled yet, standby"
               << std::endl;
+    break;
+  case ReplActionType::QUIT:
+    ReplActions::quit();
+    break;
+  case ReplActionType::HELP:
+    ReplActions::help();
+    break;
+  case ReplActionType::CLEAR:
+    ReplActions::clear();
     break;
   default:
     std::cerr << "Error: " << functionName
