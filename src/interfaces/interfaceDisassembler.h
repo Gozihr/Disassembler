@@ -29,24 +29,24 @@ public:
                                   const AbstractDisassembler &aDis);
 
   virtual const std::vector<Instruction> &getInstructions() const {
-    return instructions;
+    return mInstructions;
   }
 
   void moveInstructions(std::vector<Instruction> &instructions) {
-    this->instructions.swap(instructions);
+    this->mInstructions.swap(instructions);
   }
 
-  virtual void Clear() { instructions.clear(); }
+  virtual void Clear() { mInstructions.clear(); }
   virtual void setStartAddress(uint64_t address) { startAddress = address; }
 
 protected:
-  std::vector<Instruction> instructions;
+  std::vector<Instruction> mInstructions;
   uint64_t startAddress;
 };
 
 inline std::ostream &operator<<(std::ostream &out,
                                 const AbstractDisassembler &aDis) {
-  auto instructions = aDis.instructions;
+  auto instructions = aDis.mInstructions;
   out << "Instruction count: " << instructions.size() << std::endl;
   out << "address | opcode | operands" << std::endl;
   out << "---------------------------" << std::endl;
