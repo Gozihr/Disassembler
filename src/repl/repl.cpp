@@ -25,7 +25,7 @@ struct Lookup {
   size_t index;
 };
 
-struct ReplActions {
+class ReplActions {
 private:
   ReplActions() = delete;
 
@@ -83,7 +83,6 @@ void Singleton_Repl_Members::consoleRead() {
 // TODO We will need to build an ast to do this the right way.
 // For now lets get something working.
 void Singleton_Repl_Members::executeLine(const std::string &line) {
-  auto &instance = Singleton::get();
   std::string opcode = line.substr(0, 5);
   StringHelpers::trim(opcode);
   ReplActionType action = ReplLookupHelpers::ActionFind(opcode);
