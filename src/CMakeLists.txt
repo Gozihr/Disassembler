@@ -118,6 +118,7 @@ target_include_directories(${PROJECT_NAME}
 
 add_subdirectory (cli)
 add_subdirectory(dataPattern)
+add_subdirectory (gui)
 add_subdirectory (diff)
 add_subdirectory (runtime)
 add_subdirectory(pluginInfra)
