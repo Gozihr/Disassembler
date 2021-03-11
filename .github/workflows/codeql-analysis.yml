@@ -80,11 +80,11 @@ jobs:
         echo yes | sudo add-apt-repository "deb $LIB3MF_REPO ./"
         sudo apt-get update -qq
         sudo apt-get purge -qq fglrx || true
-        sudo apt-get install -qq libcapstone-dev nasm mingw-w64 libedit-dev
+        sudo apt-get install -qq libcapstone-dev nasm mingw-w64 libedit-dev libglfw3-dev libglm-dev
       if: matrix.os == 'ubuntu-20.04'
     - name: Install Mac dependencies
       run: |
-        brew install capstone nasm mingw-w64
+        brew install capstone nasm mingw-w64 glfw glm
       if: matrix.os == 'macos-10.15'
     - name: Install Windows dependencies
       run: |
