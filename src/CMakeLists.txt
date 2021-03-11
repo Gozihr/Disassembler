@@ -118,7 +118,11 @@ target_include_directories(${PROJECT_NAME}
 
 add_subdirectory (cli)
 add_subdirectory(dataPattern)
-add_subdirectory (gui)
+## TODO fix: https://github.com/Gozihr/Disassembler/issues/55
+# Then we can remove unix check.
+if(UNIX)
+    add_subdirectory (gui)
+endif()
 add_subdirectory (diff)
 add_subdirectory (runtime)
 add_subdirectory(pluginInfra)
