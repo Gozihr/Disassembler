@@ -20,7 +20,10 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
     - uses: actions/checkout@v2
-    - run: sudo apt install libcapstone-dev nasm mingw-w64 libedit-dev libglfw3-dev libglm-dev
+    - run: |
+        sudo apt install libcapstone-dev nasm mingw-w64 libedit-dev \
+        libgl1-mesa-dev mesa-utils libgl1-mesa-glx libxrandr-dev \
+        libxinerama-dev libxcursor-dev libxi-dev
       if: matrix.os == 'ubuntu-latest'
     - run: brew install capstone nasm mingw-w64 glfw glm
       if: matrix.os == 'macOS-latest'

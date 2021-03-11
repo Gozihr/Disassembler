@@ -2,6 +2,8 @@ project(disasm-gui)
 
 #Look up OpenGL
 find_package(OpenGL REQUIRED)
+find_package(GLM) # Look up GLM
+find_package(glfw3 3.3) # Look up glfw
 
 download_file(https://gist.github.com/farzonl/f724000a4fd841c792c82a36c0da8cba/raw/b6125287d4364e0982c970045691bf6d319c9868/glad.zip
               ${CMAKE_SOURCE_DIR}/packages/glad.zip 
