@@ -1,5 +1,5 @@
 project(Disassembler)
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.16)
 if(UNIX AND NOT APPLE)
     set(LINUX TRUE)
 endif()
@@ -111,6 +111,7 @@ else()
     endif()
 endif()
 
+
 if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++latest /W4")
     # Default debug flags are OK 
@@ -118,7 +119,7 @@ if(MSVC)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
 else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14" )
+    set(CMAKE_CXX_STANDARD 17)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g")
 endif()

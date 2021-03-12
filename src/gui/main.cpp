@@ -5,14 +5,17 @@
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "imgui.h"
-
+#include "runtime/binaryDisassemble.h"
 // clang-format off
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 // clang-format on
 
+#include <ImGuiFileDialog/ImGuiFileDialog.h>
+
 #include <iostream>
 #include <string>
+#include <sstream>
 
 int WINDOW_WIDTH = 640;
 int WINDOW_HEIGHT = 480;
@@ -20,8 +23,20 @@ std::string title = "Disasm-Gui";
 std::string glslVersion = "#version 330";
 GLFWwindow *window = nullptr;
 ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-bool show_another_window = false;
-bool show_demo_window = true;
+bool gozihr_active = true;
+std::string filePath;
+std::string binary;
+std::string disasm;
+
+void Disassemble(std::string binaryPath, std::string pluginPath = "") {
+  if (binaryPath.empty()) {
+    // TODO ImGui::OpenPopup
+    return;
+  }
+  std::stringstream stream;
+  BinaryDisassemble::action(binaryPath, pluginPath, stream);
+  disasm = stream.str();
+}
 
 void draw() {
   // Start the Dear ImGui frame
@@ -29,55 +44,45 @@ void draw() {
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
 
-  // 1. Show the big demo window (Most of the sample code is in
-  // ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear
-  // ImGui!).
-  if (show_demo_window)
-    ImGui::ShowDemoWindow(&show_demo_window);
-
-  // 2. Show a simple window that we create ourselves. We use a Begin/End pair
-  // to created a named window.
   {
-    static float f = 0.0f;
-    static int counter = 0;
+    ImGui::Begin("Gozihr", &gozihr_active, ImGuiWindowFlags_MenuBar);
+    if (ImGui::BeginMenuBar()) {
+      if (ImGui::BeginMenu("File")) {
+        if (ImGui::MenuItem("Open..", "Ctrl+O")) {
+          std::string typeFilters = ".exe,.dll,.lib,.out,.a,.so,.dylib,.*";
+          std::string startPath = ".";
+          ImGuiFileDialog::Instance()->OpenDialog(
+              "ChooseFileDlgKey", "Choose File", typeFilters.c_str(),
+              startPath);
+        }
+        if (ImGui::MenuItem("Save", "Ctrl+S")) { /* Do stuff */
+        }
+        if (ImGui::MenuItem("Close", "Ctrl+W")) {
+          gozihr_active = false;
+        }
+        ImGui::EndMenu();
+      }
+      ImGui::EndMenuBar();
+    }
+    // display
+    if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
+      // action if OK
+      if (ImGuiFileDialog::Instance()->IsOk()) {
+        filePath = ImGuiFileDialog::Instance()->GetFilePathName();
+      }
 
-    ImGui::Begin("Hello, world!"); // Create a window called "Hello, world!" and
-                                   // append into it.
-
-    ImGui::Text("This is some useful text."); // Display some text (you can use
-                                              // a format strings too)
-    ImGui::Checkbox(
-        "Demo Window",
-        &show_demo_window); // Edit bools storing our window open/close state
-    ImGui::Checkbox("Another Window", &show_another_window);
-
-    ImGui::SliderFloat("float", &f, 0.0f,
-                       1.0f); // Edit 1 float using a slider from 0.0f to 1.0f
-    ImGui::ColorEdit3(
-        "clear color",
-        (float *)&clear_color); // Edit 3 floats representing a color
-
-    if (ImGui::Button("Button")) // Buttons return true when clicked (most
-                                 // widgets return true when edited/activated)
-      counter++;
-    ImGui::SameLine();
-    ImGui::Text("counter = %d", counter);
-
-    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
-                1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-    ImGui::End();
-  }
-
-  // 3. Show another simple window.
-  if (show_another_window) {
-    ImGui::Begin(
-        "Another Window",
-        &show_another_window); // Pass a pointer to our bool variable (the
-                               // window will have a closing button that will
-                               // clear the bool when clicked)
-    ImGui::Text("Hello from another window!");
-    if (ImGui::Button("Close Me"))
-      show_another_window = false;
+      // close
+      ImGuiFileDialog::Instance()->Close();
+    }
+    ImGui::InputText("binary path: ", const_cast<char *>(filePath.c_str()),
+                     filePath.capacity() + 1);
+    if (ImGui::Button("Disassemble")) {
+      Disassemble(filePath);
+    }
+    // Display contents in a scrolling region
+    ImGui::BeginChild("Scrolling");
+    ImGui::Text("%s", disasm.c_str());
+    ImGui::EndChild();
     ImGui::End();
   }
 

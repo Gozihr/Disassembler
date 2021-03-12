@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 #include "rawcli.h"
-#include "rawDisassemble.h"
+#include "runtime/rawDisassemble.h"
 
 const std::string RawCLI::name = "r";
 const std::string RawCLI::altName = "raw";

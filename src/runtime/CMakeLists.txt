@@ -1,9 +1,13 @@
 
 set (SourceFiles
+    binaryDisassemble.cpp
+    rawDisassemble.cpp
     runtime.cpp
 )
 
 set(HeaderFiles
+    binaryDisassemble.h
+    rawDisassemble.h
     runtime.h
     internalData.h
 )

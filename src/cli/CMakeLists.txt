@@ -18,23 +18,19 @@ set (SourceFiles
      main.cpp
      autocli.cpp
      binaryfilecli.cpp
-     binaryDisassemble.cpp
      configcli.cpp
      defaultcli.cpp
      rawcli.cpp
-     rawDisassemble.cpp
      replcli.cpp
 )
 
 set(HeaderFiles
     autocli.h
     basecli.h
-    binaryDisassemble.h
     binaryfilecli.h
     configcli.h
     defaultcli.h
     rawcli.h
-    rawDisassemble.h
     replcli.h
 )
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")

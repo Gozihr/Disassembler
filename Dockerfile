@@ -5,7 +5,7 @@ RUN apt-get update \
     && apt install -y --no-install-recommends \
     git build-essential cmake vim openssl curl ca-certificates \
     libglib2.0-dev mingw-w64 nasm python3 pkg-config wget \
-    libcapstone-dev libedit-dev
+    unzip zip libcapstone-dev libedit-dev libglfw3-dev libglm-dev
 
 # Set the working directory to root (ie $HOME)
 WORKDIR root
