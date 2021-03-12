@@ -3,11 +3,11 @@
 // license that can be found in the LICENSE file.
 
 #include "configcli.h"
-#include "binaryDisassemble.h"
 #include "diff/difftool.h"
 #include "interfaces/jsonHelper.h"
 #include "interfaces/types.h"
-#include "rawDisassemble.h"
+#include "runtime/binaryDisassemble.h"
+#include "runtime/rawDisassemble.h"
 
 const std::string ConfigCLI::name = "c";
 const std::string ConfigCLI::altName = "Config";

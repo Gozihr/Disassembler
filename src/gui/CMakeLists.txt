@@ -2,7 +2,6 @@ project(disasm-gui)
 
 #Look up OpenGL
 find_package(OpenGL REQUIRED)
-find_package(GLM) # Look up GLM
 find_package(glfw3 3.3) # Look up glfw
 
 download_file(https://gist.github.com/farzonl/f724000a4fd841c792c82a36c0da8cba/raw/b6125287d4364e0982c970045691bf6d319c9868/glad.zip
@@ -29,18 +28,6 @@ else()
     include_directories(${CMAKE_SOURCE_DIR}/packages/glfw/include)
 endif()
 
-if(${GLM_FOUND})
-    MESSAGE(STATUS "Found GLM.")
-else()
-    MESSAGE(STATUS "Could not locate GLM, downloading.")
-    download_file(https://github.com/g-truc/glm/releases/download/0.9.9.8/glm-0.9.9.8.zip
-              ${CMAKE_SOURCE_DIR}/packages/glm-0.9.9.8.zip
-              MD5
-              69895110052f0d711c9c54fbf385f6f5)
-    decompress(${CMAKE_SOURCE_DIR}/packages/glm-0.9.9.8.zip ${CMAKE_SOURCE_DIR}/packages/glm)
-    include_directories(${CMAKE_SOURCE_DIR}/packages/glm)
-endif()
-
 # imgui
 download_file("https://github.com/ocornut/imgui/archive/v1.81.zip"
                  ${CMAKE_SOURCE_DIR}/packages/imgui-1.81.zip
@@ -50,7 +37,19 @@ set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/packages/imgui)
 decompress(${CMAKE_SOURCE_DIR}/packages/imgui-1.81.zip ${IMGUI_DIR})
 include_directories(${IMGUI_DIR})
 
-
+download_file(https://github.com/Gozihr/ImGuiFileDialog/archive/master.zip
+              ${CMAKE_SOURCE_DIR}/packages/ImGuiFileDialog.zip
+              MD5
+              13e1abe33aeb0b869307a238967038ae)
+set(IMGUI_3RD_DIR ${CMAKE_SOURCE_DIR}/packages/imgui-3rdparty)
+set(IMGUI_FILE_DIR ${IMGUI_3RD_DIR}/ImGuiFileDialog)
+decompress(${CMAKE_SOURCE_DIR}/packages/ImGuiFileDialog.zip ${IMGUI_FILE_DIR})
+if(LINUX )
+  execute_process (
+      COMMAND mv ${IMGUI_3RD_DIR}/ImGuiFileDialog-master ${IMGUI_3RD_DIR}/ImGuiFileDialog
+  )
+endif()
+include_directories(${IMGUI_3RD_DIR})
 
 if(APPLE)
   message(STATUS "APPLE Platform detected")
@@ -67,6 +66,10 @@ if(LINUX)
   set(EXTRA_LIBS ${CMAKE_DL_LIBS})
 endif()
 
+set(ImGuiFileDialogSource
+    ${IMGUI_FILE_DIR}/ImGuiFileDialog.cpp
+)
+
 set(ImguiSource
     ${IMGUI_DIR}/imgui.cpp 
     ${IMGUI_DIR}/imgui_demo.cpp 
@@ -75,6 +78,7 @@ set(ImguiSource
     ${IMGUI_DIR}/imgui_widgets.cpp
     ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp 
     ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
+    ${ImGuiFileDialogSource}
 )
 
 set (SourceFiles
@@ -97,3 +101,4 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${GL_LIBS})
 target_include_directories(${PROJECT_NAME}
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
 )
+target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_PROJECT_NAME})

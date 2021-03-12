@@ -10,9 +10,10 @@
 #include <iostream>
 
 bool BinaryDisassemble::action(const std::string &filename,
-                               const std::string &dynamicLibPaths) {
+                               const std::string &dynamicLibPaths,
+                               std::ostream &out) {
   std::unique_ptr<Binary> binary = ASMParser::Parser(filename);
-  std::cout << *(binary.get()) << std::endl;
+  out << *(binary.get()) << std::endl;
   DisassemblerType dType =
       Disassembler::checkAndInitDynamicDisassemblers(dynamicLibPaths);
 
@@ -20,7 +21,7 @@ bool BinaryDisassemble::action(const std::string &filename,
   disasm.setStartAddress(binary->getStartAddress());
   disasm.Decode(binary->Instructions().data(), binary->Instructions().size());
 
-  std::cout << disasm << std::endl;
+  out << disasm << std::endl;
 
   return true;
 }

@@ -7,6 +7,7 @@
 #ifndef __binary_disassemble_h__
 #define __binary_disassemble_h__
 
+#include <iostream>
 #include <string>
 
 class BinaryDisassemble {
@@ -15,7 +16,8 @@ private:
 
 public:
   static bool action(const std::string &filename,
-                     const std::string &dynamicLibPaths);
+                     const std::string &dynamicLibPaths,
+                     std::ostream &out = std::cout);
 };
 
 #endif // __binary_disassemble_h__
