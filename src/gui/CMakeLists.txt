@@ -83,9 +83,15 @@ set(ImguiSource
 
 set (SourceFiles
     main.cpp
+    glfwWindow.cpp
+    imguiGLWindow.cpp
+    window.cpp
 )
 
 set(HeaderFiles
+    glfwWindow.h
+    imguiGLWindow.h
+    window.h
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/packages/ ${DISASSEMBLER_SOURCE_DIR})
