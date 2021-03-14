@@ -92,13 +92,10 @@ else()
                   cffdd77556bd35e8cc32ff9742605a4e)
         decompress(${CMAKE_SOURCE_DIR}/packages/LIEF-${LIEF_VERSION}.tar.gz ${CMAKE_SOURCE_DIR}/packages/LIEF)
     elseif(WIN32)
-        set(LIEF_VERSION "0.10.1")
         download_file(https://github.com/lief-project/LIEF/releases/download/${LIEF_VERSION}/LIEF-${LIEF_VERSION}-win64.zip
                       ${CMAKE_SOURCE_DIR}/packages/LIEF-${LIEF_VERSION}-win64.zip
                       MD5
-                      a3bcf27708f46278519c5443857627c4)
-        # TODO Tracked here: https://github.com/Gozihr/Disassembler/issues/17
-        #             a5e6a5ef5933b1296739d859b198f857)
+                      a5e6a5ef5933b1296739d859b198f857)
         decompress(${CMAKE_SOURCE_DIR}/packages/LIEF-${LIEF_VERSION}-win64.zip ${CMAKE_SOURCE_DIR}/packages/LIEF)
     elseif(APPLE)
         download_file(https://github.com/lief-project/LIEF/releases/download/${LIEF_VERSION}/LIEF-${LIEF_VERSION}-Darwin-x86_64.tar.gz

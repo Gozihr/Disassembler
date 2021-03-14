@@ -49,6 +49,12 @@ if(LINUX )
       COMMAND mv ${IMGUI_3RD_DIR}/ImGuiFileDialog-master ${IMGUI_3RD_DIR}/ImGuiFileDialog
   )
 endif()
+if(WIN32)
+  execute_process (
+      COMMAND  powershell.exe -ExecutionPolicy Bypass Rename-Item ${IMGUI_3RD_DIR}/ImGuiFileDialog-master ImGuiFileDialog
+  )
+endif()
+
 include_directories(${IMGUI_3RD_DIR})
 
 if(APPLE)
