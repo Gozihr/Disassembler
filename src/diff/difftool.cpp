@@ -68,3 +68,14 @@ bool DiffTool::action(const jObjects::Config &config1,
   std::cout << strPair.first << "\n" << strPair.second;
   return true;
 }
+
+DiffOutput DiffTool::action(std::vector<Instruction> &inst1,
+                            std::vector<Instruction> &inst2) {
+  std::stringstream ss1;
+  ss1 << inst1;
+  std::stringstream ss2;
+  ss2 << inst2;
+  std::string left = ss1.str();
+  std::string right = ss2.str();
+  return Diff::compute(left, right);
+}

@@ -6,12 +6,15 @@
 #include <stdlib.h>
 
 #ifndef _WIN32
+#include <curses.h>
 #include <editline/readline.h>
 #include <term.h>
 #include <unistd.h>
 #endif
 
 #include "dataPattern/singleton.h"
+#include "diff/difftool.h"
+#include "disassemble.h"
 #include "interfaces/helpers.h"
 #include "interfaces/pch.h"
 #include "parser.h"
@@ -30,9 +33,16 @@ private:
   ReplActions() = delete;
 
 public:
+  static Lookup &getLookup(const std::string &assignment);
   static void print(const Lookup &lookup);
   static void print(const std::string &assignment);
   static void clear();
+  static void diff(const std::string &id1, const std::string &id2);
+  static void disassemble(const std::string &id);
+  static void disassemble(const std::string &id,
+                          std::vector<Instruction> &instructions);
+  static void disassemble(const Binary &binary,
+                          std::vector<Instruction> &instructions);
   static void quit();
   static void help();
   static bool assignment(const std::string &line);
@@ -55,6 +65,8 @@ struct Singleton_Repl_Members {
 private:
   std::map<std::string, Lookup> mapAssignments;
   std::vector<std::unique_ptr<Binary>> binaries;
+  // Note for the file io feature we will want to turn this off.
+  bool bIsInteractiveMode = true;
   friend class ReplActions;
 };
 } // namespace
@@ -144,13 +156,18 @@ void ReplActions::help() {
 void ReplActions::quit() { exit(EXIT_SUCCESS); }
 
 void ReplActions::print(const std::string &assignment) {
+  ReplActions::print(getLookup(assignment));
+}
+
+Lookup &ReplActions::getLookup(const std::string &assignment) {
   auto &instance = Singleton::get();
   auto iter = instance.mapAssignments.find(assignment);
   if (iter != instance.mapAssignments.end()) {
-    ReplActions::print(iter->second);
-  } else {
-    std::cerr << "identifier " << assignment << " Not found!" << std::endl;
+    return iter->second;
   }
+  std::stringstream sstr;
+  sstr << "identifier " << assignment << " Not found!" << std::endl;
+  throw std::runtime_error(sstr.str());
 }
 
 void ReplActions::print(const Lookup &lookup) {
@@ -222,7 +239,9 @@ Lookup ReplActions::callFunction(const std::string &functionName,
     }
     break;
   case ReplActionType::LOADBINARY:
-    assert(arguments.size() == 1);
+    if (arguments.size() != 1) {
+      throw std::runtime_error("loadBinary takes one argument.");
+    }
     lookup.index = ReplActions::loadBinary(arguments[0]);
     lookup.type = RuntimeTypes::BINARY;
     break;
@@ -239,11 +258,106 @@ Lookup ReplActions::callFunction(const std::string &functionName,
   case ReplActionType::CLEAR:
     ReplActions::clear();
     break;
+  case ReplActionType::DISASM:
+    if (arguments.size() != 1) {
+      throw std::runtime_error("disasm takes one arguments");
+    }
+    ReplActions::disassemble(arguments[0]);
+    break;
+  case ReplActionType::DIFF:
+    ReplActions::diff(arguments[0], arguments[1]);
+    break;
   default:
     std::cerr << "Error: " << functionName
               << " is not a library defined function!" << std::endl;
   }
   return lookup;
+}
+
+void ReplActions::disassemble(const std::string &id) {
+  std::vector<Instruction> instructions;
+  disassemble(id, instructions);
+  std::cout << instructions << std::endl;
+}
+
+void ReplActions::disassemble(const std::string &id,
+                              std::vector<Instruction> &instructions) {
+  auto &instance = Singleton::get();
+  Lookup l = getLookup(id);
+  if (l.type != RuntimeTypes::BINARY) {
+    std::stringstream sstr;
+    sstr << "identfier: " << id << " must be a binary.";
+    throw std::runtime_error(sstr.str());
+  }
+  assert(l.index < instance.binaries.size());
+  Binary *pBinary = instance.binaries[l.index].get();
+  disassemble(*pBinary, instructions);
+}
+
+void ReplActions::disassemble(const Binary &binary,
+                              std::vector<Instruction> &instructions) {
+  Disassembler disasm(binary.Arch());
+  disasm.setStartAddress(binary.getStartAddress());
+  disasm.Decode(binary.Instructions().data(), binary.Instructions().size());
+  disasm.moveInstructions(instructions);
+}
+
+void diffCurses(const std::string &left, const std::string &right) {
+  initscr();
+
+  printw("Diff window");
+  WINDOW *mainWindow = initscr();
+  int y = 0, x = 0;
+  getmaxyx(mainWindow, y, x);
+  WINDOW *subwindow1 = newwin(0, x / 2, 0, 0);
+  WINDOW *subwindow2 = newwin(0, 0, 0, x / 2);
+
+  refresh();
+
+  box(subwindow1, 0, 0);
+  StringHelpers::stringFunc trim = StringHelpers::trim;
+  std::vector<std::string> strLines;
+  StringHelpers::Split(left, strLines, '\n', trim);
+  int yText = 1;
+  for (auto line : strLines) {
+    mvwprintw(subwindow1, yText, 1, line.c_str());
+    yText += 1;
+  }
+
+  box(subwindow2, 0, 0);
+  StringHelpers::Split(right, strLines, '\n', trim);
+  yText = 1;
+  for (auto line : strLines) {
+    mvwprintw(subwindow2, yText, 1, line.c_str());
+    yText += 1;
+  }
+
+  refresh();
+  wrefresh(subwindow1);
+  wrefresh(subwindow2);
+
+  getch();
+  delwin(subwindow1);
+  delwin(subwindow2);
+
+  endwin();
+}
+
+void ReplActions::diff(const std::string &id1, const std::string &id2) {
+  auto &instance = Singleton::get();
+  std::vector<Instruction> inst1;
+  std::vector<Instruction> inst2;
+  disassemble(id1, inst1);
+  disassemble(id2, inst2);
+  if (instance.bIsInteractiveMode) {
+    std::stringstream sstr1;
+    std::stringstream sstr2;
+    sstr1 << inst1;
+    sstr2 << inst2;
+    diffCurses(sstr1.str(), sstr2.str());
+  }
+  DiffOutput diffout = DiffTool::action(inst1, inst2);
+  std::cout << diffout.first << "\n" << diffout.second;
 }
 
 size_t ReplActions::loadBinary(std::string path) {
@@ -256,6 +370,14 @@ void Repl::run() {
   auto &instance = Singleton::get();
   std::cout << instance.name() << " " << instance.version() << std::endl;
   while (true) {
-    instance.consoleRead();
+    try {
+      instance.consoleRead();
+    } catch (std::runtime_error &error) {
+      std::cerr << error.what() << std::endl;
+      std::cin.get();
+    } catch (std::exception &error) {
+      std::cerr << error.what() << std::endl;
+      std::cin.get();
+    }
   }
 }
