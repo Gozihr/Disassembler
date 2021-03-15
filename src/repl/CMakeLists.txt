@@ -4,7 +4,17 @@ set (SourceFiles
 
 set(HeaderFiles
     repl.h
+    replTypes.h
 )
+
+if(UNIX)
+list(APPEND SourceFiles
+     replCurses.cpp
+)
+list(APPEND HeaderFiles
+     replCurses.h
+)
+endif()
 
 add_library (Disassembler.Repl OBJECT
             ${SourceFiles} ${HeaderFiles}

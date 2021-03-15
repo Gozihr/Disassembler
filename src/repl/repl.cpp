@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 #ifndef _WIN32
-#include <curses.h>
+#include "replCurses.h"
 #include <editline/readline.h>
 #include <term.h>
 #include <unistd.h>
@@ -302,60 +302,21 @@ void ReplActions::disassemble(const Binary &binary,
   disasm.moveInstructions(instructions);
 }
 
-void diffCurses(const std::string &left, const std::string &right) {
-  initscr();
-
-  printw("Diff window");
-  WINDOW *mainWindow = initscr();
-  int y = 0, x = 0;
-  getmaxyx(mainWindow, y, x);
-  WINDOW *subwindow1 = newwin(0, x / 2, 0, 0);
-  WINDOW *subwindow2 = newwin(0, 0, 0, x / 2);
-
-  refresh();
-
-  box(subwindow1, 0, 0);
-  StringHelpers::stringFunc trim = StringHelpers::trim;
-  std::vector<std::string> strLines;
-  StringHelpers::Split(left, strLines, '\n', trim);
-  int yText = 1;
-  for (auto line : strLines) {
-    mvwprintw(subwindow1, yText, 1, line.c_str());
-    yText += 1;
-  }
-
-  box(subwindow2, 0, 0);
-  StringHelpers::Split(right, strLines, '\n', trim);
-  yText = 1;
-  for (auto line : strLines) {
-    mvwprintw(subwindow2, yText, 1, line.c_str());
-    yText += 1;
-  }
-
-  refresh();
-  wrefresh(subwindow1);
-  wrefresh(subwindow2);
-
-  getch();
-  delwin(subwindow1);
-  delwin(subwindow2);
-
-  endwin();
-}
-
 void ReplActions::diff(const std::string &id1, const std::string &id2) {
   auto &instance = Singleton::get();
   std::vector<Instruction> inst1;
   std::vector<Instruction> inst2;
   disassemble(id1, inst1);
   disassemble(id2, inst2);
+#ifndef _WIN32
   if (instance.bIsInteractiveMode) {
     std::stringstream sstr1;
     std::stringstream sstr2;
     sstr1 << inst1;
     sstr2 << inst2;
-    diffCurses(sstr1.str(), sstr2.str());
+    curses::diffCurses(sstr1.str(), sstr2.str());
   }
+#endif
   DiffOutput diffout = DiffTool::action(inst1, inst2);
   std::cout << diffout.first << "\n" << diffout.second;
 }
