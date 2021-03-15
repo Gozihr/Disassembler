@@ -48,8 +48,8 @@ inline std::ostream &operator<<(std::ostream &out,
                                 const AbstractDisassembler &aDis) {
   auto instructions = aDis.mInstructions;
   out << "Instruction count: " << instructions.size() << std::endl;
-  out << "address | opcode | operands" << std::endl;
-  out << "---------------------------" << std::endl;
+  out << "  address  |  opcode  |  operands" << std::endl;
+  out << "---------------------------------" << std::endl;
   out << instructions << std::endl;
   return out;
 }

@@ -27,7 +27,7 @@ typedef std::vector<Instruction> Instructions;
 
 inline std::ostream &operator<<(std::ostream &out,
                                 const Instruction &instruction) {
-  out << std::left << "0x" << std::setw(8) << std::hex << instruction.address
+  out << std::left << "0x" << std::setw(11) << std::hex << instruction.address
       << std::setw(9) << instruction.opcode << instruction.operandsStr;
   return out;
 }

@@ -1,10 +1,10 @@
 project(disasm)
 cmake_minimum_required(VERSION 3.10)
 
-download_file(https://raw.githubusercontent.com/FlorianRappl/CmdParser/b5288792d91fa6e962217f2ab37c60445dade105/cmdparser.hpp
+download_file(https://raw.githubusercontent.com/FlorianRappl/CmdParser/3b5e2f284e0e29543eaf51ac53a01dd3b6d468ce/cmdparser.hpp
               ${CMAKE_SOURCE_DIR}/packages/cmdParser/cmdparser.hpp
               MD5
-              2f3c0d82333d6668774ffa98c1c8e3f2)
+              8449f7da1097659698193bc0ddb24ef7)
 
 download_file(https://github.com/nlohmann/json/releases/download/v3.9.1/json.hpp
               ${CMAKE_SOURCE_DIR}/packages/nlohmann/json.hpp
