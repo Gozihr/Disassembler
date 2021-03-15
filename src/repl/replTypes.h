@@ -17,6 +17,8 @@ enum class ReplActionType {
   QUIT,
   HELP,
   CLEAR,
+  DIFF,
+  DISASM,
   UNKNOWN
 };
 
@@ -28,6 +30,8 @@ static const std::unordered_map<std::string, ReplActionType> ReplActionTypeMap =
         {"loadBinary", ReplActionType::LOADBINARY},
         {"help", ReplActionType::HELP},
         {"quit", ReplActionType::QUIT},
+        {"diff", ReplActionType::DIFF},
+        {"disasm", ReplActionType::DISASM},
         {"clear", ReplActionType::CLEAR}
 
 };
@@ -40,6 +44,8 @@ static const std::unordered_map<std::string, std::string>
         {"loadBinary", "loads a binary."},
         {"help", "prints a list of actions."},
         {"quit", "quits the REPL."},
+        {"disasm", "disassembles a binary."},
+        {"diff", "diffs two binaries."},
         {"clear", "clears the screen."}
 
 };
@@ -50,6 +56,8 @@ static const std::unordered_map<ReplActionType, std::string> ReplActionStrMap =
      {ReplActionType::LOADBINARY, "loadBinary"},
      {ReplActionType::HELP, "help"},
      {ReplActionType::QUIT, "quit"},
+     {ReplActionType::DIFF, "diff"},
+     {ReplActionType::DISASM, "disasm"},
      {ReplActionType::CLEAR, "clear"},
      {ReplActionType::UNKNOWN, "unknown"}
 
