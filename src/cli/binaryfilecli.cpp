@@ -13,7 +13,8 @@ const std::string BinaryFileCLI::description =
 BinaryFileCLI::BinaryFileCLI(int argc, char **argv) : BaseCLI(argc, argv) {
   configure_parser();
   // NOTE Needs to be run after configure_parser and property initalization
-  parser.run(); // TODO: figure out how to abstract this so its only in BaseCLI
+  parser.run_and_exit_if_error(); // TODO: figure out how to abstract this so
+                                  // its only in BaseCLI
   this->filename = parser.get<std::string>("f");
   this->dynamicLibs = parser.get<std::string>("d");
 }
@@ -30,5 +31,6 @@ void BinaryFileCLI::configure_parser() {
 }
 
 void BinaryFileCLI::executeAction() {
+  this->BaseCLI::executeAction();
   BinaryDisassemble::action(this->filename, this->dynamicLibs);
 }
