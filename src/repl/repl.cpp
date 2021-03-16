@@ -21,6 +21,7 @@
 #include "repl.h"
 #include "replTypes.h"
 #include "runtime/runtime.h"
+#include "version/version.h"
 
 namespace {
 struct Lookup {
@@ -58,9 +59,6 @@ struct Singleton_Repl_Members {
   Singleton_Repl_Members() {}
   void consoleRead();
   void executeLine(const std::string &line);
-  // These are place holder functions
-  std::string name() { return "disasm"; }
-  std::string version() { return "0.0.1"; }
 
 private:
   std::map<std::string, Lookup> mapAssignments;
@@ -329,7 +327,7 @@ size_t ReplActions::loadBinary(std::string path) {
 
 void Repl::run() {
   auto &instance = Singleton::get();
-  std::cout << instance.name() << " " << instance.version() << std::endl;
+  Gozihr::printVersion();
   while (true) {
     try {
       instance.consoleRead();

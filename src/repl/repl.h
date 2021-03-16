@@ -15,8 +15,6 @@ private:
 
 public:
   static void run();
-  static std::string name();
-  static std::string version();
 };
 
 #endif //__repl_h__

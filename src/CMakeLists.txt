@@ -90,6 +90,7 @@ add_library(${PROJECT_NAME} STATIC ${SourceFiles} ${HeaderFiles}
             $<TARGET_OBJECTS:Disassembler.Diff>
             $<TARGET_OBJECTS:Disassembler.Repl>
             $<TARGET_OBJECTS:Disassembler.Runtime>
+            $<TARGET_OBJECTS:Disassembler.Version>
 )
 
 target_link_libraries(${PROJECT_NAME} ${TargetLibraries})
@@ -124,6 +125,7 @@ add_subdirectory (runtime)
 add_subdirectory(pluginInfra)
 add_subdirectory(repl)
 add_subdirectory (test)
+add_subdirectory (version)
 
 
 

@@ -1,0 +1,17 @@
+#include "version.h"
+#include <iostream>
+
+const std::string Gozihr::Version::number = "@GOZIHR_VERSION@";
+const std::string Gozihr::Version::name   = "@GOZIHR_NAME@";
+
+const std::string Gozihr::Git::sha1 = "@GIT_SHA1@";
+const std::string Gozihr::Git::date = "@GIT_DATE@";
+const std::string Gozihr::Git::subject = "@GIT_COMMIT_SUBJECT@";
+const std::string Gozihr::Git::branch = "@GIT_COMMIT_BRANCH@";
+
+
+void Gozihr::printVersion() {
+  std::cout << Gozihr::Version::name << " version " << Gozihr::Version::number
+            << "-" << Gozihr::Git::branch << " commit " << Gozihr::Git::sha1
+            << std::endl;
+}
