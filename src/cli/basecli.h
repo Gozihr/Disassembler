@@ -14,7 +14,7 @@ class BaseCLI {
 protected:
   cli::Parser parser;
   // TODO add verbose logging move this to a
-  // singleton
+  // singleton.
   bool shouldLogVerbose = false;
   BaseCLI(int argc, char **argv) : parser(argc, argv) {}
 
@@ -27,7 +27,7 @@ public:
   virtual ~BaseCLI() {}
   virtual void executeAction() {
     shouldLogVerbose = parser.get<bool>("v");
-    if(parser.get<bool>("V")) {
+    if (parser.get<bool>("V")) {
       Gozihr::printVersion();
       exit(0);
     }

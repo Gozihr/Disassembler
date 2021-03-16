@@ -34,9 +34,7 @@ void DefaultCLI::configure_parser() {
   }
 }
 
-void DefaultCLI::executeAction() {
-  this->BaseCLI::executeAction();
-}
+void DefaultCLI::executeAction() { this->BaseCLI::executeAction(); }
 
 void DefaultCLIMgr::Register(const std::string &name,
                              const std::string &altname,
