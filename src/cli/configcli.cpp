@@ -17,7 +17,7 @@ const std::string ConfigCLI::description =
 ConfigCLI::ConfigCLI(int argc, char **argv) : BaseCLI(argc, argv) {
   configure_parser();
   // NOTE Needs to be run after configure_parser and property initalization
-  parser.run(); // TODO: figure out how to abstract this so its only in BaseCLI
+  parser.run_and_exit_if_error(); // TODO: figure out how to abstract this so its only in BaseCLI
 
   this->jsonConfigFilePath = parser.get<std::string>(ConfigCLI::name);
 }
@@ -30,6 +30,7 @@ void ConfigCLI::configure_parser() {
 }
 
 void ConfigCLI::executeAction() {
+  this->BaseCLI::executeAction();
   jObjects::ActionConfig config =
       JsonHelper::readJsonToObj<jObjects::ActionConfig>(
           this->jsonConfigFilePath);
