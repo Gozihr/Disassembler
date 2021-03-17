@@ -1,0 +1,11 @@
+{
+  "action": "diff",
+  "configs": [
+    {
+      "binaryPath":  "build\\int-tests\\windows\\link\\nasm\\Release\\main.exe"
+    },
+    {
+      "binaryPath":  "build\\int-tests\\windows\\link\\masm64\\Debug\\hello.exe"
+    }
+  ]
+}
