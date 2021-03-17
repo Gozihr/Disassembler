@@ -41,7 +41,7 @@ void DefaultCLIMgr::Register(const std::string &name,
                              const std::string &description, CLIType type) {
   auto &instance = Singleton::get();
   auto lock(instance.getLock());
-  instance.vecRegisterCLIs.push_back([&](cli::Parser &parser) {
+  instance.vecRegisterCLIs.push_back([&, type](cli::Parser &parser) {
     switch (type) {
     case CLIType::tBool:
       parser.set_optional<bool>(name, altname, false, description);
@@ -50,7 +50,7 @@ void DefaultCLIMgr::Register(const std::string &name,
       parser.set_optional<std::string>(name, altname, "", description);
       break;
     default:
-      break;
+      throw std::runtime_error("An unexpected CLI flag type was chosen.");
     }
   });
 }
