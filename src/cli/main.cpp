@@ -3,8 +3,10 @@
 // license that can be found in the LICENSE file.
 
 #include "autocli.h"
+#include "runtime/ansiConsole.h"
 
 int main(int argc, char **argv) {
+  ansiColors::enableAnsiColors();
   AutoCLI parser(argc, argv);
   return 0;
 }

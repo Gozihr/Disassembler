@@ -1,0 +1,8 @@
+{
+    "action": "binary",
+    "configs": [
+      {
+        "binaryPath": "build\\int-tests\\windows\\link\\nasm\\Release\\main.exe"
+      }
+    ]
+}

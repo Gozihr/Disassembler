@@ -10,7 +10,14 @@ set(HeaderFiles
     rawDisassemble.h
     runtime.h
     internalData.h
+    ansiConsole.h
 )
+
+if(WIN32)
+    list(APPEND SourceFiles
+         ansiWindows.cpp
+    )
+endif()
 
 add_library (Disassembler.Runtime OBJECT
             ${SourceFiles} ${HeaderFiles}
