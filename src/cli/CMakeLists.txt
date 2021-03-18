@@ -33,6 +33,16 @@ set(HeaderFiles
     rawcli.h
     replcli.h
 )
+
+
+
+if(WIN32)
+list(APPEND SourceFiles
+    ${CMAKE_CURRENT_BINARY_DIR}/../version/VersionResource.rc
+    ${CMAKE_CURRENT_BINARY_DIR}/../version/VersionInfo.h
+)
+endif()
+
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
 endif()
