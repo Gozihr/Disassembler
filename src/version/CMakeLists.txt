@@ -3,6 +3,7 @@
 include ("CMakeListsVersion.cmake")
 
 set(GIT_EXECUTABLE git)
+set(GOZHIR_DESCRIPTION "Gozhir, The bring your own Disassembler Platform.")
 
 # the commit's SHA1, and whether the building workspace was dirty or not
 execute_process(COMMAND
@@ -40,6 +41,24 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/version.cpp.in"
 set (SourceFiles
     ${CMAKE_CURRENT_BINARY_DIR}/version.cpp
 )
+
+if(WIN32)
+  include(generate_product_version.cmake)
+  file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/icon.ico
+     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+  generate_product_version(
+   VersionFilesOutputVariable
+   NAME "${GOZIHR_NAME}"
+   ICON ${CMAKE_CURRENT_BINARY_DIR}/icon.ico
+   VERSION_MAJOR ${GOZIHR_MAJOR}
+   VERSION_MINOR ${GOZIHR_MINOR}
+   VERSION_PATCH ${GOZIHR_PATCH}
+   #VERSION_REVISION 0 #could hook this up with the cli
+   COMPANY_NAME ${GOZIHR_NAME}
+   FILE_DESCRIPTION ${GOZHIR_DESCRIPTION}
+   )
+endif()
+
 
 set(HeaderFiles
     version.h
