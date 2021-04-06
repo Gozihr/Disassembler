@@ -20,6 +20,7 @@
 #include "parser.h"
 #include "repl.h"
 #include "replTypes.h"
+#include "runtime/binaryDisassemble.h"
 #include "runtime/runtime.h"
 #include "version/version.h"
 
@@ -289,15 +290,7 @@ void ReplActions::disassemble(const std::string &id,
   }
   assert(l.index < instance.binaries.size());
   Binary *pBinary = instance.binaries[l.index].get();
-  disassemble(*pBinary, instructions);
-}
-
-void ReplActions::disassemble(const Binary &binary,
-                              std::vector<Instruction> &instructions) {
-  Disassembler disasm(binary.Arch());
-  disasm.setStartAddress(binary.getStartAddress());
-  disasm.Decode(binary.Instructions().data(), binary.Instructions().size());
-  disasm.moveInstructions(instructions);
+  BinaryDisassemble::disassemble(*pBinary, instructions);
 }
 
 void ReplActions::diff(const std::string &id1, const std::string &id2) {
