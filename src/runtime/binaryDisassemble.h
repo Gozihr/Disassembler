@@ -7,14 +7,18 @@
 #ifndef __binary_disassemble_h__
 #define __binary_disassemble_h__
 
-#include <iostream>
-#include <string>
+#include "interfaces/pch.h"
+#include "runtime.h"
+
+struct Instruction;
 
 class BinaryDisassemble {
 private:
   BinaryDisassemble() = delete;
 
 public:
+  static void disassemble(const Binary &binary,
+                          std::vector<Instruction> &instructions);
   static bool action(const std::string &filename,
                      const std::string &dynamicLibPaths,
                      std::ostream &out = std::cout);
