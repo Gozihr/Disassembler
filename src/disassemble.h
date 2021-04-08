@@ -13,8 +13,6 @@
 #include <iterator>
 #include <memory>
 
-enum class DisassemblerType { CAPSTONE, DYNAMIC };
-
 class Disassembler : public InterfaceDisassembler {
 public:
   Disassembler(Archtype Archtype,
@@ -32,6 +30,9 @@ public:
   void setStartAddress(uint64_t address);
   static DisassemblerType
   checkAndInitDynamicDisassemblers(const std::string &dynamicLibPaths);
+  std::unique_ptr<AbstractDisassembler> getDisam() {
+    return std::move(pDisasm);
+  }
 
 private:
   std::unique_ptr<AbstractDisassembler> pDisasm;

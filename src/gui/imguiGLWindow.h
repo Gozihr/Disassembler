@@ -8,13 +8,14 @@
 #define __IMGUI_GL_WINDOW_H__
 
 #include "glfwWindow.h"
+#include "interfaces/interfaceDisassembler.h"
 
 class GozihrWindow {
 public:
   bool gozihr_active;
   std::string filePath;
   std::string binary;
-  std::string disasm;
+  std::unique_ptr<AbstractDisassembler> pDisasm;
   GozihrWindow() : gozihr_active(true) {}
   void Draw();
   void Disassemble(std::string binaryPath, std::string pluginPath = "");
