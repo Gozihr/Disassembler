@@ -12,6 +12,8 @@
 #include "types.h"
 #include <iterator>
 
+enum class DisassemblerType { CAPSTONE, DYNAMIC };
+
 class InterfaceDisassembler {
 public:
   virtual void Decode(const unsigned char *code, size_t size) = 0;

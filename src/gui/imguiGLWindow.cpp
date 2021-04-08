@@ -55,7 +55,14 @@ void GozihrWindow::Draw() {
   }
   // Display contents in a scrolling region
   ImGui::BeginChild("Scrolling");
-  ImGui::Text("%s", disasm.c_str());
+  if (pDisasm != nullptr) {
+    auto instructions = pDisasm->getInstructions();
+    for (size_t i = 0; i < instructions.size(); i++) {
+      std::stringstream stream;
+      stream << instructions[i];
+      ImGui::Text("%s", stream.str().c_str());
+    }
+  }
   ImGui::EndChild();
   ImGui::End();
 }
@@ -65,9 +72,8 @@ void GozihrWindow::Disassemble(std::string binaryPath, std::string pluginPath) {
     // TODO ImGui::OpenPopup
     return;
   }
-  std::stringstream stream;
-  BinaryDisassemble::action(binaryPath, pluginPath, stream);
-  disasm = stream.str();
+
+  pDisasm = BinaryDisassemble::disassemble(binaryPath, pluginPath);
 }
 
 ImguiGLWindow::ImguiGLWindow(std::string title, int width, int height)
