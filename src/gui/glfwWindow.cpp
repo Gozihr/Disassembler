@@ -6,11 +6,11 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 // clang-format on
+#include "glfwWindow.h"
+#include "dataPattern/singleton.h"
 #include <cassert>
 #include <iostream>
 #include <unordered_map>
-#include "dataPattern/singleton.h"
-#include "glfwWindow.h"
 
 struct KeyCallbackStruct {
 private:
