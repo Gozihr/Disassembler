@@ -26,6 +26,7 @@ public:
 private:
   std::string filename;
   std::string dynamicLibs;
+  bool shouldPrintFileNames;
 };
 
 #endif // __binary_file_cli_h__

@@ -17,6 +17,7 @@ BinaryFileCLI::BinaryFileCLI(int argc, char **argv) : BaseCLI(argc, argv) {
                                   // its only in BaseCLI
   this->filename = parser.get<std::string>("f");
   this->dynamicLibs = parser.get<std::string>("d");
+  this->shouldPrintFileNames = parser.get<bool>("F");
 }
 
 BinaryFileCLI::~BinaryFileCLI() {}
@@ -28,9 +29,11 @@ void BinaryFileCLI::configure_parser() {
   parser.set_required<bool>(name, altName, description);
   parser.set_optional<std::string>("d", "dynamic", "",
                                    "input to the dynamic lib we want to load.");
+  parser.set_optional<bool>("F", "function", 0, "print out function names.");
 }
 
 void BinaryFileCLI::executeAction() {
   this->BaseCLI::executeAction();
-  BinaryDisassemble::action(this->filename, this->dynamicLibs);
+  BinaryDisassemble::action(this->filename, this->dynamicLibs,
+                            this->shouldPrintFileNames);
 }

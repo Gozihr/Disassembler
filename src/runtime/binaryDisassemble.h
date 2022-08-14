@@ -27,6 +27,7 @@ public:
   disassemble(const std::string &filename, const std::string &dynamicLibPaths);
   static bool action(const std::string &filename,
                      const std::string &dynamicLibPaths,
+                     bool shouldPrintFileNames = false,
                      std::ostream &out = std::cout);
 };
 

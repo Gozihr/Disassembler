@@ -35,12 +35,16 @@ BinaryDisassemble::disassemble(const std::string &filename,
 
 bool BinaryDisassemble::action(const std::string &filename,
                                const std::string &dynamicLibPaths,
-                               std::ostream &out) {
+                               bool shouldPrintFileNames, std::ostream &out) {
   std::unique_ptr<Binary> binary = ASMParser::Parser(filename);
 
   auto disasm = disassemble(filename, dynamicLibPaths);
 
   out << *(binary.get()) << std::endl;
-  out << *(disasm.get()) << std::endl;
+  if (shouldPrintFileNames) {
+    out << binary->functionNames() << std::endl;
+  } else {
+    out << *(disasm.get()) << std::endl;
+  }
   return true;
 }

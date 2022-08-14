@@ -44,6 +44,7 @@ public:
   OStype OS() const { return os; }
 
   const std::vector<uint8_t> &Instructions() const;
+  std::vector<std::string> &functionNames();
   friend class ASMParser;
 };
 
