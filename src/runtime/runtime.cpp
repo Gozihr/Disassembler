@@ -16,4 +16,8 @@ Binary::Binary(std::string path) : mPath(path) {
   mBinaryInternal = std::make_unique<BinaryInternal>();
 }
 
+std::vector<std::string> &Binary::functionNames() {
+  return mBinaryInternal->functionNames();
+}
+
 Binary::~Binary() {}

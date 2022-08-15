@@ -22,6 +22,7 @@ struct BinaryTypes {
 struct BinaryInternal {
   BinaryInternal() {}
   BinaryTypes binary;
+  std::vector<std::string> funcNames;
   void setElf(std::unique_ptr<LIEF::ELF::Binary> &elf) {
     binary.elf = std::move(elf);
   }
@@ -33,6 +34,26 @@ struct BinaryInternal {
   }
   void setMachO(LIEF::MachO::Binary *machO) {
     binary.machO = std::unique_ptr<LIEF::MachO::Binary>(machO);
+  }
+  LIEF::Binary::functions_t functions() {
+    if (binary.elf) {
+      return binary.elf->functions();
+    }
+    if (binary.pe) {
+      return binary.pe->functions();
+    }
+    if (binary.machO) {
+      return binary.machO->functions();
+    }
+  }
+  std::vector<std::string> &functionNames() {
+    auto funcs = functions();
+    if (funcNames.empty()) {
+      auto getFuncName = [](LIEF::Function &func) { return func.name(); };
+      std::transform(funcs.begin(), funcs.end(), std::back_inserter(funcNames),
+                     getFuncName);
+    }
+    return funcNames;
   }
 };
 
