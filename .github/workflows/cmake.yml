@@ -18,6 +18,22 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-2019]
+        include:
+          - os: ubuntu-latest
+            artifact_dlib_ext: .so 
+            artifact_staticlib_ext: .a
+          - os: windows-2019
+            artifact_exec_ext: .exe
+            artifact_dlib_ext: .dll
+            artifact_staticlib_ext: .lib
+            # Note: I wanted to use env.BUILD_TYPE, but it isn't taking
+            #artifact_out_dir: ${{ BUILD_TYPE }}/
+            artifact_out_dir: Release/
+            artifact_os_name: Windows
+            artifact_arch: x86_64
+          - os: macos-latest
+            artifact_dlib_ext: .dylib
+            artifact_staticlib_ext: .a
     steps:
     - uses: actions/checkout@v2
     - run: |
@@ -79,3 +95,46 @@ jobs:
       # Execute tests defined by the CMake configuration.  
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ./src/test/Release/Disassembler_TEST.exe
+    - name: Prepare Binaries for upload (Mac\Linux)
+      if: matrix.os == 'ubuntu-latest' || matrix.os == 'macOS-latest'
+      shell: bash
+      run:  |
+        mkdir ${{github.workspace}}/artifacts
+        cp build/src/libDisassembler${{ matrix.artifact_staticlib_ext }} ${{github.workspace}}/artifacts
+        cp build/src/cli/disasm ${{github.workspace}}/artifacts
+        cp build/src/gui/disasm-gui ${{github.workspace}}/artifacts
+        cp build/plugins/xedPlugin/libxedPlugin${{ matrix.artifact_dlib_ext }} ${{github.workspace}}/artifacts
+        pushd ${{github.workspace}}
+        zip -r Gozihr-$(uname -s)-$(uname -m).zip artifacts
+        popd
+    - name: Prepare Binaries for upload (windows)
+      if: matrix.os == 'windows-2019'
+      shell: powershell
+      run: |
+        [system.io.directory]::CreateDirectory("${{github.workspace}}/artifacts")
+        Copy-Item "build/src/${{ matrix.artifact_out_dir}}Disassembler${{ matrix.artifact_staticlib_ext }}" -Destination "${{github.workspace}}/artifacts"
+        Copy-Item "build/src/cli/${{ matrix.artifact_out_dir }}disasm${{ matrix.artifact_exec_ext }}" -Destination "${{github.workspace}}/artifacts"
+        Copy-Item "build/src/gui/${{ matrix.artifact_out_dir }}disasm-gui${{ matrix.artifact_exec_ext }}" -Destination "${{github.workspace}}/artifacts"
+        Copy-Item "build/plugins/xedPlugin/${{ matrix.artifact_out_dir }}xedPlugin${{ matrix.artifact_dlib_ext }}" -Destination "${{github.workspace}}/artifacts"
+        Compress-Archive -Path ${{github.workspace}}/artifacts/* -DestinationPath Gozihr-${{matrix.artifact_os_name}}-${{matrix.artifact_arch}}.zip
+    - name: 'Upload Pull Request Artifact'
+      uses: actions/upload-artifact@v3
+      if: startsWith(github.ref, 'refs/pull/')
+      with:
+        name: Gozihr Pull Request Artifacts
+        path: Gozihr-*.zip
+        retention-days: 5
+    - name: Set variables
+      if: startsWith(github.ref, 'refs/heads/master')
+      run: |
+        APP=$(cat $GITHUB_WORKSPACE/src/version/AppName.txt)
+        VER=$(cat $GITHUB_WORKSPACE/src/version/Version.txt)
+        echo "VERSION=$VER" >> $GITHUB_ENV
+        echo "APPNAME=$APP" >> $GITHUB_ENV
+    - name: Upload binaries to Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/heads/master')
+      with:
+        tag_name: ${{ env.APPNAME }}-${{ env.VERSION }}
+        files: |
+          Gozihr-*.zip
