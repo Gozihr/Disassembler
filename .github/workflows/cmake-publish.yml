@@ -1,0 +1,112 @@
+name: CMake Publish
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - '**'
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  publish:
+    name: Publish cli for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact_exec_ext: ""
+            artifact_dlib_ext: .so 
+            artifact_staticlib_ext: .a
+            artifact_out_dir: "" 
+          - os: windows-2019
+            artifact_exec_ext: .exe
+            artifact_dlib_ext: .dll
+            artifact_staticlib_ext: .lib
+            # Note: I wanted to use env.BUILD_TYPE, but it isn't taking
+            #artifact_out_dir: ${{ BUILD_TYPE }}/
+            artifact_out_dir: Release/
+          - os: macos-latest
+            artifact_exec_ext: ""
+            artifact_dlib_ext: .dylib
+            artifact_staticlib_ext: .a
+            artifact_out_dir: ""
+    steps:
+    - uses: actions/checkout@v2
+    - run: |
+        sudo apt install libcapstone-dev nasm mingw-w64 libedit-dev \
+        libgl1-mesa-dev mesa-utils libgl1-mesa-glx libxrandr-dev \
+        libxinerama-dev libxcursor-dev libxi-dev
+      if: matrix.os == 'ubuntu-latest'
+    - run: brew install capstone nasm mingw-w64 glfw glm
+      if: matrix.os == 'macOS-latest'
+    - run: choco install python3 nasm
+      if: matrix.os == 'windows-2019'
+    - name: Create Build Environment
+      # Some projects don't allow in-source building, so create a separate build directory
+      # We'll use this as our working directory for all subsequent commands
+      run: cmake -E make_directory ${{github.workspace}}/build
+
+    #NOTE: this is temporary until i understand a bit more why i can't build binutil
+    # Monitored with issue-32 https://github.com/farzonl/Disassembler/issues/32
+    - name: Configure CMake (Mac)
+      if: matrix.os == 'macOS-latest'
+      # Use a bash shell so we can use the same syntax for environment variable
+      # access regardless of the host operating system
+      shell: bash
+      working-directory: ${{github.workspace}}/build
+      # Note the current convention is to use the -S and -B options here to specify source 
+      # and build directories, but this is only available with CMake 3.13 and higher.  
+      # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+    
+    - name: Configure CMake (Linux\Windows)
+      if: matrix.os == 'ubuntu-latest' || matrix.os == 'windows-2019'
+      # Use a bash shell so we can use the same syntax for environment variable
+      # access regardless of the host operating system
+      shell: bash
+      working-directory: ${{github.workspace}}/build
+      # Note the current convention is to use the -S and -B options here to specify source 
+      # and build directories, but this is only available with CMake 3.13 and higher.  
+      # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_INT_TESTS=true
+
+    - name: Build
+      working-directory: ${{github.workspace}}/build
+      shell: bash
+      # Execute the build.  You can specify a specific target with "--target <NAME>"
+      run: cmake --build . --config $BUILD_TYPE
+    - name: Prepare Binaries for upload (Mac\Linux)
+      if: matrix.os == 'ubuntu-latest' || matrix.os == 'macOS-latest'
+      shell: bash
+      run:  |
+        mkdir ${{github.workspace}}/artifacts
+        cp build/src/${{ matrix.artifact_out_dir}}libDisassembler${{ matrix.artifact_staticlib_ext }} ${{github.workspace}}/artifacts
+        cp build/src/cli/${{ matrix.artifact_out_dir }}disasm${{ matrix.artifact_exec_ext }} ${{github.workspace}}/artifacts
+        cp build/src/gui/${{ matrix.artifact_out_dir }}disasm-gui${{ matrix.artifact_exec_ext }} ${{github.workspace}}/artifacts
+        cp build/plugins/xedPlugin/${{ matrix.artifact_out_dir }}libxedPlugin${{ matrix.artifact_dlib_ext }} ${{github.workspace}}/artifacts
+        pushd ${{github.workspace}}
+        zip -r Gozihr-$(uname -s)-$(uname -m).zip artifacts
+        popd
+    - name: Prepare Binaries for upload (windows)
+      if: matrix.os == 'windows-2019'
+      shell: powershell
+      run: |
+        [system.io.directory]::CreateDirectory("${{github.workspace}}/artifacts")
+        Copy-Item "build/src/${{ matrix.artifact_out_dir}}Disassembler${{ matrix.artifact_staticlib_ext }}" -Destination "${{github.workspace}}/artifacts"
+        Copy-Item "build/src/cli/${{ matrix.artifact_out_dir }}disasm${{ matrix.artifact_exec_ext }}" -Destination "${{github.workspace}}/artifacts"
+        Copy-Item "build/src/gui/${{ matrix.artifact_out_dir }}disasm-gui${{ matrix.artifact_exec_ext }}" -Destination "${{github.workspace}}/artifacts"
+        Copy-Item "build/plugins/xedPlugin/${{ matrix.artifact_out_dir }}xedPlugin${{ matrix.artifact_dlib_ext }}" -Destination "${{github.workspace}}/artifacts"
+        Compress-Archive -Path ${{github.workspace}}/artifacts -DestinationPath Gozihr-${{matrix.os}}-%PROCESSOR_ARCHITECTURE%.zip
+    - name: Upload binaries to Release
+      uses: softprops/action-gh-release@v1
+      #if: startsWith(github.ref, 'refs/remotes/origin/master')
+      with:
+        tag_name: ${{ github.ref }} 
+        files: |
+          Gozihr-*.zip
