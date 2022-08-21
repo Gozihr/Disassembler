@@ -74,7 +74,7 @@ if( DEFINED BUILDLIEFSRC OR (WIN32 AND CMAKE_BUILD_TYPE MATCHES Debug))
     download_file(https://github.com/lief-project/LIEF/archive/${LIEF_VERSION}.zip
                   ${CMAKE_SOURCE_DIR}/packages/LIEF-${LIEF_VERSION}.zip
                   MD5
-                  fc6f9e277de0f25993007c0b10de2daf
+                  465563d8342e148a3d82b6b1cb36bd11
     )
     decompress(${CMAKE_SOURCE_DIR}/packages/LIEF-${LIEF_VERSION}.zip ${CMAKE_SOURCE_DIR}/packages/LIEF-src)
     buildLIEF(${CMAKE_SOURCE_DIR}/packages/LIEF-src
