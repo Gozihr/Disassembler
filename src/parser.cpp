@@ -76,8 +76,10 @@ void Binary::elfParser() {
       LIEF::ELF::Parser::parse(this->Path());
   auto header = elfBinary->header();
   LIEF::ELF::Section *textSection = elfBinary->get_section(".text");
-  this->mInstructions.resize(std::max(this->mInstructions.size(), textSection->content().size()));
-  std::copy(textSection->content().begin(), textSection->content().end(), this->mInstructions.begin());
+  this->mInstructions.resize(
+      std::max(this->mInstructions.size(), textSection->content().size()));
+  std::copy(textSection->content().begin(), textSection->content().end(),
+            this->mInstructions.begin());
 
   this->os = OStype::LINUX;
   this->arch = ::GetArch(header.machine_type());
@@ -88,9 +90,11 @@ void Binary::elfParser() {
 void Binary::peParser() {
 
   auto peBinary = LIEF::PE::Parser::parse(this->Path());
-  LIEF::PE::Section* textSection = peBinary->get_section(".text");
-  this->mInstructions.resize(std::max(this->mInstructions.size(), textSection->content().size()));
-  std::copy(textSection->content().begin(), textSection->content().end(), this->mInstructions.begin());
+  LIEF::PE::Section *textSection = peBinary->get_section(".text");
+  this->mInstructions.resize(
+      std::max(this->mInstructions.size(), textSection->content().size()));
+  std::copy(textSection->content().begin(), textSection->content().end(),
+            this->mInstructions.begin());
   this->os = OStype::WINDOWS;
   this->arch = ::GetArch(peBinary->header().machine());
   this->textSectionStartAddress = textSection->virtual_address();
@@ -103,20 +107,27 @@ void Binary::machOParser() {
       LIEF::MachO::Parser::parse(this->Path()).release();
   std::unique_ptr<LIEF::MachO::Binary> binaryData = nullptr;
   if (fat) {
-    if(fat->size() > 1) { 
-      std::cout << "Warning number of mach-O binary files is: " << fat->size() <<std::endl;
-      for(int i = 0; i < fat->size(); i++) {
-        std::cout << "fat["<<i<<"] Arch = "<< ::GetArch(fat->at(i)->header().cpu_type())<<std::endl;
+    if (fat->size() > 1) {
+      std::cout << "Warning number of mach-O binary files is: " << fat->size()
+                << std::endl;
+      for (int i = 0; i < fat->size(); i++) {
+        std::cout << "fat[" << i
+                  << "] Arch = " << ::GetArch(fat->at(i)->header().cpu_type())
+                  << std::endl;
       }
-      std::cout << "Picking the last format: " <<GetArch(fat->at(fat->size()-1)->header().cpu_type())<<std::endl;
+      std::cout << "Picking the last format: "
+                << GetArch(fat->at(fat->size() - 1)->header().cpu_type())
+                << std::endl;
     }
     binaryData = fat->pop_back();
   }
 
   auto header = binaryData->header();
-  LIEF::MachO::Section* textSection = binaryData->get_section("__text");
-  this->mInstructions.resize(std::max(this->mInstructions.size(), textSection->content().size()));
-  std::copy(textSection->content().begin(), textSection->content().end(), this->mInstructions.begin());
+  LIEF::MachO::Section *textSection = binaryData->get_section("__text");
+  this->mInstructions.resize(
+      std::max(this->mInstructions.size(), textSection->content().size()));
+  std::copy(textSection->content().begin(), textSection->content().end(),
+            this->mInstructions.begin());
 
   this->os = OStype::MACOS;
   this->arch = ::GetArch(header.cpu_type());
