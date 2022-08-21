@@ -55,9 +55,9 @@ jobs:
       with:
         path: |
           packages
-        key: ${{ runner.OS }}-c++-packages-cache-${{ hashFiles('depsCache.json') }}
+        key: ${{ runner.OS }}-c++-packages-cache-Release-${{ hashFiles('depsCache.json') }}
         restore-keys: |
-          ${{ runner.OS }}-c++-packages-cache-
+          ${{ runner.OS }}-c++-packages-cache-Release-
 
     #NOTE: this is temporary until i understand a bit more why i can't build binutil
     # Monitored with issue-32 https://github.com/farzonl/Disassembler/issues/32
