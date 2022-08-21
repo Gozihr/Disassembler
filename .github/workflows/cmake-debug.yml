@@ -1,4 +1,4 @@
-name: CMake
+name: CMake Debug
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Release
+  BUILD_TYPE: Debug
 
 jobs:
   build:
@@ -124,23 +124,3 @@ jobs:
         name: Gozihr Pull Request Artifacts
         path: Gozihr-*.zip
         retention-days: 5
-    - name: Set variables (Mac\Linux)
-      if: matrix.os == 'ubuntu-latest' || matrix.os == 'macOS-latest'
-      run: |
-        APP=$(cat $GITHUB_WORKSPACE/src/version/AppName.txt)
-        VER=$(cat $GITHUB_WORKSPACE/src/version/Version.txt)
-        echo "VERSION=$VER" >> $GITHUB_ENV
-        echo "APPNAME=$APP" >> $GITHUB_ENV
-    - name: Set variables (Windows)
-      if: matrix.os == 'windows-2019'
-      run: |
-        echo "VERSION=0.0.1" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-        echo "APPNAME=Gozihr" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-
-    - name: Upload binaries to Release
-      uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/heads/master')
-      with:
-        tag_name: ${{ env.APPNAME }}-${{ env.VERSION }}
-        files: |
-          Gozihr-*.zip
