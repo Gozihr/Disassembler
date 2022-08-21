@@ -68,7 +68,7 @@ if(WIN32)
     endif()
 endif()
 
-set(LIEF_VERSION "0.11.3")
+set(LIEF_VERSION "0.12.1")
 if( DEFINED BUILDLIEFSRC OR (WIN32 AND CMAKE_BUILD_TYPE MATCHES Debug))
     message(STATUS  "starting a LIEF source build")
     download_file(https://github.com/lief-project/LIEF/archive/${LIEF_VERSION}.zip
@@ -89,19 +89,19 @@ else()
         download_file(https://github.com/lief-project/LIEF/releases/download/${LIEF_VERSION}/LIEF-${LIEF_VERSION}-Linux-x86_64.tar.gz
                   ${CMAKE_SOURCE_DIR}/packages/LIEF-${LIEF_VERSION}.tar.gz
                   MD5
-                  cffdd77556bd35e8cc32ff9742605a4e)
+                  eb604e6d494e86a888e41ef4df549b3a)
         decompress(${CMAKE_SOURCE_DIR}/packages/LIEF-${LIEF_VERSION}.tar.gz ${CMAKE_SOURCE_DIR}/packages/LIEF)
     elseif(WIN32)
         download_file(https://github.com/lief-project/LIEF/releases/download/${LIEF_VERSION}/LIEF-${LIEF_VERSION}-win64.zip
                       ${CMAKE_SOURCE_DIR}/packages/LIEF-${LIEF_VERSION}-win64.zip
                       MD5
-                      a5e6a5ef5933b1296739d859b198f857)
+                      ca4665c47fb6d4b68a30199195fa7037)
         decompress(${CMAKE_SOURCE_DIR}/packages/LIEF-${LIEF_VERSION}-win64.zip ${CMAKE_SOURCE_DIR}/packages/LIEF)
     elseif(APPLE)
         download_file(https://github.com/lief-project/LIEF/releases/download/${LIEF_VERSION}/LIEF-${LIEF_VERSION}-Darwin-x86_64.tar.gz
                       ${CMAKE_SOURCE_DIR}/packages/LIEF-${LIEF_VERSION}.tar.gz
                       MD5
-                      d033f69581f61386cca64ff0fb9b4e88)
+                      5d609361f22b6f9a8dc22f2c6fb541a7)
         decompress(${CMAKE_SOURCE_DIR}/packages/LIEF-${LIEF_VERSION}.tar.gz ${CMAKE_SOURCE_DIR}/packages/LIEF)
     else()
     message(FATAL_ERROR  "No other platforms are supported.")
