@@ -67,6 +67,19 @@ msbuild build\Disassembler.sln -t:Build -p:Configuration=Release
 - build: `docker build -t disassembler:latest .`
 - run: `docker run  --name test_vm -it disassembler:latest`
 
+## Setup Clang Tidy 
+### On MacOS
+```bash
+ln -s "$(brew --prefix llvm)/bin/clang-tidy" "/usr/local/bin/clang-tidy"
+ln -s "$(brew --prefix llvm)/bin/clang-apply-replacements" "/usr/local/bin/clang-apply-replacements"
+ln -s "$(brew --prefix llvm)/bin/run-clang-tidy" "/usr/local/bin/run-clang-tidy"
+```
+### Run Clang Tidy
+After running cmake, the build dir will have a `compile_commands.json` file. Thats all you need to run `run-clang-tidy.py`.
+```bash
+run-clang-tidy -p build/ -header-filter='.*' -fix -format
+```
+
 
 ## Debuging 
 - Switch compiler

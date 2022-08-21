@@ -1,5 +1,4 @@
 project(${CMAKE_PROJECT_NAME}_TEST)
-cmake_minimum_required(VERSION 3.10)
 
 download_file(https://github.com/catchorg/Catch2/releases/download/v2.13.0/catch.hpp 
               ${CMAKE_SOURCE_DIR}/packages/catch2/catch.hpp
