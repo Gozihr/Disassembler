@@ -1,5 +1,4 @@
 project(xedPlugin)
-cmake_minimum_required(VERSION 3.10)
 
 function(download_xed)
 if(WIN32 AND MSVC)

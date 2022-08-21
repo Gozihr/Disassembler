@@ -1,5 +1,4 @@
 project(disasm)
-cmake_minimum_required(VERSION 3.10)
 
 download_file(https://raw.githubusercontent.com/FlorianRappl/CmdParser/3b5e2f284e0e29543eaf51ac53a01dd3b6d468ce/cmdparser.hpp
               ${CMAKE_SOURCE_DIR}/packages/cmdParser/cmdparser.hpp

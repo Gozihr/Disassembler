@@ -1,5 +1,6 @@
 project(Disassembler)
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.23)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 if(UNIX AND NOT APPLE)
     set(LINUX TRUE)
 endif()

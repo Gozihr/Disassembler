@@ -1,5 +1,4 @@
 project(${CMAKE_PROJECT_NAME})
-cmake_minimum_required(VERSION 3.10)
 
 set(LIEF_DIR ${CMAKE_SOURCE_DIR}/packages/LIEF)
 set(LIEF_INCLUDE_DIR ${LIEF_DIR}/include)
