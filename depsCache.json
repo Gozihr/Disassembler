@@ -1,0 +1,35 @@
+{
+    "LIEF" : {
+        "Src": "465563d8342e148a3d82b6b1cb36bd11",
+        "Linux": "eb604e6d494e86a888e41ef4df549b3a",
+        "Windows" : "ca4665c47fb6d4b68a30199195fa7037",
+        "MacOS": "5d609361f22b6f9a8dc22f2c6fb541a7"
+    },
+    "Catch2" : {
+        "Src": "209cbb2f8f37224cc5f7261cf9388bc2"
+    },
+    "CMDParser" : {
+        "Src": "8449f7da1097659698193bc0ddb24ef7"
+    },
+    "nlohmannJson" : {
+        "Src": "7804b38146921d03374549c9e2a5e3acda097814c43caf2b96a0278e58df26e0"
+    },
+    "Capstone" : {
+        "Windows": "a6ad5a3bd6842cb7fadc3f3e5ed8bf20"
+    },
+    "myers-diff" : {
+        "Src" : "90486b3453ab76ab2a1498dc64c79060"
+    },
+    "glad" : {
+        "Src" : "262e8984dbde2f359207ffa8e609aa50"
+    },
+    "glfw3" : {
+        "Src": "f794d9ad899a64894782884be79d644b"
+    },
+    "imgui" : {
+        "Src": "78af0cf170fb3f2a431eb39cac7f55b8"
+    },
+    "ImGuiFileDialog": {
+        "Src" : "13e1abe33aeb0b869307a238967038ae"
+    }
+}

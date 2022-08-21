@@ -33,12 +33,20 @@ BinaryDisassemble::disassemble(const std::string &filename,
   return BinaryDisassemble::disassemble(*(binary.get()), dType);
 }
 
+std::unique_ptr<AbstractDisassembler>
+BinaryDisassemble::disassemble(const Binary &binary,
+                               const std::string &dynamicLibPaths) {
+  DisassemblerType dType =
+      Disassembler::checkAndInitDynamicDisassemblers(dynamicLibPaths);
+  return BinaryDisassemble::disassemble(binary, dType);
+}
+
 bool BinaryDisassemble::action(const std::string &filename,
                                const std::string &dynamicLibPaths,
                                bool shouldPrintFileNames, std::ostream &out) {
   std::unique_ptr<Binary> binary = ASMParser::Parser(filename);
 
-  auto disasm = disassemble(filename, dynamicLibPaths);
+  auto disasm = disassemble(*(binary.get()), dynamicLibPaths);
 
   out << *(binary.get()) << std::endl;
   if (shouldPrintFileNames) {

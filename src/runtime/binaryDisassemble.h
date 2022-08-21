@@ -25,6 +25,8 @@ public:
                           DisassemblerType dtype = DisassemblerType::CAPSTONE);
   static std::unique_ptr<AbstractDisassembler>
   disassemble(const std::string &filename, const std::string &dynamicLibPaths);
+  static std::unique_ptr<AbstractDisassembler>
+  disassemble(const Binary &binary, const std::string &dynamicLibPaths);
   static bool action(const std::string &filename,
                      const std::string &dynamicLibPaths,
                      bool shouldPrintFileNames = false,
