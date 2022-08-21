@@ -53,10 +53,10 @@ jobs:
       uses: actions/cache@v3
       with:
         path: |
-          ${{github.workspace}}/packages
-        key: ${{ runner.OS }}-c++-packages-cache-${{ hashFiles('${{github.workspace}}/depsCache.json') }}
+          packages
+        key: ${{ runner.OS }}-c++-packages-cache-Debug-${{ hashFiles('depsCache.json') }}
         restore-keys: |
-          ${{ runner.OS }}-c++-packages-cache
+          ${{ runner.OS }}-c++-packages-cache-Debug-
     #NOTE: this is temporary until i understand a bit more why i can't build binutil
     # Monitored with issue-32 https://github.com/farzonl/Disassembler/issues/32
     - name: Configure CMake (Mac)

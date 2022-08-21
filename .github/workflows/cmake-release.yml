@@ -54,10 +54,10 @@ jobs:
       uses: actions/cache@v3
       with:
         path: |
-          ${{github.workspace}}/packages
-        key: ${{ runner.OS }}-c++-packages-cache-${{ hashFiles('${{github.workspace}}/depsCache.json') }}
+          packages
+        key: ${{ runner.OS }}-c++-packages-cache-Release-${{ hashFiles('depsCache.json') }}
         restore-keys: |
-          ${{ runner.OS }}-c++-packages-cache
+          ${{ runner.OS }}-c++-packages-cache-Release-
 
     #NOTE: this is temporary until i understand a bit more why i can't build binutil
     # Monitored with issue-32 https://github.com/farzonl/Disassembler/issues/32
@@ -71,14 +71,6 @@ jobs:
       # and build directories, but this is only available with CMake 3.13 and higher.  
       # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
       run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
-    - name: Cache C++ dependencies in Packages Directory
-      uses: actions/cache@v3
-      with:
-        path: |
-          ${{github.workspace}}/packages
-        key: ${{ runner.OS }}-c++-packages-cache-${{ hashFiles('${{github.workspace}}/depsCache.json') }}
-        restore-keys: |
-          ${{ runner.OS }}-c++-packages-cache
     - name: Configure CMake (Linux\Windows)
       if: matrix.os == 'ubuntu-latest' || matrix.os == 'windows-2019'
       # Use a bash shell so we can use the same syntax for environment variable
